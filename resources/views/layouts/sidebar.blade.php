@@ -28,6 +28,16 @@
     </a>
 
     @if($isAdmin)
+        <a href="{{ route('dashboard.mentors.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentors.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />
+                <path fill-rule="evenodd" d="M3 18a7 7 0 0 1 14 0H3Z" clip-rule="evenodd" />
+            </svg>
+            <span>Mentors</span>
+        </a>
+
         <a href="{{ route('roles.index') }}"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('roles.*') ? $active : $inactive }}">

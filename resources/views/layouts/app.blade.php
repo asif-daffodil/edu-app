@@ -15,11 +15,15 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         @stack('styles')
+
+        <style>
+            [x-cloak] { display: none !important; }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-100">
             <!-- Mobile sidebar -->
-            <div x-show="sidebarOpen" x-cloak class="fixed inset-0 z-40 lg:hidden" aria-hidden="true">
+            <div x-show="sidebarOpen" x-cloak style="display: none;" class="fixed inset-0 z-40 lg:hidden" aria-hidden="true">
                 <div class="absolute inset-0 z-40 bg-slate-900/60" @click="sidebarOpen = false"></div>
                 <div class="absolute inset-y-0 left-0 z-50 w-72 bg-slate-900 p-4 shadow-xl" @click.stop>
                     <div class="flex items-center justify-between">

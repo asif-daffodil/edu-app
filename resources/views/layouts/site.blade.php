@@ -341,9 +341,9 @@
                 </div>
             </div>
 
-            <div class="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-                <div>© {{ date('Y') }} {{ config('app.name', 'iTechBD Ltd') }}. All rights reserved.</div>
-                <div class="flex flex-wrap gap-x-4 gap-y-1">
+            <div class="mt-10 flex items-center justify-between gap-4 border-t border-white/10 pt-6 text-[11px] text-slate-400 sm:text-xs">
+                <div class="min-w-0 truncate whitespace-nowrap">© {{ date('Y') }} {{ config('app.name', 'iTechBD Ltd') }}. All rights reserved.</div>
+                <div class="flex shrink-0 items-center gap-4 whitespace-nowrap">
                     <a href="{{ route('privacy') }}" class="hover:text-slate-200">Privacy</a>
                     <a href="{{ route('terms') }}" class="hover:text-slate-200">Terms</a>
                 </div>
