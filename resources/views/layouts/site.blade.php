@@ -38,6 +38,24 @@
             animation: gradientMove 14s ease infinite;
         }
 
+        @keyframes itechPulseDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, .55);
+            }
+            55% {
+                transform: scale(1.45);
+                opacity: .35;
+                box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+            }
+        }
+
+        .itech-pulse-dot {
+            transform-origin: center;
+            animation: itechPulseDot 1.15s ease-in-out infinite !important;
+        }
+
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }

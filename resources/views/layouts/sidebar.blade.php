@@ -32,8 +32,9 @@
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentors.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path d="M10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />
-                <path fill-rule="evenodd" d="M3 18a7 7 0 0 1 14 0H3Z" clip-rule="evenodd" />
+                <path d="M10 2 1.5 6 10 10l8.5-4L10 2Z" />
+                <path d="M4 9.2V13c0 .6.4 1.2 1 1.5 1.4.8 3.2 1.5 5 1.5s3.6-.7 5-1.5c.6-.3 1-.9 1-1.5V9.2L10 12 4 9.2Z" />
+                <path d="M18.5 6.5v6.5a1 1 0 0 1-2 0V7.4l2-.9Z" />
             </svg>
             <span>Mentors</span>
         </a>

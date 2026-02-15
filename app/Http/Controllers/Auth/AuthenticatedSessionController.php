@@ -28,6 +28,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+        if ($user && ($user->must_change_password ?? false)) {
+            try {
+                if (method_exists($user, 'hasRole') && $user->hasRole('mentor')) {
+                    return redirect()->route('profile.edit')->with('status', 'must-change-password');
+                }
+            } catch (\Throwable $e) {
+                // If role check fails for any reason, continue normal flow.
+            }
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

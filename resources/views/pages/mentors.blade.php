@@ -12,20 +12,7 @@
             </div>
 
             <div class="reveal mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @php
-                    $mentors = [
-                        ['role' => 'Senior Web Engineer', 'tag' => 'Web Dev'],
-                        ['role' => 'SEO Lead', 'tag' => 'SEO'],
-                        ['role' => '.NET Developer', 'tag' => '.NET'],
-                        ['role' => 'Creative Designer', 'tag' => 'Design'],
-                        ['role' => 'UI/UX Specialist', 'tag' => 'UI/UX'],
-                        ['role' => 'Mobile App Developer', 'tag' => 'Flutter'],
-                        ['role' => 'DevOps Engineer', 'tag' => 'DevOps'],
-                        ['role' => 'Data Analyst', 'tag' => 'Data'],
-                    ];
-                @endphp
-
-                @foreach ($mentors as $m)
+                @forelse ($mentors as $mentor)
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
                         <div class="aspect-square w-full overflow-hidden rounded-2xl bg-slate-950/30 ring-1 ring-white/10 grid place-items-center">
                             <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-200/70" aria-hidden="true">
@@ -33,11 +20,17 @@
                                 <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
                             </svg>
                         </div>
-                        <div class="mt-4 text-sm font-semibold text-white">{{ $m['role'] }}</div>
-                        <div class="mt-1 text-xs text-slate-300">{{ $m['tag'] }} • Weekly support</div>
-                        <p class="mt-3 text-sm text-slate-200">Project review, guidance, and best practices to level up fast.</p>
+                        <div class="mt-4 text-sm font-semibold text-white">{{ $mentor->name }}</div>
+                        <div class="mt-1 text-xs text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
+                        <p class="mt-3 text-sm text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
                     </div>
-                @endforeach
+                @empty
+                    <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 text-slate-200">No mentors available yet.</div>
+                @endforelse
+            </div>
+
+            <div class="mt-10">
+                {{ $mentors->links() }}
             </div>
         </div>
     </section>

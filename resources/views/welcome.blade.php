@@ -10,7 +10,7 @@
             <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-20">
                 <div class="lg:col-span-7">
                     <div class="reveal inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs text-slate-200 ring-1 ring-white/10">
-                        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+                        <span class="itech-pulse-dot inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
                         Job-ready training with real projects
                         <span class="hidden text-slate-300 sm:inline">•</span>
                         <span class="hidden text-slate-300 sm:inline">Mentor support • Career guidance</span>
@@ -74,8 +74,10 @@
                                 </div>
                             </div>
 
-                            <div class="mt-6 grid gap-4">
-                                <div class="rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
+                            <div class="mt-6">
+                                <div id="differentReasonsViewport" class="overflow-hidden" data-force-motion="1">
+                                    <div id="differentReasonsTrack" class="flex flex-col gap-4 will-change-transform">
+                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-indigo-500/20 p-2 ring-1 ring-indigo-400/20">
                                             <div class="text-xs font-semibold text-indigo-100">Career Track</div>
@@ -83,9 +85,9 @@
                                         </div>
                                         <div class="text-sm text-slate-200">Structured growth path from basics to advanced.</div>
                                     </div>
-                                </div>
+                                        </div>
 
-                                <div class="rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
+                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-sky-500/20 p-2 ring-1 ring-sky-400/20">
                                             <div class="text-xs font-semibold text-sky-100">Freelancing Support</div>
@@ -93,15 +95,27 @@
                                         </div>
                                         <div class="text-sm text-slate-200">Learn how to work with real clients professionally.</div>
                                     </div>
-                                </div>
+                                        </div>
 
-                                <div class="rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
+                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-emerald-500/20 p-2 ring-1 ring-emerald-400/20">
                                             <div class="text-xs font-semibold text-emerald-100">Progress Tracking</div>
                                             <div class="mt-1 text-sm text-slate-200">Weekly tasks + reviews</div>
                                         </div>
                                         <div class="text-sm text-slate-200">Stay consistent with milestones and feedback.</div>
+                                    </div>
+                                        </div>
+
+                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
+                                            <div class="flex items-start gap-3">
+                                                <div class="mt-0.5 rounded-xl bg-violet-500/20 p-2 ring-1 ring-violet-400/20">
+                                                    <div class="text-xs font-semibold text-violet-100">Community & Networking</div>
+                                                    <div class="mt-1 text-sm text-slate-200">Peer support + job updates</div>
+                                                </div>
+                                                <div class="text-sm text-slate-200">Connect with learners and mentors beyond the classroom.</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -225,23 +239,6 @@
                 </div>
 
                 <div class="reveal mt-10">
-                    @php
-                        $mentors = [
-                            ['role' => 'Senior Web Engineer', 'tag' => 'Web Dev'],
-                            ['role' => 'SEO Lead', 'tag' => 'SEO'],
-                            ['role' => '.NET Developer', 'tag' => '.NET'],
-                            ['role' => 'Creative Designer', 'tag' => 'Design'],
-                            ['role' => 'UI/UX Specialist', 'tag' => 'UI/UX'],
-                            ['role' => 'Mobile App Developer', 'tag' => 'Flutter'],
-                            ['role' => 'DevOps Engineer', 'tag' => 'DevOps'],
-                            ['role' => 'Data Analyst', 'tag' => 'Data'],
-                            ['role' => 'Cybersecurity Consultant', 'tag' => 'Security'],
-                            ['role' => 'QA Automation Engineer', 'tag' => 'QA'],
-                            ['role' => 'Digital Marketer', 'tag' => 'Marketing'],
-                            ['role' => 'Project Manager', 'tag' => 'PM'],
-                        ];
-                    @endphp
-
                     <div class="relative">
                         <div class="mb-3 flex items-center justify-end gap-2">
                             <button id="mentorPrev" type="button" aria-label="Previous mentors" class="inline-flex items-center justify-center rounded-xl bg-slate-950/70 px-3 py-2 text-white ring-1 ring-white/10 backdrop-blur transition hover:bg-slate-950/90">
@@ -257,7 +254,7 @@
                         </div>
 
                         <div id="mentorCarousel" class="mentor-carousel flex gap-6 overflow-x-auto scroll-smooth pb-2">
-                            @foreach ($mentors as $m)
+                            @forelse ($mentors ?? [] as $mentor)
                                 <div class="mentor-card shrink-0 basis-full overflow-hidden rounded-3xl bg-white/5 ring-1 ring-white/10 sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(25%-1.125rem)]">
                                     <div class="aspect-square w-full bg-slate-950/30 grid place-items-center">
                                         <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-200/70 sm:h-28 sm:w-28" aria-hidden="true">
@@ -266,12 +263,14 @@
                                         </svg>
                                     </div>
                                     <div class="p-6">
-                                        <div class="text-sm font-semibold text-white">{{ $m['role'] }}</div>
-                                        <div class="mt-1 text-xs text-slate-300">{{ $m['tag'] }} • Weekly support</div>
-                                        <p class="mt-3 text-sm text-slate-200">Project review, guidance, and best practices to level up fast.</p>
+                                        <div class="text-sm font-semibold text-white">{{ $mentor->name }}</div>
+                                        <div class="mt-1 text-xs text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
+                                        <p class="mt-3 text-sm text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 text-slate-200">No mentors available yet.</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -528,6 +527,145 @@
                 carousel.addEventListener('touchend', start, { passive: true });
 
                 start();
+            }
+
+            // What makes us different (vertical ticker)
+            var reasonsViewport = document.getElementById('differentReasonsViewport');
+            var reasonsTrack = document.getElementById('differentReasonsTrack');
+            if (reasonsViewport && reasonsTrack) {
+                var reduceReasonsMotion = false;
+
+                try {
+                    reduceReasonsMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                } catch (e) {
+                    reduceReasonsMotion = false;
+                }
+
+                var forceReasonsMotion = reasonsViewport.getAttribute('data-force-motion') === '1';
+                if (forceReasonsMotion) reduceReasonsMotion = false;
+
+                var visibleCount = 3;
+                var durationMs = 650;
+                var intervalMs = 2600;
+
+                var originalItems = Array.prototype.slice.call(reasonsTrack.querySelectorAll('.different-reason'));
+                var originalCount = originalItems.length;
+
+                function setStaticViewportHeight() {
+                    var itemsNow = reasonsTrack.querySelectorAll('.different-reason');
+                    if (!itemsNow || itemsNow.length < 2) return;
+
+                    var r1 = itemsNow[0].getBoundingClientRect();
+                    var r2 = itemsNow[1].getBoundingClientRect();
+                    var step = Math.round(r2.top - r1.top);
+                    if (!step || step <= 0) step = Math.round(r1.height + 16);
+
+                    var viewportHeight = Math.round(r1.height + step * (visibleCount - 1));
+                    reasonsViewport.style.height = viewportHeight + 'px';
+                }
+
+                if (originalCount > visibleCount) {
+                    setStaticViewportHeight();
+
+                    if (reduceReasonsMotion) {
+                        var staticResizeTimer = null;
+                        window.addEventListener('resize', function () {
+                            if (staticResizeTimer) window.clearTimeout(staticResizeTimer);
+                            staticResizeTimer = window.setTimeout(setStaticViewportHeight, 120);
+                        });
+                    }
+                }
+
+                if (!reduceReasonsMotion && originalCount > visibleCount) {
+                    // Clone first N items for a seamless loop.
+                    var cloneCount = Math.min(visibleCount, originalCount);
+                    for (var i = 0; i < cloneCount; i++) {
+                        var clone = originalItems[i].cloneNode(true);
+                        clone.setAttribute('data-clone', '1');
+                        reasonsTrack.appendChild(clone);
+                    }
+
+                    reasonsTrack.style.transitionProperty = 'transform';
+                    reasonsTrack.style.transitionTimingFunction = 'cubic-bezier(0.4, 0, 0.2, 1)';
+                    reasonsTrack.style.transitionDuration = durationMs + 'ms';
+
+                    var stepPx = 0;
+                    var firstHeight = 0;
+                    var index = 0;
+                    var timer2 = null;
+                    var resetting = false;
+
+                    function measure() {
+                        var itemsNow = reasonsTrack.querySelectorAll('.different-reason');
+                        if (!itemsNow || itemsNow.length < 2) return;
+
+                        var r1 = itemsNow[0].getBoundingClientRect();
+                        var r2 = itemsNow[1].getBoundingClientRect();
+
+                        firstHeight = r1.height;
+                        stepPx = Math.round(r2.top - r1.top);
+
+                        if (!stepPx || stepPx <= 0) {
+                            // Fallback: item height + 16px (gap-4)
+                            stepPx = Math.round(r1.height + 16);
+                        }
+
+                        // Show exactly 3 items; the 4th stays hidden until scroll.
+                        var viewportHeight = Math.round(firstHeight + stepPx * (visibleCount - 1));
+                        reasonsViewport.style.height = viewportHeight + 'px';
+
+                        // Keep current position after resize.
+                        reasonsTrack.style.transform = 'translateY(' + (-index * stepPx) + 'px)';
+                    }
+
+                    function stopReasons() {
+                        if (timer2) window.clearInterval(timer2);
+                        timer2 = null;
+                    }
+
+                    function resetIfNeeded() {
+                        if (index !== originalCount) return;
+                        resetting = true;
+                        // Jump back to the start after reaching the clones.
+                        reasonsTrack.style.transitionProperty = 'none';
+                        reasonsTrack.style.transform = 'translateY(0px)';
+                        // Force reflow so the browser applies the transform before re-enabling transition.
+                        void reasonsTrack.offsetHeight;
+                        reasonsTrack.style.transitionProperty = 'transform';
+                        index = 0;
+                        resetting = false;
+                    }
+
+                    function tick() {
+                        if (!stepPx || resetting) return;
+                        index += 1;
+                        reasonsTrack.style.transform = 'translateY(' + (-index * stepPx) + 'px)';
+
+                        if (index === originalCount) {
+                            window.setTimeout(resetIfNeeded, durationMs + 60);
+                        }
+                    }
+
+                    function startReasons() {
+                        stopReasons();
+                        timer2 = window.setInterval(tick, intervalMs);
+                    }
+
+                    reasonsViewport.addEventListener('mouseenter', stopReasons);
+                    reasonsViewport.addEventListener('mouseleave', startReasons);
+                    reasonsViewport.addEventListener('focusin', stopReasons);
+                    reasonsViewport.addEventListener('focusout', startReasons);
+
+                    measure();
+
+                    var resizeTimer = null;
+                    window.addEventListener('resize', function () {
+                        if (resizeTimer) window.clearTimeout(resizeTimer);
+                        resizeTimer = window.setTimeout(measure, 120);
+                    });
+
+                    startReasons();
+                }
             }
         })();
     </script>

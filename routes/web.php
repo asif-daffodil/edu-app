@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', [SiteController::class, 'home'])->name('home');
 
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/courses', 'pages.courses')->name('courses');
-Route::view('/mentors', 'pages.mentors')->name('mentors');
+Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
 Route::view('/reviews', 'pages.reviews')->name('reviews');
 Route::view('/news', 'pages.news')->name('news');
 Route::view('/contact', 'pages.contact')->name('contact');

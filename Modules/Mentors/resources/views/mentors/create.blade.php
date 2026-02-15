@@ -12,14 +12,10 @@
                 @csrf
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700">Link to User (optional)</label>
-                    <select name="user_id" class="mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">
-                        <option value="">— Not linked —</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" @selected(old('user_id') == $user->id)>{{ $user->name }} ({{ $user->email }})</option>
-                        @endforeach
-                    </select>
-                    @error('user_id')
+                    <label class="block text-sm font-medium text-slate-700">Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" class="mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="mentor@example.com" required />
+                    <p class="mt-1 text-xs text-slate-500">A user will be created with default password <span class="font-semibold">12345678</span>. Mentor will change it after login.</p>
+                    @error('email')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>

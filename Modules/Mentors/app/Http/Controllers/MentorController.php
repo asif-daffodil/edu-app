@@ -7,7 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Modules\Mentors\Models\Mentor;
 
 class MentorController extends Controller implements HasMiddleware
@@ -38,9 +40,7 @@ class MentorController extends Controller implements HasMiddleware
     {
         abort_unless(Gate::allows('create', Mentor::class), 403);
 
-        $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
-
-        return view('mentors::mentors.create', compact('users'));
+        return view('mentors::mentors.create');
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class MentorController extends Controller implements HasMiddleware
         abort_unless(Gate::allows('create', Mentor::class), 403);
 
         $validated = $request->validate([
-            'user_id' => 'nullable|integer|exists:users,id',
+            'email' => 'required|email|max:255|unique:users,email',
             'name' => 'required|string|max:255',
             'topic' => 'nullable|string|max:255',
             'bio' => 'nullable|string|max:2000',
@@ -57,15 +57,24 @@ class MentorController extends Controller implements HasMiddleware
 
         $validated['is_active'] = (bool) ($request->boolean('is_active'));
 
-        if (! empty($validated['user_id'])) {
-            // one mentor profile per user
-            $existing = Mentor::query()->where('user_id', $validated['user_id'])->first();
-            if ($existing) {
-                return back()->withErrors(['user_id' => 'This user already has a mentor profile.'])->withInput();
-            }
-        }
+        DB::transaction(function () use ($validated) {
+            $user = User::query()->create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => '12345678',
+                'must_change_password' => true,
+            ]);
 
-        Mentor::create($validated);
+            $user->assignRole('mentor');
+
+            Mentor::query()->create([
+                'user_id' => $user->id,
+                'name' => $validated['name'],
+                'topic' => $validated['topic'] ?? null,
+                'bio' => $validated['bio'] ?? null,
+                'is_active' => $validated['is_active'],
+            ]);
+        });
 
         return redirect()->route('dashboard.mentors.index')->with('success', 'Mentor created successfully.');
     }
@@ -83,9 +92,9 @@ class MentorController extends Controller implements HasMiddleware
     {
         abort_unless(Gate::allows('update', $mentor), 403);
 
-        $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
+        $mentor->load(['user:id,name,email']);
 
-        return view('mentors::mentors.edit', compact('mentor', 'users'));
+        return view('mentors::mentors.edit', compact('mentor'));
     }
 
     public function update(Request $request, Mentor $mentor)
@@ -93,7 +102,12 @@ class MentorController extends Controller implements HasMiddleware
         abort_unless(Gate::allows('update', $mentor), 403);
 
         $validated = $request->validate([
-            'user_id' => 'nullable|integer|exists:users,id',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($mentor->user_id),
+            ],
             'name' => 'required|string|max:255',
             'topic' => 'nullable|string|max:255',
             'bio' => 'nullable|string|max:2000',
@@ -102,18 +116,32 @@ class MentorController extends Controller implements HasMiddleware
 
         $validated['is_active'] = (bool) ($request->boolean('is_active'));
 
-        if (! empty($validated['user_id'])) {
-            $existing = Mentor::query()
-                ->where('user_id', $validated['user_id'])
-                ->where('id', '!=', $mentor->id)
-                ->first();
+        DB::transaction(function () use ($mentor, $validated) {
+            $mentor->loadMissing(['user']);
 
-            if ($existing) {
-                return back()->withErrors(['user_id' => 'This user already has a mentor profile.'])->withInput();
+            if ($mentor->user) {
+                $mentor->user->update([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                ]);
+            } else {
+                $user = User::query()->create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => '12345678',
+                    'must_change_password' => true,
+                ]);
+                $user->assignRole('mentor');
+                $mentor->user()->associate($user);
             }
-        }
 
-        $mentor->update($validated);
+            $mentor->update([
+                'name' => $validated['name'],
+                'topic' => $validated['topic'] ?? null,
+                'bio' => $validated['bio'] ?? null,
+                'is_active' => $validated['is_active'],
+            ]);
+        });
 
         return redirect()->route('dashboard.mentors.index')->with('success', 'Mentor updated successfully.');
     }
