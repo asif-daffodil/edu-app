@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('title', 'Courses • ' . config('app.name', 'iTechBD Ltd'))
+@section('title', __('frontend.courses') . ' • ' . config('app.name', 'iTechBD Ltd'))
 
 @section('content')
 <main>
@@ -8,8 +8,8 @@
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">Courses</h1>
-                    <p class="mt-3 max-w-2xl text-slate-200">Choose a skill track and learn with practical projects, reviews, and mentor support.</p>
+                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.courses_title') }}</h1>
+                    <p class="mt-3 max-w-2xl text-slate-200">{{ __('frontend.courses_subtitle') }}</p>
                 </div>
             </div>
 

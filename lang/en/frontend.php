@@ -1,0 +1,160 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'home' => 'Home',
+    'about' => 'About',
+    'courses' => 'Courses',
+    'mentors' => 'Mentors',
+    'reviews' => 'Reviews',
+    'news' => 'News',
+    'contact' => 'Contact',
+
+    'login' => 'Log in',
+    'register' => 'Register',
+    'dashboard' => 'Dashboard',
+
+    'enroll_now' => 'Enroll Now',
+    'explore_courses' => 'Explore Courses',
+
+    'language_bn' => 'বাংলা',
+    'language_en' => 'English',
+
+    'live_class' => 'Live Class',
+    'recorded_class' => 'Recorded Class',
+
+    'courses_title' => 'Courses',
+    'courses_subtitle' => 'Choose a skill track and learn with practical projects, '
+        .'reviews, and mentor support.',
+
+    'about_title' => 'Why Choose iTechBD',
+    'about_subtitle' => 'Mentor-led learning, portfolio-first projects, '
+        .'and career-focused support to help you get hired '
+        .'or start freelancing.',
+
+    'hero_badge_primary' => 'Job-ready training with real projects',
+    'hero_badge_secondary' => 'Mentor support • Career guidance',
+    'hero_heading_primary' => 'Learn from the most experienced mentors '
+        .'in Bangladesh —',
+    'hero_heading_emphasis' => 'become career-ready',
+    'hero_paragraph' => 'Build a strong portfolio with industry-standard skills. '
+        .'Our trainers and mentors are top-positioned professionals, '
+        .'and we focus on practical learning, interview preparation, '
+        .'and real-world problem solving. Many of our students become '
+        .'active freelancers and professionals working with leading '
+        .'IT companies in Bangladesh.',
+    'hero_cta_outcomes' => 'See Student Outcomes',
+
+    'hero_stat_live_label' => 'Live Classes',
+    'hero_stat_live_value' => 'Mentor-led',
+    'hero_stat_projects_label' => 'Projects',
+    'hero_stat_projects_value' => 'Portfolio-ready',
+    'hero_stat_support_label' => 'Support',
+    'hero_stat_support_value' => 'Career guidance',
+    'hero_stat_community_label' => 'Community',
+    'hero_stat_community_value' => 'Active learners',
+
+    'hero_side_why_choose_us' => 'Why choose us',
+    'hero_side_what_makes_different' => 'What makes us different',
+    'hero_side_pill' => 'Mentor-led, career-focused',
+
+    'hero_reason_career_title' => 'Career Track',
+    'hero_reason_career_subtitle' => 'CV + interview prep + real projects',
+    'hero_reason_career_desc' => 'Structured growth path from basics to advanced.',
+
+    'hero_reason_freelance_title' => 'Freelancing Support',
+    'hero_reason_freelance_subtitle' => 'Profile + proposal + client communication',
+    'hero_reason_freelance_desc' => 'Learn how to work with real clients '
+        .'professionally.',
+
+    'hero_reason_progress_title' => 'Progress Tracking',
+    'hero_reason_progress_subtitle' => 'Weekly tasks + reviews',
+    'hero_reason_progress_desc' => 'Stay consistent with milestones and feedback.',
+
+    'hero_reason_community_title' => 'Community & Networking',
+    'hero_reason_community_subtitle' => 'Peer support + job updates',
+    'hero_reason_community_desc' => 'Connect with learners and mentors '
+        .'beyond the classroom.',
+
+    'hero_need_details_title' => 'Need details?',
+    'hero_need_details_subtitle' => 'Get course outline, schedule and fees.',
+    'hero_need_details_email_us' => 'Email Us',
+    'hero_need_details_read_faq' => 'Read FAQ',
+
+    'home_about_title' => 'Why Choose iTechBD',
+    'home_about_subtitle' => 'We focus on job-ready skills, mentorship, '
+        .'and real projects. Learn with top-positioned trainers '
+        .'and mentors, get regular reviews, and build a portfolio '
+        .'that helps you in jobs and freelancing.',
+    'home_about_card_1_title' => 'Mentor-led learning',
+    'home_about_card_1_desc' => 'Weekly guidance, code/design reviews, '
+        .'and a clear learning path.',
+    'home_about_card_2_title' => 'Portfolio first',
+    'home_about_card_2_desc' => 'Projects that showcase your skills '
+        .'and help you stand out.',
+    'home_about_card_3_title' => 'Career + freelancing support',
+    'home_about_card_3_desc' => 'Interview practice, client communication, '
+        .'and practical guidance.',
+
+    'home_skill_tracks_title' => 'Our Skill Tracks',
+    'home_skill_tracks_subtitle' => 'Choose a course, learn by doing, '
+        .'and build a strong portfolio.',
+
+    'home_mentors_title' => 'Mentors',
+    'home_mentors_subtitle' => 'Top-positioned mentors guide you with reviews, '
+        .'projects, and career support.',
+
+    'home_reviews_title' => 'Student Reviews',
+    'home_reviews_subtitle' => 'Real feedback from learners who improved their '
+        .'skills, careers, and freelancing journey.',
+
+    'home_outcomes_title' => 'Student Outcomes',
+    'home_outcomes_subtitle' => 'Students get good jobs and become top-rated '
+        .'freelancers by building real skills and strong portfolios.',
+
+    'home_news_title' => 'News & Updates',
+    'home_news_subtitle' => 'Announcements, workshops, and upcoming batches.',
+
+    'faq_title' => 'FAQ',
+    'faq_subtitle' => 'Common questions about batches, mentoring, and support.',
+
+    'faq_q1_title' => 'Do I need prior experience?',
+    'faq_q1_answer' => 'No. We start from fundamentals '
+        .'and gradually move to projects.',
+
+    'faq_q2_title' => 'Will you help with jobs and freelancing?',
+    'faq_q2_answer' => 'Yes. We support CV, interview practice, '
+        .'and freelancing guidance.',
+
+    'faq_cta_title' => 'Ready to start?',
+    'faq_cta_subtitle' => 'Join a batch and build your future.',
+
+    'contact_title' => 'Contact',
+    'contact_subtitle' => 'Get course outline, schedule and fees.',
+    'contact_email_label' => 'Email',
+    'contact_phone_label' => 'Phone',
+
+    'footer_cta_pill' => 'Mentor-led • Career-focused',
+    'footer_cta_title' => 'Ready to learn with mentors?',
+    'footer_cta_subtitle' => 'Get schedule, fees, and course outline '
+        .'in one message.',
+    'footer_cta_tag_weekly_reviews' => 'Weekly reviews',
+    'footer_cta_tag_portfolio_projects' => 'Portfolio projects',
+    'footer_cta_tag_career_support' => 'Career support',
+
+    'footer_brand_tagline' => 'Training Institute • Career-focused',
+    'footer_brand_description' => 'Training institute for career-focused '
+        .'tech & creative skills. Learn with practical projects, '
+        .'reviews, and ongoing mentor support.',
+
+    'footer_updates_title' => 'Get updates',
+    'footer_updates_subtitle' => 'Drop your email to get batch updates '
+        .'and workshop news.',
+    'footer_email_label' => 'Email',
+    'footer_notify' => 'Notify',
+    'footer_no_spam' => 'No spam. Only important updates.',
+
+    'footer_quick_links' => 'Quick Links',
+    'footer_social_media' => 'Social Media',
+];

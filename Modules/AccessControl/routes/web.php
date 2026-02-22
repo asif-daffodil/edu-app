@@ -5,7 +5,7 @@ use Modules\AccessControl\Http\Controllers\PermissionController;
 use Modules\AccessControl\Http\Controllers\RoleController;
 use Modules\AccessControl\Http\Controllers\UserController;
 
-Route::middleware(['auth', 'role:admin'])->group(
+Route::middleware(['auth', 'role:admin', 'backend.locale'])->group(
     function () {
         Route::resource('permissions', PermissionController::class);
         Route::resource('roles', RoleController::class);

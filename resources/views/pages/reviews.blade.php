@@ -7,8 +7,8 @@
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">Student Reviews</h1>
-                <p class="mt-3 max-w-2xl text-slate-200">Real feedback from learners who improved their skills and careers.</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.home_reviews_title') }}</h1>
+                <p class="mt-3 max-w-2xl text-slate-200">{{ __('frontend.home_reviews_subtitle') }}</p>
             </div>
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">

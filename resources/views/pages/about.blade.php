@@ -1,14 +1,14 @@
 @extends('layouts.site')
 
-@section('title', 'About • ' . config('app.name', 'iTechBD Ltd'))
+@section('title', __('frontend.about') . ' • ' . config('app.name', 'iTechBD Ltd'))
 
 @section('content')
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">Why Choose iTechBD</h1>
-                <p class="mt-3 max-w-3xl text-slate-200">Mentor-led learning, portfolio-first projects, and career-focused support to help you get hired or start freelancing.</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.about_title') }}</h1>
+                <p class="mt-3 max-w-3xl text-slate-200">{{ __('frontend.about_subtitle') }}</p>
             </div>
 
             <div class="reveal mt-10 grid gap-6 md:grid-cols-3">

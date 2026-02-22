@@ -3,21 +3,39 @@
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [SiteController::class, 'home'])->name('home');
+Route::get(
+    '/language/{lang}',
+    function (string $lang) {
+        if (in_array($lang, ['en', 'bn'], true)) {
+            session(['locale' => $lang]);
+        }
 
-Route::view('/about', 'pages.about')->name('about');
-Route::view('/courses', 'pages.courses')->name('courses');
-Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
-Route::view('/reviews', 'pages.reviews')->name('reviews');
-Route::view('/news', 'pages.news')->name('news');
-Route::view('/contact', 'pages.contact')->name('contact');
+        return redirect()->back();
+    }
+)->name('language.switch');
 
-Route::view('/privacy', 'pages.privacy')->name('privacy');
-Route::view('/terms', 'pages.terms')->name('terms');
+Route::middleware('frontend.locale')->group(
+    function () {
+        Route::get('/', [SiteController::class, 'home'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+        Route::view('/about', 'pages.about')->name('about');
+        Route::view('/courses', 'pages.courses')->name('courses');
+        Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
+        Route::view('/reviews', 'pages.reviews')->name('reviews');
+        Route::view('/news', 'pages.news')->name('news');
+        Route::view('/contact', 'pages.contact')->name('contact');
 
-require __DIR__.'/auth.php';
+        Route::view('/privacy', 'pages.privacy')->name('privacy');
+        Route::view('/terms', 'pages.terms')->name('terms');
+
+        include __DIR__.'/auth.php';
+    }
+);
+
+Route::get(
+    '/dashboard',
+    function () {
+        return view('dashboard');
+    }
+)->middleware(['auth', 'verified', 'backend.locale'])->name('dashboard');
 

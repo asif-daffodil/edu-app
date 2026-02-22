@@ -37,4 +37,4 @@ $webRoutes = static function () use ($dashboardRoutes): void {
     $dashboardGroup->group($dashboardRoutes);
 };
 
-Route::middleware(['auth', 'verified'])->group($webRoutes);
+Route::middleware(['auth', 'verified', 'backend.locale'])->group($webRoutes);

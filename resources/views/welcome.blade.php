@@ -11,20 +11,18 @@
                 <div class="lg:col-span-7">
                     <div class="reveal inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs text-slate-200 ring-1 ring-white/10">
                         <span class="itech-pulse-dot inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
-                        Job-ready training with real projects
+                        {{ __('frontend.hero_badge_primary') }}
                         <span class="hidden text-slate-300 sm:inline">•</span>
-                        <span class="hidden text-slate-300 sm:inline">Mentor support • Career guidance</span>
+                        <span class="hidden text-slate-300 sm:inline">{{ __('frontend.hero_badge_secondary') }}</span>
                     </div>
 
                     <h1 class="reveal mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                        Learn from the most experienced mentors in Bangladesh —
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-sky-300 to-emerald-300 animate-gradient">become career-ready</span>
+                        {{ __('frontend.hero_heading_primary') }}
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-sky-300 to-emerald-300 animate-gradient">{{ __('frontend.hero_heading_emphasis') }}</span>
                     </h1>
 
                     <p class="reveal mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-                        Build a strong portfolio with industry-standard skills. Our trainers and mentors are top-positioned professionals,
-                        and we focus on practical learning, interview preparation, and real-world problem solving.
-                        Many of our students become active freelancers and professionals working with leading IT companies in Bangladesh.
+                        {{ __('frontend.hero_paragraph') }}
                     </p>
 
                     <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -34,26 +32,26 @@
                         </a>
                         <a href="#outcomes"
                            class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">
-                            See Student Outcomes
+                            {{ __('frontend.hero_cta_outcomes') }}
                         </a>
                     </div>
 
                     <div class="reveal mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                         <div class="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                            <div class="text-xs text-slate-300">Live Classes</div>
-                            <div class="mt-1 font-semibold text-white">Mentor-led</div>
+                            <div class="text-xs text-slate-300">{{ __('frontend.hero_stat_live_label') }}</div>
+                            <div class="mt-1 font-semibold text-white">{{ __('frontend.hero_stat_live_value') }}</div>
                         </div>
                         <div class="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                            <div class="text-xs text-slate-300">Projects</div>
-                            <div class="mt-1 font-semibold text-white">Portfolio-ready</div>
+                            <div class="text-xs text-slate-300">{{ __('frontend.hero_stat_projects_label') }}</div>
+                            <div class="mt-1 font-semibold text-white">{{ __('frontend.hero_stat_projects_value') }}</div>
                         </div>
                         <div class="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                            <div class="text-xs text-slate-300">Support</div>
-                            <div class="mt-1 font-semibold text-white">Career guidance</div>
+                            <div class="text-xs text-slate-300">{{ __('frontend.hero_stat_support_label') }}</div>
+                            <div class="mt-1 font-semibold text-white">{{ __('frontend.hero_stat_support_value') }}</div>
                         </div>
                         <div class="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                            <div class="text-xs text-slate-300">Community</div>
-                            <div class="mt-1 font-semibold text-white">Active learners</div>
+                            <div class="text-xs text-slate-300">{{ __('frontend.hero_stat_community_label') }}</div>
+                            <div class="mt-1 font-semibold text-white">{{ __('frontend.hero_stat_community_value') }}</div>
                         </div>
                     </div>
                 </div>
@@ -66,11 +64,11 @@
                         <div class="relative">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <div class="text-xs text-slate-300">Why choose us</div>
-                                    <div class="mt-1 text-lg font-semibold text-white">What makes us different</div>
+                                    <div class="text-xs text-slate-300">{{ __('frontend.hero_side_why_choose_us') }}</div>
+                                    <div class="mt-1 text-lg font-semibold text-white">{{ __('frontend.hero_side_what_makes_different') }}</div>
                                 </div>
                                 <div class="rounded-2xl bg-white/10 px-3 py-2 text-xs text-slate-200 ring-1 ring-white/10">
-                                    Mentor-led, career-focused
+                                    {{ __('frontend.hero_side_pill') }}
                                 </div>
                             </div>
 
@@ -80,40 +78,40 @@
                                         <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-indigo-500/20 p-2 ring-1 ring-indigo-400/20">
-                                            <div class="text-xs font-semibold text-indigo-100">Career Track</div>
-                                            <div class="mt-1 text-sm text-slate-200">CV + interview prep + real projects</div>
+                                            <div class="text-xs font-semibold text-indigo-100">{{ __('frontend.hero_reason_career_title') }}</div>
+                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_career_subtitle') }}</div>
                                         </div>
-                                        <div class="text-sm text-slate-200">Structured growth path from basics to advanced.</div>
+                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_career_desc') }}</div>
                                     </div>
                                         </div>
 
                                         <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-sky-500/20 p-2 ring-1 ring-sky-400/20">
-                                            <div class="text-xs font-semibold text-sky-100">Freelancing Support</div>
-                                            <div class="mt-1 text-sm text-slate-200">Profile + proposal + client communication</div>
+                                            <div class="text-xs font-semibold text-sky-100">{{ __('frontend.hero_reason_freelance_title') }}</div>
+                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_freelance_subtitle') }}</div>
                                         </div>
-                                        <div class="text-sm text-slate-200">Learn how to work with real clients professionally.</div>
+                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_freelance_desc') }}</div>
                                     </div>
                                         </div>
 
                                         <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-0.5 rounded-xl bg-emerald-500/20 p-2 ring-1 ring-emerald-400/20">
-                                            <div class="text-xs font-semibold text-emerald-100">Progress Tracking</div>
-                                            <div class="mt-1 text-sm text-slate-200">Weekly tasks + reviews</div>
+                                            <div class="text-xs font-semibold text-emerald-100">{{ __('frontend.hero_reason_progress_title') }}</div>
+                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_progress_subtitle') }}</div>
                                         </div>
-                                        <div class="text-sm text-slate-200">Stay consistent with milestones and feedback.</div>
+                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_progress_desc') }}</div>
                                     </div>
                                         </div>
 
                                         <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
                                             <div class="flex items-start gap-3">
                                                 <div class="mt-0.5 rounded-xl bg-violet-500/20 p-2 ring-1 ring-violet-400/20">
-                                                    <div class="text-xs font-semibold text-violet-100">Community & Networking</div>
-                                                    <div class="mt-1 text-sm text-slate-200">Peer support + job updates</div>
+                                                    <div class="text-xs font-semibold text-violet-100">{{ __('frontend.hero_reason_community_title') }}</div>
+                                                    <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_community_subtitle') }}</div>
                                                 </div>
-                                                <div class="text-sm text-slate-200">Connect with learners and mentors beyond the classroom.</div>
+                                                <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_community_desc') }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -121,16 +119,16 @@
                             </div>
 
                             <div id="contact" class="mt-6 rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
-                                <div class="text-sm font-semibold text-white">Need details?</div>
-                                <div class="mt-1 text-sm text-slate-200">Get course outline, schedule and fees.</div>
+                                <div class="text-sm font-semibold text-white">{{ __('frontend.hero_need_details_title') }}</div>
+                                <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_need_details_subtitle') }}</div>
                                 <div class="mt-4 flex flex-col gap-2 sm:flex-row">
                                     <a href="mailto:info@example.com"
                                        class="inline-flex flex-1 items-center justify-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">
-                                        Email Us
+                                        {{ __('frontend.hero_need_details_email_us') }}
                                     </a>
                                     <a href="#faq"
                                        class="inline-flex flex-1 items-center justify-center rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">
-                                        Read FAQ
+                                        {{ __('frontend.hero_need_details_read_faq') }}
                                     </a>
                                 </div>
                             </div>
@@ -144,22 +142,22 @@
         <section id="about" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">Why Choose iTechBD</h2>
-                    <p class="mt-2 max-w-3xl text-slate-200">We focus on job-ready skills, mentorship, and real projects. Learn with top-positioned trainers and mentors, get regular reviews, and build a portfolio that helps you in jobs and freelancing.</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_about_title') }}</h2>
+                    <p class="mt-2 max-w-3xl text-slate-200">{{ __('frontend.home_about_subtitle') }}</p>
                 </div>
 
                 <div class="reveal mt-10 grid gap-6 md:grid-cols-3">
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">Mentor-led learning</div>
-                        <p class="mt-2 text-sm text-slate-200">Weekly guidance, code/design reviews, and a clear learning path.</p>
+                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_1_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_1_desc') }}</p>
                     </div>
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">Portfolio first</div>
-                        <p class="mt-2 text-sm text-slate-200">Projects that showcase your skills and help you stand out.</p>
+                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_2_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_2_desc') }}</p>
                     </div>
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">Career + freelancing support</div>
-                        <p class="mt-2 text-sm text-slate-200">Interview practice, client communication, and practical guidance.</p>
+                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_3_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_3_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -170,8 +168,8 @@
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">Our Skill Tracks</h2>
-                        <p class="mt-2 max-w-2xl text-slate-200">Choose a course, learn by doing, and build a strong portfolio.</p>
+                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_skill_tracks_title') }}</h2>
+                        <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_skill_tracks_subtitle') }}</p>
                     </div>
                     <a href="#outcomes" class="text-sm font-medium text-sky-200 hover:text-sky-100">How we help you get hired →</a>
                 </div>
@@ -234,8 +232,8 @@
         <section id="mentors" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">Mentors</h2>
-                    <p class="mt-2 max-w-2xl text-slate-200">Top-positioned mentors guide you with reviews, projects, and career support.</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_mentors_title') }}</h2>
+                    <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_mentors_subtitle') }}</p>
                 </div>
 
                 <div class="reveal mt-10">
@@ -281,8 +279,8 @@
         <section id="reviews" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">Student Reviews</h2>
-                    <p class="mt-2 max-w-2xl text-slate-200">Real feedback from learners who improved their skills, careers, and freelancing journey.</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_reviews_title') }}</h2>
+                    <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_reviews_subtitle') }}</p>
                 </div>
 
                 <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -315,8 +313,8 @@
         <section id="outcomes" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">Student Outcomes</h2>
-                    <p class="mt-2 max-w-2xl text-slate-200">Students get good jobs and become top-rated freelancers by building real skills and strong portfolios.</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_outcomes_title') }}</h2>
+                    <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_outcomes_subtitle') }}</p>
                 </div>
 
                 <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -349,8 +347,8 @@
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">News & Updates</h2>
-                        <p class="mt-2 max-w-2xl text-slate-200">Announcements, workshops, and upcoming batches.</p>
+                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_news_title') }}</h2>
+                        <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_news_subtitle') }}</p>
                     </div>
                     <a href="{{ route('contact') }}" class="text-sm font-medium text-sky-200 hover:text-sky-100">Get schedule & fees →</a>
                 </div>
@@ -379,33 +377,33 @@
         <section id="faq" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">FAQ</h2>
-                    <p class="mt-2 max-w-2xl text-slate-200">Common questions about batches, mentoring, and support.</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.faq_title') }}</h2>
+                    <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.faq_subtitle') }}</p>
                 </div>
 
                 <div class="mt-10 grid gap-6 lg:grid-cols-2">
                     <div class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <h3 class="text-base font-semibold text-white">Do I need prior experience?</h3>
-                        <p class="mt-2 text-sm text-slate-200">No. We start from fundamentals and gradually move to projects.</p>
+                        <h3 class="text-base font-semibold text-white">{{ __('frontend.faq_q1_title') }}</h3>
+                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.faq_q1_answer') }}</p>
                     </div>
                     <div class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <h3 class="text-base font-semibold text-white">Will you help with jobs and freelancing?</h3>
-                        <p class="mt-2 text-sm text-slate-200">Yes. We support CV, interview practice, and freelancing guidance.</p>
+                        <h3 class="text-base font-semibold text-white">{{ __('frontend.faq_q2_title') }}</h3>
+                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.faq_q2_answer') }}</p>
                     </div>
                 </div>
 
                 <div class="reveal mt-10 rounded-3xl bg-gradient-to-r from-indigo-500/20 via-sky-500/15 to-emerald-500/20 p-8 ring-1 ring-white/10">
                     <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-white">Ready to start?</h3>
-                            <p class="mt-1 text-sm text-slate-200">Join a batch and build your future.</p>
+                            <h3 class="text-lg font-semibold text-white">{{ __('frontend.faq_cta_title') }}</h3>
+                            <p class="mt-1 text-sm text-slate-200">{{ __('frontend.faq_cta_subtitle') }}</p>
                         </div>
                         <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                            <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">View Courses</a>
+                            <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">Enroll Now</a>
+                                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">{{ __('frontend.enroll_now') }}</a>
                             @else
-                                <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">Contact</a>
+                                <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">{{ __('frontend.contact') }}</a>
                             @endif
                         </div>
                     </div>

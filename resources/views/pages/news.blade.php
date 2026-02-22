@@ -8,8 +8,8 @@
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">News & Updates</h1>
-                    <p class="mt-3 max-w-2xl text-slate-200">Announcements, workshops, and upcoming batches.</p>
+                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.home_news_title') }}</h1>
+                    <p class="mt-3 max-w-2xl text-slate-200">{{ __('frontend.home_news_subtitle') }}</p>
                 </div>
             </div>
 
