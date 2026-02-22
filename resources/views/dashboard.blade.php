@@ -29,8 +29,9 @@
         <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <div class="text-sm font-medium text-slate-500">Quick Actions</div>
             <div class="mt-4 space-y-2">
-                <a href="{{ route('users.index') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Users</a>
+                <a href="{{ route('profile.edit') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Update Profile</a>
                 @if($isAdmin)
+                    <a href="{{ route('users.index') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Users</a>
                     <a href="{{ route('roles.index') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Roles</a>
                     <a href="{{ route('permissions.index') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Permissions</a>
                 @endif

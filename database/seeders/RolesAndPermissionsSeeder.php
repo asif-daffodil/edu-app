@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -7,33 +9,62 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
+/**
+ * Seed roles and permissions.
+ *
+ * @category Database
+ * @package  Database\Seeders
+ * @author   Edu App
+ * @license  UNLICENSED
+ * @link     https://localhost
+ */
 class RolesAndPermissionsSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run(): void
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $mentorPermissions = [
+        $permissions = [
             'addMentor',
             'readMentor',
             'editMentor',
             'deleteMentor',
+            'addCourse',
+            'readCourse',
+            'editCourse',
+            'deleteCourse',
+            'addBatch',
+            'readBatch',
+            'editBatch',
+            'deleteBatch',
+            'assignMentorsToBatch',
+            'assignStudentsToBatch',
+            'addClassSchedule',
+            'readClassSchedule',
+            'editClassSchedule',
+            'deleteClassSchedule',
         ];
 
-        foreach ($mentorPermissions as $permissionName) {
+        foreach ($permissions as $permissionName) {
             Permission::findOrCreate($permissionName, 'web');
         }
 
-        /** @var Role $adminRole */
-        $adminRole = Role::query()->firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        /** @var Role $studentRole */
-        $studentRole = Role::query()->firstOrCreate(['name' => 'student', 'guard_name' => 'web']);
+        $adminRoleAttributes = ['name' => 'admin', 'guard_name' => 'web'];
+        $studentRoleAttributes = ['name' => 'student', 'guard_name' => 'web'];
+        $mentorRoleAttributes = ['name' => 'mentor', 'guard_name' => 'web'];
+
+        $adminRole = Role::query()->firstOrCreate($adminRoleAttributes);
+        $studentRole = Role::query()->firstOrCreate($studentRoleAttributes);
 
         // teacher -> mentor (rename/merge)
-        /** @var Role|null $mentorRole */
-        $mentorRole = Role::query()->where('name', 'mentor')->where('guard_name', 'web')->first();
-        /** @var Role|null $teacherRole */
-        $teacherRole = Role::query()->where('name', 'teacher')->where('guard_name', 'web')->first();
+        $roleQuery = Role::query()->where('guard_name', 'web');
+        $mentorRole = (clone $roleQuery)->where('name', 'mentor')->first();
+        $teacherRole = (clone $roleQuery)->where('name', 'teacher')->first();
 
         if (! $mentorRole && $teacherRole) {
             $teacherRole->name = 'mentor';
@@ -42,11 +73,11 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         if (! $mentorRole) {
-            $mentorRole = Role::query()->firstOrCreate(['name' => 'mentor', 'guard_name' => 'web']);
+            $mentorRole = Role::query()->firstOrCreate($mentorRoleAttributes);
         }
 
         if ($teacherRole && $mentorRole && $teacherRole->id !== $mentorRole->id) {
-            // Merge: move permissions + users from teacher to mentor then delete teacher role
+            // Merge teacher -> mentor
             $mentorRole->givePermissionTo($teacherRole->permissions);
 
             foreach ($teacherRole->users as $user) {
@@ -60,17 +91,28 @@ class RolesAndPermissionsSeeder extends Seeder
         // Admin has all permissions
         $adminRole->syncPermissions(Permission::all());
 
-        // Student can only read mentors
-        $studentRole->syncPermissions([
+        $studentPermissions = [
             'readMentor',
-        ]);
+            'readCourse',
+            'readBatch',
+            'readClassSchedule',
+        ];
 
-        // Mentor can read mentors + edit their personal mentor profile (policy restricts to own)
-        $mentorRole->syncPermissions([
+        $mentorPermissions = [
             'readMentor',
             'editMentor',
-        ]);
+            'readCourse',
+            'readBatch',
+            'readClassSchedule',
+            'addClassSchedule',
+            'editClassSchedule',
+        ];
+
+        $studentRole->syncPermissions($studentPermissions);
+        $mentorRole->syncPermissions($mentorPermissions);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
+
+// phpcs:enable

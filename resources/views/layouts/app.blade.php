@@ -81,9 +81,7 @@
                                     <x-slot name="trigger">
                                         <button class="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50">
                                             <span class="hidden sm:block">{{ Auth::user()->name }}</span>
-                                            <span class="grid h-8 w-8 place-items-center rounded-full bg-indigo-600 text-white text-xs font-semibold">
-                                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                            </span>
+                                            <x-avatar :user="Auth::user()" />
                                         </button>
                                     </x-slot>
 

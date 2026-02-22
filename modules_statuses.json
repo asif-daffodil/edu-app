@@ -1,4 +1,7 @@
 {
     "AccessControl": true,
-    "Mentors": true
+    "Mentors": true,
+    "Profile": true,
+    "Course": true,
+    "Batch": true
 }

@@ -50,10 +50,12 @@ class UserController extends Controller implements HasMiddleware
                 })
                 ->addColumn('actions', function (User $user) {
                     $editUrl = route('users.edit', $user);
+                    $profileUrl = route('admin.users.profile.edit', $user);
 
                     return
                         '<div class="inline-flex items-center gap-2">'
                         . '<a href="' . e($editUrl) . '" class="inline-flex items-center px-3 py-1.5 bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition">Edit</a>'
+                        . '<a href="' . e($profileUrl) . '" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">Profile</a>'
                         . '</div>';
                 })
                 ->rawColumns(['roles', 'actions'])

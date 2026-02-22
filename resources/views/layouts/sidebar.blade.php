@@ -1,6 +1,26 @@
 @php
     $user = Auth::user();
     $isAdmin = $user && method_exists($user, 'hasRole') ? $user->hasRole('admin') : false;
+    $isMentor = $user && method_exists($user, 'hasRole') ? $user->hasRole('mentor') : false;
+    $isStudent = $user && method_exists($user, 'hasRole') ? $user->hasRole('student') : false;
+
+    $canManageCourses = $user
+        && (
+            $user->can('addCourse')
+            || $user->can('editCourse')
+            || $user->can('deleteCourse')
+        );
+
+    $canSeeMentorBatches = $user
+        && $user->can('readBatch')
+        && $user->can('addClassSchedule')
+        && ! $user->can('addBatch');
+
+    $canSeeStudentPanel = $user
+        && $user->can('readBatch')
+        && $user->can('readCourse')
+        && ! $user->can('addBatch')
+        && ! $user->can('addClassSchedule');
 
     $linkBase = 'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition';
     $active = 'bg-indigo-600 text-white shadow-sm';
@@ -17,17 +37,87 @@
         <span>Dashboard</span>
     </a>
 
-    <a href="{{ route('users.index') }}"
+    <a href="{{ route('profile.edit') }}"
         @click="sidebarOpen = false"
-        class="{{ $linkBase }} {{ request()->routeIs('users.*') ? $active : $inactive }}">
+        class="{{ $linkBase }} {{ request()->routeIs('profile.*') ? $active : $inactive }}">
         <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path d="M10 2a4 4 0 100 8 4 4 0 000-8z" />
+            <path fill-rule="evenodd" d="M10 2a4 4 0 100 8 4 4 0 000-8z" clip-rule="evenodd" />
             <path fill-rule="evenodd" d="M.458 16.944A10 10 0 0110 12c3.59 0 6.73 1.89 8.542 4.944A1 1 0 0117.66 18H2.34a1 1 0 01-1.882-1.056z" clip-rule="evenodd" />
         </svg>
-        <span>Users</span>
+        <span>Profile</span>
     </a>
 
+    @if($isAdmin || $canManageCourses)
+        <a href="{{ route('dashboard.courses.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.courses.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" />
+                <path d="M7 6h6v2H7V6zm0 4h6v2H7v-2z" />
+            </svg>
+            <span>Courses</span>
+        </a>
+    @endif
+
     @if($isAdmin)
+        <a href="{{ route('dashboard.batches.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.batches.index') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V6.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 3H4z" />
+                <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
+            </svg>
+            <span>Batches</span>
+        </a>
+    @endif
+
+    @if($isMentor || $canSeeMentorBatches)
+        <a href="{{ route('dashboard.mentor.batches.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentor.batches.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V6.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 3H4z" />
+                <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
+            </svg>
+            <span>My Batches</span>
+        </a>
+    @endif
+
+    @if($isStudent || $canSeeStudentPanel)
+        <a href="{{ route('dashboard.student.courses.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.student.courses.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" />
+                <path d="M7 6h6v2H7V6zm0 4h6v2H7v-2z" />
+            </svg>
+            <span>My Courses</span>
+        </a>
+
+        <a href="{{ route('dashboard.student.batches.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.student.batches.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V6.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 3H4z" />
+                <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
+            </svg>
+            <span>My Batches</span>
+        </a>
+    @endif
+
+    @if($isAdmin)
+        <a href="{{ route('users.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('users.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10 2a4 4 0 100 8 4 4 0 000-8z" />
+                <path fill-rule="evenodd" d="M.458 16.944A10 10 0 0110 12c3.59 0 6.73 1.89 8.542 4.944A1 1 0 0117.66 18H2.34a1 1 0 01-1.882-1.056z" clip-rule="evenodd" />
+            </svg>
+            <span>Users</span>
+        </a>
+    @endif
+
+    @if($user && $user->can('readMentor'))
         <a href="{{ route('dashboard.mentors.index') }}"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentors.*') ? $active : $inactive }}">
@@ -38,7 +128,9 @@
             </svg>
             <span>Mentors</span>
         </a>
+    @endif
 
+    @if($isAdmin)
         <a href="{{ route('roles.index') }}"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('roles.*') ? $active : $inactive }}">

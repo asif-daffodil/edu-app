@@ -12,6 +12,11 @@
 					<div class="mb-6">
 						<h3 class="text-lg font-semibold text-gray-900">Edit User</h3>
 						<p class="mt-1 text-sm text-gray-600">Update user roles and submit.</p>
+						<div class="mt-3">
+							<a href="{{ route('admin.users.profile.edit', $user) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+								Edit Profile Details
+							</a>
+						</div>
 					</div>
 
 					<form action="{{ route('users.update', $user) }}" method="POST" class="space-y-6">
