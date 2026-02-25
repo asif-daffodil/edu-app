@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Admin\FrontendEditorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get(
@@ -18,15 +19,35 @@ Route::middleware('frontend.locale')->group(
     function () {
         Route::get('/', [SiteController::class, 'home'])->name('home');
 
-        Route::view('/about', 'pages.about')->name('about');
-        Route::view('/courses', 'pages.courses')->name('courses');
-        Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
-        Route::view('/reviews', 'pages.reviews')->name('reviews');
-        Route::view('/news', 'pages.news')->name('news');
-        Route::view('/contact', 'pages.contact')->name('contact');
+        Route::get('/about', [SiteController::class, 'page'])
+            ->defaults('slug', 'about')
+            ->name('about');
 
-        Route::view('/privacy', 'pages.privacy')->name('privacy');
-        Route::view('/terms', 'pages.terms')->name('terms');
+        Route::get('/courses', [SiteController::class, 'page'])
+            ->defaults('slug', 'courses')
+            ->name('courses');
+
+        Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
+
+        Route::get('/reviews', [SiteController::class, 'page'])
+            ->defaults('slug', 'reviews')
+            ->name('reviews');
+
+        Route::get('/news', [SiteController::class, 'page'])
+            ->defaults('slug', 'news')
+            ->name('news');
+
+        Route::get('/contact', [SiteController::class, 'page'])
+            ->defaults('slug', 'contact')
+            ->name('contact');
+
+        Route::get('/privacy', [SiteController::class, 'page'])
+            ->defaults('slug', 'privacy')
+            ->name('privacy');
+
+        Route::get('/terms', [SiteController::class, 'page'])
+            ->defaults('slug', 'terms')
+            ->name('terms');
 
         include __DIR__.'/auth.php';
     }
@@ -38,4 +59,26 @@ Route::get(
         return view('dashboard');
     }
 )->middleware(['auth', 'verified', 'backend.locale'])->name('dashboard');
+
+Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
+    ->prefix('admin/frontend-editor')
+    ->name('admin.frontend-editor.')
+    ->group(
+        function () {
+            Route::get(
+                '/',
+                [FrontendEditorController::class, 'index']
+            )->name('index');
+
+            Route::post(
+                '/{page}/sections',
+                [FrontendEditorController::class, 'store']
+            )->name('sections.store');
+
+            Route::patch(
+                '/sections/{section}',
+                [FrontendEditorController::class, 'update']
+            )->name('sections.update');
+        }
+    );
 

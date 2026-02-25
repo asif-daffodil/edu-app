@@ -6,10 +6,14 @@
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            @php
+                $hero = $cmsSectionsByKey->get('hero');
+            @endphp
+
             <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.courses_title') }}</h1>
-                    <p class="mt-3 max-w-2xl text-slate-200">{{ __('frontend.courses_subtitle') }}</p>
+                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.courses_title') }}</h1>
+                    <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: __('frontend.courses_subtitle') }}</p>
                 </div>
             </div>
 

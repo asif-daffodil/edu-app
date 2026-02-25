@@ -6,9 +6,13 @@
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            @php
+                $hero = $cmsSectionsByKey->get('hero');
+            @endphp
+
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">Privacy Policy</h1>
-                <p class="mt-3 max-w-3xl text-slate-200">This is a placeholder privacy policy page. Replace this content with your real policy.</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: 'Privacy Policy' }}</h1>
+                <p class="mt-3 max-w-3xl text-slate-200">{{ optional($hero)->content ?: 'This is a placeholder privacy policy page. Replace this content with your real policy.' }}</p>
             </div>
         </div>
     </section>

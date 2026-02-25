@@ -11,13 +11,25 @@ use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SampleBatchesSeeder;
 use Database\Seeders\SampleCoursesSeeder;
 use Database\Seeders\StudentsSeeder;
+use Database\Seeders\FrontendContentSeeder;
 
+/**
+ * Seeds the application with demo/initial data.
+ *
+ * @category Database
+ * @package  Database\Seeders
+ * @author   Unknown <unknown@example.invalid>
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @link     https://laravel.com
+ */
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
     public function run(): void
     {
@@ -29,6 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SampleCoursesSeeder::class);
         $this->call(SampleBatchesSeeder::class);
         $this->call(BatchAssignmentsAndSchedulesSeeder::class);
+        $this->call(FrontendContentSeeder::class);
 
         User::query()->firstOrCreate(
             ['email' => 'test@example.com'],

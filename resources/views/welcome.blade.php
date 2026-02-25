@@ -4,6 +4,13 @@
 
 @section('content')
 
+    @php
+        $heroPrimary = $cmsSectionsByKey->get('hero_primary');
+        $heroEmphasis = $cmsSectionsByKey->get('hero_emphasis');
+        $heroParagraph = $cmsSectionsByKey->get('hero_paragraph');
+        $heroCtaPrimary = $cmsSectionsByKey->get('hero_cta_primary');
+    @endphp
+
     <main id="top">
         <!-- Hero -->
         <section class="relative">
@@ -17,18 +24,18 @@
                     </div>
 
                     <h1 class="reveal mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                        {{ __('frontend.hero_heading_primary') }}
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-sky-300 to-emerald-300 animate-gradient">{{ __('frontend.hero_heading_emphasis') }}</span>
+                        {{ optional($heroPrimary)->title ?: __('frontend.hero_heading_primary') }}
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-sky-300 to-emerald-300 animate-gradient">{{ optional($heroEmphasis)->title ?: __('frontend.hero_heading_emphasis') }}</span>
                     </h1>
 
                     <p class="reveal mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-                        {{ __('frontend.hero_paragraph') }}
+                        {{ optional($heroParagraph)->content ?: __('frontend.hero_paragraph') }}
                     </p>
 
                     <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <a href="{{ route('courses') }}"
+                        <a href="{{ optional($heroCtaPrimary)->button_link ?: route('courses') }}"
                            class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">
-                            Explore Courses
+                            {{ optional($heroCtaPrimary)->button_text ?: 'Explore Courses' }}
                         </a>
                         <a href="#outcomes"
                            class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/15">
@@ -252,23 +259,30 @@
                         </div>
 
                         <div id="mentorCarousel" class="mentor-carousel flex gap-6 overflow-x-auto scroll-smooth pb-2">
-                            @forelse ($mentors ?? [] as $mentor)
-                                <div class="mentor-card shrink-0 basis-full overflow-hidden rounded-3xl bg-white/5 ring-1 ring-white/10 sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(25%-1.125rem)]">
-                                    <div class="aspect-square w-full bg-slate-950/30 grid place-items-center">
-                                        <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-200/70 sm:h-28 sm:w-28" aria-hidden="true">
-                                            <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
-                                            <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
-                                        </svg>
-                                    </div>
-                                    <div class="p-6">
-                                        <div class="text-sm font-semibold text-white">{{ $mentor->name }}</div>
-                                        <div class="mt-1 text-xs text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
-                                        <p class="mt-3 text-sm text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
-                                    </div>
-                                </div>
-                            @empty
+                            @php
+                                /** @var \Illuminate\Support\Collection<int, \Modules\Mentors\Models\Mentor> $mentorItems */
+                                $mentorItems = $mentors ?? collect();
+                            @endphp
+
+                            @if ($mentorItems->isEmpty())
                                 <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 text-slate-200">No mentors available yet.</div>
-                            @endforelse
+                            @else
+                                @foreach ($mentorItems as $mentor)
+                                    <div class="mentor-card shrink-0 basis-full overflow-hidden rounded-3xl bg-white/5 ring-1 ring-white/10 sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(25%-1.125rem)]">
+                                        <div class="aspect-square w-full bg-slate-950/30 grid place-items-center">
+                                            <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-200/70 sm:h-28 sm:w-28" aria-hidden="true">
+                                                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
+                                                <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
+                                            </svg>
+                                        </div>
+                                        <div class="p-6">
+                                            <div class="text-sm font-semibold text-white">{{ $mentor->name }}</div>
+                                            <div class="mt-1 text-xs text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
+                                            <p class="mt-3 text-sm text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -6,9 +6,13 @@
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            @php
+                $hero = $cmsSectionsByKey->get('hero');
+            @endphp
+
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">Mentors</h1>
-                <p class="mt-3 max-w-2xl text-slate-200">Meet mentors from different topics and learn with weekly guidance.</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: 'Mentors' }}</h1>
+                <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: 'Meet mentors from different topics and learn with weekly guidance.' }}</p>
             </div>
 
             <div class="reveal mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">

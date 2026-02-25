@@ -6,9 +6,13 @@
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            @php
+                $hero = $cmsSectionsByKey->get('hero');
+            @endphp
+
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.about_title') }}</h1>
-                <p class="mt-3 max-w-3xl text-slate-200">{{ __('frontend.about_subtitle') }}</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.about_title') }}</h1>
+                <p class="mt-3 max-w-3xl text-slate-200">{{ optional($hero)->content ?: __('frontend.about_subtitle') }}</p>
             </div>
 
             <div class="reveal mt-10 grid gap-6 md:grid-cols-3">

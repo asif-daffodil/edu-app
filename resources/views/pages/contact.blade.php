@@ -6,19 +6,33 @@
 <main>
     <section class="border-b border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+            @php
+                $hero = $cmsSectionsByKey->get('hero');
+                $emailSection = $cmsSectionsByKey->get('contact_email');
+                $phoneSection = $cmsSectionsByKey->get('contact_phone');
+
+                $emailLabel = optional($emailSection)->title ?: __('frontend.contact_email_label');
+                $emailValue = trim((string) (optional($emailSection)->content ?: 'info@example.com'));
+                $emailHref = optional($emailSection)->button_link ?: ('mailto:' . $emailValue);
+
+                $phoneLabel = optional($phoneSection)->title ?: __('frontend.contact_phone_label');
+                $phoneValue = trim((string) (optional($phoneSection)->content ?: '+880 10 0000 0000'));
+                $phoneHref = optional($phoneSection)->button_link ?: ('tel:' . preg_replace('/\s+/', '', $phoneValue));
+            @endphp
+
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ __('frontend.contact_title') }}</h1>
-                <p class="mt-3 max-w-2xl text-slate-200">{{ __('frontend.contact_subtitle') }}</p>
+                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.contact_title') }}</h1>
+                <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: __('frontend.contact_subtitle') }}</p>
             </div>
 
             <div class="reveal mt-10 grid gap-6 lg:grid-cols-2">
                 <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-sm font-semibold text-white">{{ __('frontend.contact_email_label') }}</div>
-                    <a href="mailto:info@example.com" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">info@example.com</a>
+                    <div class="text-sm font-semibold text-white">{{ $emailLabel }}</div>
+                    <a href="{{ $emailHref }}" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">{{ $emailValue }}</a>
                 </div>
                 <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-sm font-semibold text-white">{{ __('frontend.contact_phone_label') }}</div>
-                    <a href="tel:+8801000000000" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">+880 10 0000 0000</a>
+                    <div class="text-sm font-semibold text-white">{{ $phoneLabel }}</div>
+                    <a href="{{ $phoneHref }}" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">{{ $phoneValue }}</a>
                 </div>
             </div>
         </div>

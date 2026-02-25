@@ -115,6 +115,16 @@
             </svg>
             <span>Users</span>
         </a>
+
+        <a href="{{ route('admin.frontend-editor.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('admin.frontend-editor.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6.5a1 1 0 1 0 0-2H4V4h12v6.5a1 1 0 1 0 2 0V4a2 2 0 0 0-2-2H4z" />
+                <path d="M12.293 10.293a1 1 0 0 1 1.414 0l3 3a1 1 0 0 1 .242.39l1 3a1 1 0 0 1-1.265 1.265l-3-1a1 1 0 0 1-.39-.242l-3-3a1 1 0 0 1 0-1.414l2-2z" />
+            </svg>
+            <span>Frontend Editor</span>
+        </a>
     @endif
 
     @if($user && $user->can('readMentor'))
