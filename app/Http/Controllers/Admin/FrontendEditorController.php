@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreFrontendSectionRequest;
 use App\Http\Requests\Admin\UpdateFrontendSectionRequest;
 use App\Models\FrontendPage;
+use App\Models\FrontendSetting;
 use App\Models\FrontendSection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -51,6 +53,11 @@ class FrontendEditorController extends Controller implements HasMiddleware
     {
         $allowedSlugs = ['home', 'about', 'courses', 'contact'];
 
+        $tab = (string) $request->query('tab', 'pages');
+        if (!in_array($tab, ['pages', 'header'], true)) {
+            $tab = 'pages';
+        }
+
         foreach ($allowedSlugs as $slug) {
             FrontendPage::query()->firstOrCreate(['slug' => $slug]);
         }
@@ -68,10 +75,18 @@ class FrontendEditorController extends Controller implements HasMiddleware
         $selectedPage = $pages->firstWhere('slug', $selectedSlug)
             ?: FrontendPage::query()->where('slug', 'home')->firstOrFail();
 
-        $sections = FrontendSection::query()
-            ->where('frontend_page_id', $selectedPage->id)
-            ->orderBy('section_key')
-            ->get();
+        $sections = collect();
+        if ($tab === 'pages') {
+            $sections = FrontendSection::query()
+                ->where('frontend_page_id', $selectedPage->id)
+                ->orderBy('section_key')
+                ->get();
+        }
+
+        $settings = collect();
+        if ($tab === 'header' && Schema::hasTable('frontend_settings')) {
+            $settings = FrontendSetting::query()->get()->keyBy('key');
+        }
 
         return view(
             'admin.frontend-editor.index',
@@ -80,6 +95,8 @@ class FrontendEditorController extends Controller implements HasMiddleware
                 'selectedPage' => $selectedPage,
                 'sections' => $sections,
                 'allowedSlugs' => $allowedSlugs,
+                'tab' => $tab,
+                'settings' => $settings,
             ]
         );
     }

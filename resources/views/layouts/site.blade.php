@@ -114,22 +114,30 @@
                         <path d="M12 22s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
                         <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.7" />
                     </svg>
-                    <span>Dhaka, Bangladesh</span>
+                    <span>{{ $frontendSettings['site_address'] ?? 'Dhaka, Bangladesh' }}</span>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <a href="tel:+8801000000000" class="inline-flex items-center gap-2 hover:text-white">
+                    @php
+                        $sitePhone = $frontendSettings['site_phone'] ?? '+880 10 0000 0000';
+                        $sitePhoneTel = 'tel:' . preg_replace('/\s+/', '', (string) $sitePhone);
+
+                        $siteEmail = $frontendSettings['site_email'] ?? 'info@example.com';
+                        $siteEmailMailto = 'mailto:' . (string) $siteEmail;
+                    @endphp
+
+                    <a href="{{ $sitePhoneTel }}" class="inline-flex items-center gap-2 hover:text-white">
                         <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 text-slate-300" aria-hidden="true">
                             <path d="M7 3h2l2 5-2 1c1 3 3 5 6 6l1-2 5 2v2c0 1-1 2-2 2-9 0-16-7-16-16 0-1 1-2 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
                         </svg>
-                        <span>+880 10 0000 0000</span>
+                        <span>{{ $sitePhone }}</span>
                     </a>
-                    <a href="mailto:info@example.com" class="inline-flex items-center gap-2 hover:text-white">
+                    <a href="{{ $siteEmailMailto }}" class="inline-flex items-center gap-2 hover:text-white">
                         <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 text-slate-300" aria-hidden="true">
                             <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.7" />
                             <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
                         </svg>
-                        <span>info@example.com</span>
+                        <span>{{ $siteEmail }}</span>
                     </a>
 
                     <div class="hidden sm:flex items-center gap-2 border-l border-white/10 pl-4">
@@ -143,16 +151,29 @@
 
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
             <a href="/" class="group inline-flex shrink-0 items-center gap-3">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10">
-                    <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5 text-white" aria-hidden="true">
-                        <path d="M4 19V6.5a2.5 2.5 0 0 1 2.5-2.5H20v15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                        <path d="M8 8h8M8 12h8M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                    </svg>
-                </span>
-                <span class="leading-tight">
-                    <span class="block text-base font-semibold tracking-tight">{{ config('app.name', 'iTechBD Ltd') }}</span>
-                    <span class="block text-xs text-slate-300/80">Training Institute • Career-focused</span>
-                </span>
+                @php
+                    $logoPath = $frontendSettings['site_logo_path'] ?? null;
+                @endphp
+
+                @if ($logoPath)
+                    <img
+                        src="{{ asset('storage/' . $logoPath) }}"
+                        alt="{{ config('app.name', 'iTechBD Ltd') }}"
+                        class="h-12 w-auto max-w-[360px] object-contain"
+                        style="filter: drop-shadow(0 1px 0 rgba(255,255,255,.35)) drop-shadow(0 6px 14px rgba(255,255,255,.12));"
+                    />
+                @else
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10">
+                        <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5 text-white" aria-hidden="true">
+                            <path d="M4 19V6.5a2.5 2.5 0 0 1 2.5-2.5H20v15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M8 8h8M8 12h8M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                    <span class="leading-tight">
+                        <span class="block text-base font-semibold tracking-tight">{{ config('app.name', 'iTechBD Ltd') }}</span>
+                        <span class="block text-xs text-slate-300/80">Training Institute • Career-focused</span>
+                    </span>
+                @endif
             </a>
 
             <nav class="relative z-10 hidden flex-1 items-center justify-center gap-5 text-sm text-slate-200 md:flex">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Admin\FrontendEditorController;
+use App\Http\Controllers\Admin\FrontendSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get(
@@ -69,6 +70,11 @@ Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
                 '/',
                 [FrontendEditorController::class, 'index']
             )->name('index');
+
+            Route::patch(
+                '/header-settings',
+                [FrontendSettingsController::class, 'updateHeader']
+            )->name('header-settings.update');
 
             Route::post(
                 '/{page}/sections',

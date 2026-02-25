@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BatchAssignmentsAndSchedulesSeeder;
+use Database\Seeders\FrontendSettingsSeeder;
 use Database\Seeders\MentorsSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SampleBatchesSeeder;
@@ -42,6 +43,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SampleBatchesSeeder::class);
         $this->call(BatchAssignmentsAndSchedulesSeeder::class);
         $this->call(FrontendContentSeeder::class);
+        $this->call(FrontendSettingsSeeder::class);
 
         User::query()->firstOrCreate(
             ['email' => 'test@example.com'],
