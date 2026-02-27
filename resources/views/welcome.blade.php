@@ -9,6 +9,96 @@
         $heroEmphasis = $cmsSectionsByKey->get('hero_emphasis');
         $heroParagraph = $cmsSectionsByKey->get('hero_paragraph');
         $heroCtaPrimary = $cmsSectionsByKey->get('hero_cta_primary');
+
+        $fallbackReasonsByIndex = [
+            1 => [
+                'title' => __('frontend.hero_reason_career_title'),
+                'subtitle' => __('frontend.hero_reason_career_subtitle'),
+                'desc' => __('frontend.hero_reason_career_desc'),
+            ],
+            2 => [
+                'title' => __('frontend.hero_reason_freelance_title'),
+                'subtitle' => __('frontend.hero_reason_freelance_subtitle'),
+                'desc' => __('frontend.hero_reason_freelance_desc'),
+            ],
+            3 => [
+                'title' => __('frontend.hero_reason_progress_title'),
+                'subtitle' => __('frontend.hero_reason_progress_subtitle'),
+                'desc' => __('frontend.hero_reason_progress_desc'),
+            ],
+            4 => [
+                'title' => __('frontend.hero_reason_community_title'),
+                'subtitle' => __('frontend.hero_reason_community_subtitle'),
+                'desc' => __('frontend.hero_reason_community_desc'),
+            ],
+        ];
+
+        $parseHeroReason = function ($section, array $fallback): array {
+            $title = trim((string) optional($section)->title);
+            if ($title === '' && isset($fallback['title'])) {
+                $title = $fallback['title'];
+            }
+
+            $raw = trim((string) optional($section)->content);
+            if ($raw === '') {
+                return [
+                    'title' => $title,
+                    'subtitle' => (string) ($fallback['subtitle'] ?? ''),
+                    'desc' => (string) ($fallback['desc'] ?? ''),
+                ];
+            }
+
+            $lines = preg_split("/\r\n|\r|\n/", $raw) ?: [];
+            $lines = array_values(array_filter(array_map('trim', $lines), fn ($v) => $v !== ''));
+
+            if (count($lines) === 0) {
+                return [
+                    'title' => $title,
+                    'subtitle' => (string) ($fallback['subtitle'] ?? ''),
+                    'desc' => (string) ($fallback['desc'] ?? ''),
+                ];
+            }
+
+            if (count($lines) === 1) {
+                return [
+                    'title' => $title,
+                    'subtitle' => '',
+                    'desc' => $lines[0],
+                ];
+            }
+
+            return [
+                'title' => $title,
+                'subtitle' => $lines[0],
+                'desc' => trim(implode(' ', array_slice($lines, 1))),
+            ];
+        };
+
+        $cmsReasonSections = $cmsSectionsByKey
+            ->filter(fn ($section, $key) => is_string($key) && str_starts_with($key, 'hero_different_reason_'))
+            ->sortBy(function ($section, $key) {
+                if (is_string($key) && preg_match('/^hero_different_reason_(\d+)$/', $key, $m)) {
+                    return (int) $m[1];
+                }
+
+                return 9999;
+            });
+
+        $heroReasons = [];
+        foreach ($cmsReasonSections as $key => $section) {
+            if (!is_string($key) || !preg_match('/^hero_different_reason_(\d+)$/', $key, $m)) {
+                continue;
+            }
+
+            $i = (int) $m[1];
+            $heroReasons[] = $parseHeroReason($section, $fallbackReasonsByIndex[$i] ?? []);
+        }
+
+        if (count($heroReasons) === 0) {
+            foreach ($fallbackReasonsByIndex as $fallback) {
+                $heroReasons[] = $parseHeroReason(null, $fallback);
+            }
+        }
     @endphp
 
     <main id="top">
@@ -72,7 +162,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <div class="text-xs text-slate-300">{{ __('frontend.hero_side_why_choose_us') }}</div>
-                                    <div class="mt-1 text-lg font-semibold text-white">{{ __('frontend.hero_side_what_makes_different') }}</div>
+                                    <div class="mt-1 text-lg font-semibold text-white">{{ optional($cmsSectionsByKey->get('hero_side_heading'))->title ?: __('frontend.hero_side_what_makes_different') }}</div>
                                 </div>
                                 <div class="rounded-2xl bg-white/10 px-3 py-2 text-xs text-slate-200 ring-1 ring-white/10">
                                     {{ __('frontend.hero_side_pill') }}
@@ -82,45 +172,29 @@
                             <div class="mt-6">
                                 <div id="differentReasonsViewport" class="overflow-hidden" data-force-motion="1">
                                     <div id="differentReasonsTrack" class="flex flex-col gap-4 will-change-transform">
-                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
-                                    <div class="flex items-start gap-3">
-                                        <div class="mt-0.5 rounded-xl bg-indigo-500/20 p-2 ring-1 ring-indigo-400/20">
-                                            <div class="text-xs font-semibold text-indigo-100">{{ __('frontend.hero_reason_career_title') }}</div>
-                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_career_subtitle') }}</div>
-                                        </div>
-                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_career_desc') }}</div>
-                                    </div>
-                                        </div>
+                                        @php
+                                            $reasonColorClasses = [
+                                                ['bg' => 'bg-indigo-500/20', 'ring' => 'ring-indigo-400/20', 'title' => 'text-indigo-100'],
+                                                ['bg' => 'bg-sky-500/20', 'ring' => 'ring-sky-400/20', 'title' => 'text-sky-100'],
+                                                ['bg' => 'bg-emerald-500/20', 'ring' => 'ring-emerald-400/20', 'title' => 'text-emerald-100'],
+                                                ['bg' => 'bg-violet-500/20', 'ring' => 'ring-violet-400/20', 'title' => 'text-violet-100'],
+                                            ];
+                                        @endphp
 
-                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
-                                    <div class="flex items-start gap-3">
-                                        <div class="mt-0.5 rounded-xl bg-sky-500/20 p-2 ring-1 ring-sky-400/20">
-                                            <div class="text-xs font-semibold text-sky-100">{{ __('frontend.hero_reason_freelance_title') }}</div>
-                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_freelance_subtitle') }}</div>
-                                        </div>
-                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_freelance_desc') }}</div>
-                                    </div>
-                                        </div>
-
-                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
-                                    <div class="flex items-start gap-3">
-                                        <div class="mt-0.5 rounded-xl bg-emerald-500/20 p-2 ring-1 ring-emerald-400/20">
-                                            <div class="text-xs font-semibold text-emerald-100">{{ __('frontend.hero_reason_progress_title') }}</div>
-                                            <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_progress_subtitle') }}</div>
-                                        </div>
-                                        <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_progress_desc') }}</div>
-                                    </div>
-                                        </div>
-
-                                        <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
-                                            <div class="flex items-start gap-3">
-                                                <div class="mt-0.5 rounded-xl bg-violet-500/20 p-2 ring-1 ring-violet-400/20">
-                                                    <div class="text-xs font-semibold text-violet-100">{{ __('frontend.hero_reason_community_title') }}</div>
-                                                    <div class="mt-1 text-sm text-slate-200">{{ __('frontend.hero_reason_community_subtitle') }}</div>
+                                        @foreach($heroReasons as $idx => $reason)
+                                            @php $c = $reasonColorClasses[$idx % count($reasonColorClasses)]; @endphp
+                                            <div class="different-reason rounded-2xl bg-slate-950/40 p-4 ring-1 ring-white/10">
+                                                <div class="flex items-start gap-3">
+                                                    <div class="mt-0.5 rounded-xl {{ $c['bg'] }} p-2 ring-1 {{ $c['ring'] }}">
+                                                        <div class="text-xs font-semibold {{ $c['title'] }}">{{ $reason['title'] }}</div>
+                                                        @if(($reason['subtitle'] ?? '') !== '')
+                                                            <div class="mt-1 text-sm text-slate-200">{{ $reason['subtitle'] }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="text-sm text-slate-200">{{ $reason['desc'] }}</div>
                                                 </div>
-                                                <div class="text-sm text-slate-200">{{ __('frontend.hero_reason_community_desc') }}</div>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -149,22 +223,22 @@
         <section id="about" class="border-t border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
-                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_about_title') }}</h2>
-                    <p class="mt-2 max-w-3xl text-slate-200">{{ __('frontend.home_about_subtitle') }}</p>
+                    <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ optional($cmsSectionsByKey->get('home_about_title'))->title ?: __('frontend.home_about_title') }}</h2>
+                    <p class="mt-2 max-w-3xl text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_subtitle'))->content ?: __('frontend.home_about_subtitle') }}</p>
                 </div>
 
                 <div class="reveal mt-10 grid gap-6 md:grid-cols-3">
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_1_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_1_desc') }}</p>
+                        <div class="text-sm font-semibold text-white">{{ optional($cmsSectionsByKey->get('home_about_card_1'))->title ?: __('frontend.home_about_card_1_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_1'))->content ?: __('frontend.home_about_card_1_desc') }}</p>
                     </div>
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_2_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_2_desc') }}</p>
+                        <div class="text-sm font-semibold text-white">{{ optional($cmsSectionsByKey->get('home_about_card_2'))->title ?: __('frontend.home_about_card_2_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_2'))->content ?: __('frontend.home_about_card_2_desc') }}</p>
                     </div>
                     <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                        <div class="text-sm font-semibold text-white">{{ __('frontend.home_about_card_3_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-200">{{ __('frontend.home_about_card_3_desc') }}</p>
+                        <div class="text-sm font-semibold text-white">{{ optional($cmsSectionsByKey->get('home_about_card_3'))->title ?: __('frontend.home_about_card_3_title') }}</div>
+                        <p class="mt-2 text-sm text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_3'))->content ?: __('frontend.home_about_card_3_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -175,62 +249,130 @@
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ __('frontend.home_skill_tracks_title') }}</h2>
-                        <p class="mt-2 max-w-2xl text-slate-200">{{ __('frontend.home_skill_tracks_subtitle') }}</p>
+                        <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ optional($cmsSectionsByKey->get('home_skill_tracks_title'))->title ?: __('frontend.home_skill_tracks_title') }}</h2>
+                        <p class="mt-2 max-w-2xl text-slate-200">{{ optional($cmsSectionsByKey->get('home_skill_tracks_subtitle'))->content ?: __('frontend.home_skill_tracks_subtitle') }}</p>
                     </div>
-                    <a href="#outcomes" class="text-sm font-medium text-sky-200 hover:text-sky-100">How we help you get hired →</a>
+                    @php $skillTracksCta = $cmsSectionsByKey->get('home_skill_tracks_cta'); @endphp
+                    <a href="{{ optional($skillTracksCta)->button_link ?: '#outcomes' }}" class="text-sm font-medium text-sky-200 hover:text-sky-100">
+                        {{ optional($skillTracksCta)->button_text ?: 'How we help you get hired →' }}
+                    </a>
                 </div>
 
+                @php
+                    $defaultSkillTracks = [
+                        [
+                            'title' => 'Web Development',
+                            'desc' => 'Front-end + back-end fundamentals with real projects.',
+                            'bullets' => [
+                                'HTML, CSS, TailwindCSS, JavaScript',
+                                'Responsive UI + animations + components',
+                                'APIs, database basics, deployment basics',
+                            ],
+                        ],
+                        [
+                            'title' => 'SEO (Search Engine Optimization)',
+                            'desc' => 'Technical SEO + content + analytics.',
+                            'bullets' => [
+                                'On-page, off-page, technical SEO',
+                                'Keyword research + content planning',
+                                'Analytics basics + reporting',
+                            ],
+                        ],
+                        [
+                            'title' => '.NET Development',
+                            'desc' => 'C# + ASP.NET Core for modern applications.',
+                            'bullets' => [
+                                'C# fundamentals + OOP',
+                                'ASP.NET Core APIs + auth basics',
+                                'Database + EF Core basics',
+                            ],
+                        ],
+                        [
+                            'title' => 'Graphics Design',
+                            'desc' => 'Branding + marketing visuals + portfolio.',
+                            'bullets' => [
+                                'Photoshop / Illustrator fundamentals',
+                                'Branding, typography, layouts',
+                                'Portfolio + client workflow',
+                            ],
+                        ],
+                        [
+                            'title' => 'Extra Topics (Optional)',
+                            'desc' => 'UI/UX, Git, communication and teamwork.',
+                            'bullets' => [
+                                'UI/UX basics (Figma)',
+                                'Git basics + teamwork',
+                                'Client communication',
+                            ],
+                        ],
+                    ];
+
+                    $skillTrackSections = $cmsSectionsByKey
+                        ->filter(fn ($section, $key) => is_string($key) && str_starts_with($key, 'home_skill_track_'))
+                        ->sortBy(function ($section, $key) {
+                            if (is_string($key) && preg_match('/^home_skill_track_(\d+)$/', $key, $m)) {
+                                return (int) $m[1];
+                            }
+
+                            return 9999;
+                        });
+
+                    $skillTracks = [];
+                    foreach ($skillTrackSections as $section) {
+                        $title = trim((string) optional($section)->title);
+                        $raw = trim((string) optional($section)->content);
+
+                        if ($title === '' && $raw === '') {
+                            continue;
+                        }
+
+                        $desc = '';
+                        $bullets = [];
+                        if ($raw !== '') {
+                            $lines = preg_split("/\r\n|\r|\n/", $raw) ?: [];
+                            $lines = array_values(array_filter(array_map('trim', $lines), fn ($v) => $v !== ''));
+
+                            if (count($lines) > 0) {
+                                $desc = array_shift($lines);
+                            }
+
+                            foreach ($lines as $line) {
+                                $line = preg_replace('/^\s*[•\-]\s*/u', '', $line);
+                                $line = trim((string) $line);
+                                if ($line !== '') {
+                                    $bullets[] = $line;
+                                }
+                            }
+                        }
+
+                        $skillTracks[] = [
+                            'title' => $title,
+                            'desc' => $desc,
+                            'bullets' => $bullets,
+                        ];
+                    }
+
+                    if (count($skillTracks) === 0) {
+                        $skillTracks = $defaultSkillTracks;
+                    }
+                @endphp
+
                 <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                    <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                        <h3 class="text-lg font-semibold text-white">Web Development</h3>
-                        <p class="mt-1 text-sm text-slate-200">Front-end + back-end fundamentals with real projects.</p>
-                        <ul class="mt-5 space-y-2 text-sm text-slate-200">
-                            <li>• HTML, CSS, TailwindCSS, JavaScript</li>
-                            <li>• Responsive UI + animations + components</li>
-                            <li>• APIs, database basics, deployment basics</li>
-                        </ul>
-                    </article>
-
-                    <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                        <h3 class="text-lg font-semibold text-white">SEO (Search Engine Optimization)</h3>
-                        <p class="mt-1 text-sm text-slate-200">Technical SEO + content + analytics.</p>
-                        <ul class="mt-5 space-y-2 text-sm text-slate-200">
-                            <li>• On-page, off-page, technical SEO</li>
-                            <li>• Keyword research + content planning</li>
-                            <li>• Analytics basics + reporting</li>
-                        </ul>
-                    </article>
-
-                    <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                        <h3 class="text-lg font-semibold text-white">.NET Development</h3>
-                        <p class="mt-1 text-sm text-slate-200">C# + ASP.NET Core for modern applications.</p>
-                        <ul class="mt-5 space-y-2 text-sm text-slate-200">
-                            <li>• C# fundamentals + OOP</li>
-                            <li>• ASP.NET Core APIs + auth basics</li>
-                            <li>• Database + EF Core basics</li>
-                        </ul>
-                    </article>
-
-                    <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                        <h3 class="text-lg font-semibold text-white">Graphics Design</h3>
-                        <p class="mt-1 text-sm text-slate-200">Branding + marketing visuals + portfolio.</p>
-                        <ul class="mt-5 space-y-2 text-sm text-slate-200">
-                            <li>• Photoshop / Illustrator fundamentals</li>
-                            <li>• Branding, typography, layouts</li>
-                            <li>• Portfolio + client workflow</li>
-                        </ul>
-                    </article>
-
-                    <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                        <h3 class="text-lg font-semibold text-white">Extra Topics (Optional)</h3>
-                        <p class="mt-1 text-sm text-slate-200">UI/UX, Git, communication and teamwork.</p>
-                        <ul class="mt-5 space-y-2 text-sm text-slate-200">
-                            <li>• UI/UX basics (Figma)</li>
-                            <li>• Git basics + teamwork</li>
-                            <li>• Client communication</li>
-                        </ul>
-                    </article>
+                    @foreach($skillTracks as $track)
+                        <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
+                            <h3 class="text-lg font-semibold text-white">{{ $track['title'] }}</h3>
+                            @if(($track['desc'] ?? '') !== '')
+                                <p class="mt-1 text-sm text-slate-200">{{ $track['desc'] }}</p>
+                            @endif
+                            @if(!empty($track['bullets']))
+                                <ul class="mt-5 space-y-2 text-sm text-slate-200">
+                                    @foreach($track['bullets'] as $b)
+                                        <li>• {{ $b }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </article>
+                    @endforeach
                 </div>
             </div>
         </section>

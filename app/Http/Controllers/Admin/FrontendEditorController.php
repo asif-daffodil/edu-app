@@ -14,6 +14,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
@@ -182,5 +183,124 @@ class FrontendEditorController extends Controller implements HasMiddleware
         return redirect()
             ->route('admin.frontend-editor.index', ['page' => $pageSlug])
             ->with('success', 'Section updated successfully.');
+    }
+
+    /**
+     * Bulk update (upsert) multiple sections for a page.
+     *
+     * Currently used by the Home tab to edit hero-related fields in a single
+     * form.
+     *
+     * @param Request      $request The incoming request.
+     * @param FrontendPage $page    The page model.
+     *
+     * @return RedirectResponse
+     */
+    public function bulkUpdate(
+        Request $request,
+        FrontendPage $page
+    ): RedirectResponse {
+        $fixedKeys = [
+            'hero_cta_primary',
+            'hero_emphasis',
+            'hero_paragraph',
+            'hero_primary',
+            'hero_side_heading',
+
+            'home_about_title',
+            'home_about_subtitle',
+            'home_about_card_1',
+            'home_about_card_2',
+            'home_about_card_3',
+
+            'home_skill_tracks_title',
+            'home_skill_tracks_subtitle',
+            'home_skill_tracks_cta',
+        ];
+
+        $validated = $request->validate(
+            [
+                'sections' => ['required', 'array'],
+                'sections.*' => ['array'],
+
+                'sections.*.title_bn' => ['nullable', 'string', 'max:255'],
+                'sections.*.title_en' => ['nullable', 'string', 'max:255'],
+                'sections.*.content_bn' => ['nullable', 'string'],
+                'sections.*.content_en' => ['nullable', 'string'],
+                'sections.*.button_text_bn' => [
+                    'nullable',
+                    'string',
+                    'max:255',
+                ],
+                'sections.*.button_text_en' => [
+                    'nullable',
+                    'string',
+                    'max:255',
+                ],
+                'sections.*.button_link' => ['nullable', 'string', 'max:255'],
+                'sections.*.status' => [
+                    'required',
+                    Rule::in(['active', 'inactive']),
+                ],
+            ],
+            [],
+            [
+                'sections.*.title_bn' => 'Bangla title',
+                'sections.*.title_en' => 'English title',
+                'sections.*.content_bn' => 'Bangla content',
+                'sections.*.content_en' => 'English content',
+                'sections.*.button_text_bn' => 'Bangla button text',
+                'sections.*.button_text_en' => 'English button text',
+                'sections.*.button_link' => 'Button link',
+                'sections.*.status' => 'Status',
+            ]
+        );
+
+        $sectionsPayload = $validated['sections'] ?? [];
+
+        foreach ($sectionsPayload as $sectionKey => $payload) {
+            $sectionKey = (string) $sectionKey;
+
+            $isFixed = in_array($sectionKey, $fixedKeys, true);
+            $isHeroReason = false;
+            $isSkillTrack = false;
+
+            if (preg_match('/^hero_different_reason_(\d+)$/', $sectionKey, $m)) {
+                $index = (int) $m[1];
+                $isHeroReason = $index >= 1 && $index <= 50;
+            }
+
+            if (preg_match('/^home_skill_track_(\d+)$/', $sectionKey, $m)) {
+                $index = (int) $m[1];
+                $isSkillTrack = $index >= 1 && $index <= 20;
+            }
+
+            if (! $isFixed && ! $isHeroReason && ! $isSkillTrack) {
+                continue;
+            }
+
+            $payload = is_array($payload) ? $payload : [];
+
+            FrontendSection::query()->updateOrCreate(
+                [
+                    'frontend_page_id' => $page->id,
+                    'section_key' => $sectionKey,
+                ],
+                [
+                    'title_bn' => $payload['title_bn'] ?? null,
+                    'title_en' => $payload['title_en'] ?? null,
+                    'content_bn' => $payload['content_bn'] ?? null,
+                    'content_en' => $payload['content_en'] ?? null,
+                    'button_text_bn' => $payload['button_text_bn'] ?? null,
+                    'button_text_en' => $payload['button_text_en'] ?? null,
+                    'button_link' => $payload['button_link'] ?? null,
+                    'status' => $payload['status'] ?? FrontendSection::STATUS_ACTIVE,
+                ]
+            );
+        }
+
+        return redirect()
+            ->route('admin.frontend-editor.index', ['page' => $page->slug])
+            ->with('success', 'Home hero sections updated successfully.');
     }
 }

@@ -85,6 +85,11 @@ Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
                 '/sections/{section}',
                 [FrontendEditorController::class, 'update']
             )->name('sections.update');
+
+            Route::patch(
+                '/{page}/sections/bulk',
+                [FrontendEditorController::class, 'bulkUpdate']
+            )->name('sections.bulk-update');
         }
     );
 
