@@ -11,6 +11,7 @@ use Database\Seeders\MentorsSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SampleBatchesSeeder;
 use Database\Seeders\SampleCoursesSeeder;
+use Database\Seeders\SampleReviewsSeeder;
 use Database\Seeders\StudentsSeeder;
 use Database\Seeders\FrontendContentSeeder;
 
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MentorsSeeder::class);
         $this->call(StudentsSeeder::class);
         $this->call(SampleCoursesSeeder::class);
+        $this->call(SampleReviewsSeeder::class);
         $this->call(SampleBatchesSeeder::class);
         $this->call(BatchAssignmentsAndSchedulesSeeder::class);
         $this->call(FrontendContentSeeder::class);

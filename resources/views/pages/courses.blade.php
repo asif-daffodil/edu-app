@@ -18,27 +18,52 @@
             </div>
 
             <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                    <h3 class="text-lg font-semibold text-white">Web Development</h3>
-                    <p class="mt-1 text-sm text-slate-200">Front-end + back-end fundamentals with real projects.</p>
-                </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                    <h3 class="text-lg font-semibold text-white">SEO</h3>
-                    <p class="mt-1 text-sm text-slate-200">Technical SEO + content + analytics.</p>
-                </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                    <h3 class="text-lg font-semibold text-white">.NET Development</h3>
-                    <p class="mt-1 text-sm text-slate-200">C# + ASP.NET Core for modern applications.</p>
-                </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                    <h3 class="text-lg font-semibold text-white">Graphics Design</h3>
-                    <p class="mt-1 text-sm text-slate-200">Branding + marketing visuals + portfolio.</p>
-                </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
-                    <h3 class="text-lg font-semibold text-white">UI/UX (Optional)</h3>
-                    <p class="mt-1 text-sm text-slate-200">Design systems, wireframes and prototyping fundamentals.</p>
-                </article>
+                @php
+                    /** @var \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection $courses */
+                    $hasCourses = isset($courses) && $courses->count() > 0;
+                @endphp
+
+                @forelse($courses as $course)
+                    @php
+                        $thumbUrl = $course->thumbnail_url;
+                        $excerpt = \Illuminate\Support\Str::limit(trim(strip_tags((string) $course->description)), 140);
+                    @endphp
+                    <article class="reveal overflow-hidden rounded-3xl bg-white/5 ring-1 ring-white/10 transition hover:bg-white/[0.07]">
+                        <div class="aspect-[16/9] bg-slate-950/30">
+                            @if($thumbUrl)
+                                <img src="{{ $thumbUrl }}" alt="{{ $course->title }} thumbnail" class="h-full w-full object-cover" loading="lazy">
+                            @else
+                                <div class="flex h-full w-full items-center justify-center text-xs text-slate-300">
+                                    {{ __('frontend.no_image') }}
+                                </div>
+                            @endif
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-white">{{ $course->title }}</h3>
+                            <p class="mt-2 text-sm text-slate-200">{{ $excerpt }}</p>
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-500/20">
+                                    {{ __('frontend.enroll_now') }}
+                                </span>
+                                <a href="{{ route('contact') }}" class="text-sm font-semibold text-white/90 hover:text-white">
+                                    {{ __('frontend.contact') }} →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div class="reveal rounded-3xl bg-white/5 p-8 ring-1 ring-white/10 md:col-span-2 xl:col-span-3">
+                        <div class="text-white font-semibold">{{ __('frontend.no_courses_title') }}</div>
+                        <div class="mt-2 text-sm text-slate-200">{{ __('frontend.no_courses_body') }}</div>
+                    </div>
+                @endforelse
             </div>
+
+            @if(isset($courses) && method_exists($courses, 'links'))
+                <div class="mt-10">
+                    {{ $courses->links() }}
+                </div>
+            @endif
         </div>
     </section>
 </main>

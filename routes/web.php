@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiteController;
-use App\Http\Controllers\Admin\FrontendEditorController;
-use App\Http\Controllers\Admin\FrontendSettingsController;
+use App\Http\Controllers\Admin\WysiwygUploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get(
@@ -62,34 +61,14 @@ Route::get(
 )->middleware(['auth', 'verified', 'backend.locale'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
-    ->prefix('admin/frontend-editor')
-    ->name('admin.frontend-editor.')
+    ->prefix('admin')
+    ->name('admin.')
     ->group(
         function () {
-            Route::get(
-                '/',
-                [FrontendEditorController::class, 'index']
-            )->name('index');
-
-            Route::patch(
-                '/header-settings',
-                [FrontendSettingsController::class, 'updateHeader']
-            )->name('header-settings.update');
-
             Route::post(
-                '/{page}/sections',
-                [FrontendEditorController::class, 'store']
-            )->name('sections.store');
-
-            Route::patch(
-                '/sections/{section}',
-                [FrontendEditorController::class, 'update']
-            )->name('sections.update');
-
-            Route::patch(
-                '/{page}/sections/bulk',
-                [FrontendEditorController::class, 'bulkUpdate']
-            )->name('sections.bulk-update');
+                '/wysiwyg/upload',
+                [WysiwygUploadController::class, 'upload']
+            )->name('wysiwyg.upload');
         }
     );
 

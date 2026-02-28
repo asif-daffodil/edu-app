@@ -14,6 +14,12 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        @if(Auth::check() && Auth::user()->hasRole('admin'))
+            <meta name="wysiwyg-upload-url" content="{{ route('admin.wysiwyg.upload') }}">
+            <meta name="tinymce-base-url" content="{{ asset('vendor/tinymce') }}">
+            @vite(['resources/js/admin.js'])
+        @endif
+
         @stack('styles')
 
         <style>

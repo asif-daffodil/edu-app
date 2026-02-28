@@ -38,7 +38,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700">Bio</label>
-                    <textarea name="bio" rows="5" class="mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Short description...">{{ old('bio') }}</textarea>
+                    <textarea name="bio" rows="5" class="wysiwyg mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Short description...">{{ old('bio') }}</textarea>
                     @error('bio')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror

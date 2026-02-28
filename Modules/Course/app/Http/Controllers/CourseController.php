@@ -5,8 +5,11 @@ namespace Modules\Course\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Modules\Course\Http\Requests\StoreCourseRequest;
 use Modules\Course\Http\Requests\UpdateCourseRequest;
 use Modules\Course\Models\Course;
@@ -104,10 +107,17 @@ class CourseController extends Controller implements HasMiddleware
 
         $validated = $request->validated();
 
+        $thumbnailPath = null;
+        /** @var UploadedFile|null $thumbnail */
+        $thumbnail = $request->file('thumbnail');
+        if ($thumbnail) {
+            $thumbnailPath = $thumbnail->store('courses/thumbnails', 'public');
+        }
+
         $course = Course::query()->create([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'thumbnail' => $validated['thumbnail'] ?? null,
+            'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
             'created_by' => (int) Auth::id(),
         ]);
@@ -150,10 +160,18 @@ class CourseController extends Controller implements HasMiddleware
 
         $validated = $request->validated();
 
+        $thumbnailPath = $course->thumbnail;
+        /** @var UploadedFile|null $thumbnail */
+        $thumbnail = $request->file('thumbnail');
+        if ($thumbnail) {
+            $this->deleteCourseThumbnailIfStored($course);
+            $thumbnailPath = $thumbnail->store('courses/thumbnails', 'public');
+        }
+
         $course->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'thumbnail' => $validated['thumbnail'] ?? null,
+            'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
         ]);
 
@@ -169,10 +187,36 @@ class CourseController extends Controller implements HasMiddleware
     {
         abort_unless(Gate::allows('delete', $course), 403);
 
+        $this->deleteCourseThumbnailIfStored($course);
+
         $course->delete();
 
         return redirect()
             ->route('dashboard.courses.index')
             ->with('success', 'Course deleted successfully.');
+    }
+
+    private function deleteCourseThumbnailIfStored(Course $course): void
+    {
+        $thumb = $course->thumbnail;
+        if (!is_string($thumb)) {
+            return;
+        }
+
+        $thumb = trim($thumb);
+        if ($thumb === '') {
+            return;
+        }
+
+        if (Str::startsWith($thumb, ['http://', 'https://'])) {
+            return;
+        }
+
+        $normalized = ltrim($thumb, '/');
+        if (Str::startsWith($normalized, 'storage/')) {
+            $normalized = Str::after($normalized, 'storage/');
+        }
+
+        Storage::disk('public')->delete($normalized);
     }
 }

@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="max-w-3xl">
-        <form method="POST" action="{{ route('dashboard.courses.store') }}" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
+        <form method="POST" action="{{ route('dashboard.courses.store') }}" enctype="multipart/form-data" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
             @csrf
 
             <div>
@@ -18,13 +18,14 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700">Description</label>
-                <textarea name="description" rows="5" class="mt-1 w-full rounded-lg border-slate-300" required>{{ old('description') }}</textarea>
+                <textarea name="description" rows="5" class="wysiwyg mt-1 w-full rounded-lg border-slate-300" required>{{ old('description') }}</textarea>
                 @error('description') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">Thumbnail (path/url)</label>
-                <input name="thumbnail" value="{{ old('thumbnail') }}" class="mt-1 w-full rounded-lg border-slate-300" />
+                <label class="block text-sm font-medium text-slate-700">Thumbnail</label>
+                <input type="file" name="thumbnail" accept="image/*" class="mt-1 block w-full rounded-lg border border-slate-300 bg-white file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-700 hover:file:bg-slate-200" />
+                <p class="mt-1 text-xs text-slate-500">Upload a course thumbnail image (jpg/png/webp). Max size 2MB.</p>
                 @error('thumbnail') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 

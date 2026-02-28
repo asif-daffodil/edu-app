@@ -3,5 +3,7 @@
     "Mentors": true,
     "Profile": true,
     "Course": true,
-    "Batch": true
+    "Batch": true,
+    "FrontendEditor": true,
+    "Reviews": true
 }

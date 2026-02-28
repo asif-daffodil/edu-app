@@ -33,6 +33,46 @@ return [
         .'and career-focused support to help you get hired '
         .'or start freelancing.',
 
+    'about_page_intro_title' => 'Who we are',
+    'about_page_intro_body' => 'We are a career-focused learning platform that helps learners build real skills through structured modules, hands-on projects, and mentor guidance. Our goal is simple: help you become confident enough to do real work — in a job or as a freelancer.',
+
+    'about_page_mission_title' => 'Our mission',
+    'about_page_mission_body' => 'Make skill-building practical, structured, and outcome-driven — so learners can ship projects and grow consistently.',
+
+    'about_page_vision_title' => 'Our vision',
+    'about_page_vision_body' => 'Create a community of job-ready professionals and successful freelancers by focusing on portfolio-first learning.',
+
+    'about_page_values_title' => 'What you get at iTechBD',
+    'about_page_values_subtitle' => 'A clear learning path, real projects, and ongoing support — designed for long-term growth.',
+
+    'about_page_value_1_title' => 'Mentor-led learning',
+    'about_page_value_1_desc' => 'Weekly guidance, reviews, and a structured path from fundamentals to advanced skills.',
+    'about_page_value_2_title' => 'Portfolio first',
+    'about_page_value_2_desc' => 'Projects that prove your ability and help you stand out to employers and clients.',
+    'about_page_value_3_title' => 'Career support',
+    'about_page_value_3_desc' => 'CV + interview practice with feedback to help you become job-ready.',
+    'about_page_value_4_title' => 'Freelancing support',
+    'about_page_value_4_desc' => 'Profile + proposal + client communication guidance for real-world freelancing.',
+    'about_page_value_5_title' => 'Structured roadmap',
+    'about_page_value_5_desc' => 'Milestones and tasks that keep you consistent and focused on outcomes.',
+    'about_page_value_6_title' => 'Community & accountability',
+    'about_page_value_6_desc' => 'Stay motivated with a learning community, peer support, and regular check-ins.',
+
+    'about_page_stats_title' => 'Learning outcomes',
+    'about_page_stats_subtitle' => 'Progress you can measure — skills you can demonstrate.',
+    'about_page_stat_1_value' => 'Mentor-led',
+    'about_page_stat_1_label' => 'Guidance & reviews',
+    'about_page_stat_2_value' => 'Project-based',
+    'about_page_stat_2_label' => 'Portfolio outcomes',
+    'about_page_stat_3_value' => 'Weekly',
+    'about_page_stat_3_label' => 'Consistency & milestones',
+    'about_page_stat_4_value' => 'Career-ready',
+    'about_page_stat_4_label' => 'Jobs & freelancing',
+
+    'about_page_cta_title' => 'Ready to start learning?',
+    'about_page_cta_body' => 'Explore courses, pick a skill track, and start building your portfolio with mentor support.',
+    'about_page_cta_button' => 'Explore Courses',
+
     'hero_badge_primary' => 'Job-ready training with real projects',
     'hero_badge_secondary' => 'Mentor support • Career guidance',
     'hero_heading_primary' => 'Learn from the most experienced mentors '
@@ -134,6 +174,12 @@ return [
     'contact_subtitle' => 'Get course outline, schedule and fees.',
     'contact_email_label' => 'Email',
     'contact_phone_label' => 'Phone',
+
+    'no_image' => 'No image',
+    'no_courses_title' => 'No courses available right now',
+    'no_courses_body' => 'Please check back soon or contact us for the latest schedule and fees.',
+    'no_reviews_title' => 'No reviews available right now',
+    'no_reviews_body' => 'Please check back soon. New student reviews will be published here.',
 
     'footer_cta_pill' => 'Mentor-led • Career-focused',
     'footer_cta_title' => 'Ready to learn with mentors?',

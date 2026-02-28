@@ -250,7 +250,19 @@
                 <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-white sm:text-3xl">{{ optional($cmsSectionsByKey->get('home_skill_tracks_title'))->title ?: __('frontend.home_skill_tracks_title') }}</h2>
-                        <p class="mt-2 max-w-2xl text-slate-200">{{ optional($cmsSectionsByKey->get('home_skill_tracks_subtitle'))->content ?: __('frontend.home_skill_tracks_subtitle') }}</p>
+                        @php
+                            $skillTracksSubtitleValue = optional($cmsSectionsByKey->get('home_skill_tracks_subtitle'))->content
+                                ?: __('frontend.home_skill_tracks_subtitle');
+                            $skillTracksSubtitleIsHtml = is_string($skillTracksSubtitleValue)
+                                && preg_match('/<[^>]+>/', $skillTracksSubtitleValue);
+                        @endphp
+                        <div class="mt-2 max-w-2xl text-slate-200 [&_p]:m-0 [&_p]:text-slate-200">
+                            @if($skillTracksSubtitleIsHtml)
+                                {!! $skillTracksSubtitleValue !!}
+                            @else
+                                {{ $skillTracksSubtitleValue }}
+                            @endif
+                        </div>
                     </div>
                     @php $skillTracksCta = $cmsSectionsByKey->get('home_skill_tracks_cta'); @endphp
                     <a href="{{ optional($skillTracksCta)->button_link ?: '#outcomes' }}" class="text-sm font-medium text-sky-200 hover:text-sky-100">
@@ -326,9 +338,11 @@
                             continue;
                         }
 
+                        $rawIsHtml = $raw !== '' && preg_match('/<[^>]+>/', $raw);
+
                         $desc = '';
                         $bullets = [];
-                        if ($raw !== '') {
+                        if ($raw !== '' && !$rawIsHtml) {
                             $lines = preg_split("/\r\n|\r|\n/", $raw) ?: [];
                             $lines = array_values(array_filter(array_map('trim', $lines), fn ($v) => $v !== ''));
 
@@ -349,6 +363,7 @@
                             'title' => $title,
                             'desc' => $desc,
                             'bullets' => $bullets,
+                            'html' => $rawIsHtml ? $raw : '',
                         ];
                     }
 
@@ -361,7 +376,11 @@
                     @foreach($skillTracks as $track)
                         <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 transition hover:bg-white/7">
                             <h3 class="text-lg font-semibold text-white">{{ $track['title'] }}</h3>
-                            @if(($track['desc'] ?? '') !== '')
+                            @if(!empty($track['html']))
+                                <div class="mt-2 text-sm text-slate-200 [&_p]:m-0 [&_p]:text-slate-200 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_li]:text-slate-200">
+                                    {!! $track['html'] !!}
+                                </div>
+                            @elseif(($track['desc'] ?? '') !== '')
                                 <p class="mt-1 text-sm text-slate-200">{{ $track['desc'] }}</p>
                             @endif
                             @if(!empty($track['bullets']))

@@ -7,7 +7,9 @@ use App\Models\FrontendSection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
+use Modules\Course\Models\Course;
 use Modules\Mentors\Models\Mentor;
+use Modules\Reviews\Models\Review;
 
 /**
  * Public site controller.
@@ -113,6 +115,30 @@ class SiteController extends Controller
     public function page(string $slug): View
     {
         $cms = $this->loadCms($slug);
+
+        if ($slug === 'courses') {
+            $courses = Course::query()
+                ->where('status', 'active')
+                ->orderByDesc('id')
+                ->paginate(12);
+
+            return view('pages.' . $slug, array_merge($cms, compact('courses')));
+        }
+
+        if ($slug === 'reviews') {
+            $reviews = new Collection();
+
+            if (Schema::hasTable('reviews')) {
+                $reviews = Review::query()
+                    ->where('status', 'active')
+                    ->orderBy('sort_order')
+                    ->orderByDesc('id')
+                    ->limit(48)
+                    ->get(['id', 'name', 'designation', 'quote', 'rating']);
+            }
+
+            return view('pages.' . $slug, array_merge($cms, compact('reviews')));
+        }
 
         return view('pages.' . $slug, $cms);
     }
