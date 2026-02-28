@@ -4,7 +4,7 @@
 
 @section('content')
 <main>
-    <section class="border-b border-white/10">
+    <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             @php
                 $hero = $cmsSectionsByKey->get('hero');
@@ -21,18 +21,18 @@
             @endphp
 
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.contact_title') }}</h1>
-                <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: __('frontend.contact_subtitle') }}</p>
+                <h1 class="text-3xl font-semibold text-slate-900 dark:text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.contact_title') }}</h1>
+                <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-200">{{ optional($hero)->content ?: __('frontend.contact_subtitle') }}</p>
             </div>
 
             <div class="reveal mt-10 grid gap-6 lg:grid-cols-2">
-                <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-sm font-semibold text-white">{{ $emailLabel }}</div>
-                    <a href="{{ $emailHref }}" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">{{ $emailValue }}</a>
+                <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ $emailLabel }}</div>
+                    <a href="{{ $emailHref }}" class="mt-2 inline-flex text-sm text-sky-700 hover:text-sky-800 dark:text-sky-200 dark:hover:text-sky-100">{{ $emailValue }}</a>
                 </div>
-                <div class="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-sm font-semibold text-white">{{ $phoneLabel }}</div>
-                    <a href="{{ $phoneHref }}" class="mt-2 inline-flex text-sm text-sky-200 hover:text-sky-100">{{ $phoneValue }}</a>
+                <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ $phoneLabel }}</div>
+                    <a href="{{ $phoneHref }}" class="mt-2 inline-flex text-sm text-sky-700 hover:text-sky-800 dark:text-sky-200 dark:hover:text-sky-100">{{ $phoneValue }}</a>
                 </div>
             </div>
         </div>

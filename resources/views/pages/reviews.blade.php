@@ -4,15 +4,15 @@
 
 @section('content')
 <main>
-    <section class="border-b border-white/10">
+    <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             @php
                 $hero = $cmsSectionsByKey->get('hero');
             @endphp
 
             <div class="reveal">
-                <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.home_reviews_title') }}</h1>
-                <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: __('frontend.home_reviews_subtitle') }}</p>
+                <h1 class="text-3xl font-semibold text-slate-900 dark:text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.home_reviews_title') }}</h1>
+                <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-200">{{ optional($hero)->content ?: __('frontend.home_reviews_subtitle') }}</p>
             </div>
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -20,7 +20,7 @@
                     @php
                         $rating = max(1, min(5, (int) ($review->rating ?? 5)));
                     @endphp
-                    <div class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
+                    <div class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
                         <div class="flex items-center gap-1 text-amber-300" aria-label="{{ $rating }} star rating">
                             @for ($i = 1; $i <= 5; $i++)
                                 <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 {{ $i <= $rating ? '' : 'opacity-30' }}">
@@ -28,18 +28,18 @@
                                 </svg>
                             @endfor
                         </div>
-                        <p class="mt-4 text-sm text-slate-200">“{{ $review->quote }}”</p>
-                        <div class="mt-4 text-xs font-semibold text-white">
+                        <p class="mt-4 text-sm text-slate-600 dark:text-slate-200">“{{ $review->quote }}”</p>
+                        <div class="mt-4 text-xs font-semibold text-slate-900 dark:text-white">
                             — {{ $review->name }}
                             @if(!empty($review->designation))
-                                <span class="font-normal text-slate-300">• {{ $review->designation }}</span>
+                                <span class="font-normal text-slate-500 dark:text-slate-300">• {{ $review->designation }}</span>
                             @endif
                         </div>
                     </div>
                 @empty
-                    <div class="reveal rounded-3xl bg-white/5 p-8 ring-1 ring-white/10 md:col-span-3">
-                        <div class="text-white font-semibold">{{ __('frontend.no_reviews_title') }}</div>
-                        <div class="mt-2 text-sm text-slate-200">{{ __('frontend.no_reviews_body') }}</div>
+                    <div class="reveal rounded-3xl bg-white p-8 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none md:col-span-3">
+                        <div class="text-slate-900 dark:text-white font-semibold">{{ __('frontend.no_reviews_title') }}</div>
+                        <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.no_reviews_body') }}</div>
                     </div>
                 @endforelse
             </div>

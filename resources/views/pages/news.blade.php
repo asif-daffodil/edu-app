@@ -4,7 +4,7 @@
 
 @section('content')
 <main>
-    <section class="border-b border-white/10">
+    <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             @php
                 $hero = $cmsSectionsByKey->get('hero');
@@ -12,26 +12,26 @@
 
             <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h1 class="text-3xl font-semibold text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.home_news_title') }}</h1>
-                    <p class="mt-3 max-w-2xl text-slate-200">{{ optional($hero)->content ?: __('frontend.home_news_subtitle') }}</p>
+                    <h1 class="text-3xl font-semibold text-slate-900 dark:text-white sm:text-4xl">{{ optional($hero)->title ?: __('frontend.home_news_title') }}</h1>
+                    <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-200">{{ optional($hero)->content ?: __('frontend.home_news_subtitle') }}</p>
                 </div>
             </div>
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-xs text-slate-300">Batch Update</div>
-                    <h3 class="mt-2 text-base font-semibold text-white">New batch enrollment open</h3>
-                    <p class="mt-2 text-sm text-slate-200">Limited seats with mentor-led support and weekly reviews.</p>
+                <article class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="text-xs text-slate-500 dark:text-slate-300">Batch Update</div>
+                    <h3 class="mt-2 text-base font-semibold text-slate-900 dark:text-white">New batch enrollment open</h3>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">Limited seats with mentor-led support and weekly reviews.</p>
                 </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-xs text-slate-300">Workshop</div>
-                    <h3 class="mt-2 text-base font-semibold text-white">Portfolio & LinkedIn session</h3>
-                    <p class="mt-2 text-sm text-slate-200">Improve your profile and showcase projects professionally.</p>
+                <article class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="text-xs text-slate-500 dark:text-slate-300">Workshop</div>
+                    <h3 class="mt-2 text-base font-semibold text-slate-900 dark:text-white">Portfolio & LinkedIn session</h3>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">Improve your profile and showcase projects professionally.</p>
                 </article>
-                <article class="reveal rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
-                    <div class="text-xs text-slate-300">Freelancing</div>
-                    <h3 class="mt-2 text-base font-semibold text-white">Client communication Q&A</h3>
-                    <p class="mt-2 text-sm text-slate-200">Learn proposals, scope, and how to handle real clients.</p>
+                <article class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="text-xs text-slate-500 dark:text-slate-300">Freelancing</div>
+                    <h3 class="mt-2 text-base font-semibold text-slate-900 dark:text-white">Client communication Q&A</h3>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">Learn proposals, scope, and how to handle real clients.</p>
                 </article>
             </div>
         </div>
