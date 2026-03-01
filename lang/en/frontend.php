@@ -17,6 +17,9 @@ return [
 
     'enroll_now' => 'Enroll Now',
     'explore_courses' => 'Explore Courses',
+    'view_details' => 'View details',
+    'old_price' => 'Old price',
+    'discount_price' => 'Discount price',
 
     'language_bn' => 'বাংলা',
     'language_en' => 'English',

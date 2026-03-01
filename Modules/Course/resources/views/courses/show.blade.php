@@ -28,6 +28,30 @@
                 <div class="text-sm font-semibold text-slate-900">{{ ucfirst($course->status) }}</div>
             </div>
 
+            <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Old price</div>
+                    <div class="mt-1 text-sm font-semibold text-slate-900">
+                        @if(!is_null($course->old_price))
+                            {{ number_format((float) $course->old_price, 2) }}
+                        @else
+                            —
+                        @endif
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Discount price</div>
+                    <div class="mt-1 text-sm font-semibold text-slate-900">
+                        @if(!is_null($course->discount_price))
+                            {{ number_format((float) $course->discount_price, 2) }}
+                        @else
+                            —
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Description</div>
                 <div class="mt-2 text-sm text-slate-700 whitespace-pre-line">{{ $course->description }}</div>

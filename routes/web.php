@@ -27,6 +27,10 @@ Route::middleware('frontend.locale')->group(
             ->defaults('slug', 'courses')
             ->name('courses');
 
+        Route::get('/courses/{course}', [SiteController::class, 'course'])
+            ->whereNumber('course')
+            ->name('courses.show');
+
         Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
 
         Route::get('/reviews', [SiteController::class, 'page'])

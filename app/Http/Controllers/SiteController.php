@@ -142,4 +142,14 @@ class SiteController extends Controller
 
         return view('pages.' . $slug, $cms);
     }
+
+    /**
+     * Show a public single course details page.
+     */
+    public function course(Course $course): View
+    {
+        abort_unless($course->status === 'active', 404);
+
+        return view('pages.course-show', compact('course'));
+    }
 }

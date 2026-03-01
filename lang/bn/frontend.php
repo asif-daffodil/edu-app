@@ -17,6 +17,9 @@ return [
 
     'enroll_now' => 'এনরোল করুন',
     'explore_courses' => 'কোর্স দেখুন',
+    'view_details' => 'বিস্তারিত দেখুন',
+    'old_price' => 'পুরনো দাম',
+    'discount_price' => 'ডিসকাউন্ট দাম',
 
     'language_bn' => 'বাংলা',
     'language_en' => 'English',

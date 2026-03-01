@@ -22,6 +22,20 @@
                 @error('description') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">Old price</label>
+                    <input type="number" name="old_price" value="{{ old('old_price') }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                    @error('old_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">Discount price</label>
+                    <input type="number" name="discount_price" value="{{ old('discount_price') }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                    @error('discount_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
             <div>
                 <label class="block text-sm font-medium text-slate-700">Thumbnail</label>
                 <input type="file" name="thumbnail" accept="image/*" class="mt-1 block w-full rounded-lg border border-slate-300 bg-white file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-700 hover:file:bg-slate-200" />

@@ -117,6 +117,8 @@ class CourseController extends Controller implements HasMiddleware
         $course = Course::query()->create([
             'title' => $validated['title'],
             'description' => $validated['description'],
+            'old_price' => $validated['old_price'] ?? null,
+            'discount_price' => $validated['discount_price'] ?? null,
             'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
             'created_by' => (int) Auth::id(),
@@ -171,6 +173,8 @@ class CourseController extends Controller implements HasMiddleware
         $course->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
+            'old_price' => $validated['old_price'] ?? null,
+            'discount_price' => $validated['discount_price'] ?? null,
             'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
         ]);

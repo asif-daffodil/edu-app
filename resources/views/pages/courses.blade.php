@@ -40,14 +40,38 @@
                         </div>
                         <div class="p-6">
                             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ $course->title }}</h3>
+
+                            @php
+                                $oldPrice = $course->old_price;
+                                $discountPrice = $course->discount_price;
+                            @endphp
+
+                            @if(!is_null($oldPrice) || !is_null($discountPrice))
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    @if(!is_null($oldPrice) && !is_null($discountPrice) && (float) $discountPrice < (float) $oldPrice)
+                                        <span class="text-sm font-semibold text-slate-500 line-through dark:text-white/60">{{ number_format((float) $oldPrice, 2) }}</span>
+                                        <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $discountPrice, 2) }}</span>
+                                    @elseif(!is_null($discountPrice))
+                                        <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $discountPrice, 2) }}</span>
+                                    @else
+                                        <span class="text-base font-semibold text-slate-900 dark:text-white">{{ number_format((float) $oldPrice, 2) }}</span>
+                                    @endif
+                                </div>
+                            @endif
+
                             <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ $excerpt }}</p>
                             <div class="mt-4 flex items-center justify-between">
                                 <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-500/20 dark:text-emerald-200">
                                     {{ __('frontend.enroll_now') }}
                                 </span>
-                                <a href="{{ route('contact') }}" class="text-sm font-semibold text-sky-700 hover:text-sky-800 dark:text-white/90 dark:hover:text-white">
-                                    {{ __('frontend.contact') }} →
-                                </a>
+                                <div class="flex items-center gap-4">
+                                    <a href="{{ route('courses.show', $course) }}" class="text-sm font-semibold text-slate-900 hover:text-slate-950 dark:text-white/90 dark:hover:text-white">
+                                        {{ __('frontend.view_details') }} →
+                                    </a>
+                                    <a href="{{ route('contact') }}" class="text-sm font-semibold text-sky-700 hover:text-sky-800 dark:text-white/90 dark:hover:text-white">
+                                        {{ __('frontend.contact') }} →
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </article>

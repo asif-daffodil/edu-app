@@ -22,9 +22,16 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
+        'old_price',
+        'discount_price',
         'thumbnail',
         'status',
         'created_by',
+    ];
+
+    protected $casts = [
+        'old_price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
     ];
 
     public function batches(): HasMany
