@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -13,9 +15,26 @@ class PasswordResetLinkController extends Controller
     /**
      * Display the password reset link request view.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
-        return view('auth.forgot-password');
+        $intended = (string) session()->get('url.intended', '');
+        $intendedPath = (string) parse_url($intended, PHP_URL_PATH);
+
+        if ($intendedPath !== '' && (Str::startsWith($intendedPath, ['/admin', '/dashboard']))) {
+            return view('auth.forgot-password');
+        }
+
+        $previous = (string) url()->previous();
+        $previousPath = (string) parse_url($previous, PHP_URL_PATH);
+        $isUnsafePrevious = $previousPath === ''
+            || Str::startsWith($previousPath, ['/login', '/register', '/forgot-password', '/admin', '/dashboard']);
+
+        $target = $isUnsafePrevious ? '' : $previous;
+        if ($target === '') {
+            $target = route('home');
+        }
+
+        return redirect()->to($target)->with('auth_modal', 'forgot');
     }
 
     /**
@@ -23,7 +42,7 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -36,9 +55,23 @@ class PasswordResetLinkController extends Controller
             $request->only('email')
         );
 
+        if ($request->expectsJson()) {
+            if ($status == Password::RESET_LINK_SENT) {
+                return response()->json([
+                    'ok' => true,
+                    'message' => __($status),
+                ]);
+            }
+
+            return response()->json([
+                'message' => __($status),
+                'errors' => ['email' => [__($status)]],
+            ], 422);
+        }
+
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+            ? back()->with('status', __($status))
+            : back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
     }
 }

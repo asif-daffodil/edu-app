@@ -9,6 +9,8 @@ test('public course details page can be viewed for active course', function () {
     $course = Course::query()->create([
         'title' => 'Test Course',
         'description' => 'Test description',
+        'old_price' => 8000,
+        'discount_price' => 6500,
         'thumbnail' => null,
         'status' => 'active',
         'created_by' => $user->id,
@@ -26,6 +28,7 @@ test('public course details page returns 404 for inactive course', function () {
     $course = Course::query()->create([
         'title' => 'Inactive Course',
         'description' => 'Hidden',
+        'old_price' => 8000,
         'thumbnail' => null,
         'status' => 'inactive',
         'created_by' => $user->id,

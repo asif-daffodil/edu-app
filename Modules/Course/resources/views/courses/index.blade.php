@@ -37,6 +37,7 @@
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">SL</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Title</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Fee</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Status</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Batches</th>
                         <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">Actions</th>
@@ -59,6 +60,7 @@
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                         { data: 'title', name: 'title' },
+                        { data: 'fee', name: 'old_price', orderable: false, searchable: false },
                         { data: 'status_badge', name: 'status', orderable: false, searchable: false },
                         { data: 'batches_count', name: 'batches_count', searchable: false },
                         { data: 'actions', name: 'actions', orderable: false, searchable: false },

@@ -14,8 +14,8 @@ class StoreCourseRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:5000'],
-            'old_price' => ['nullable', 'numeric', 'min:0'],
-            'discount_price' => ['nullable', 'numeric', 'min:0'],
+            'old_price' => ['required', 'numeric', 'min:0'],
+            'discount_price' => ['nullable', 'numeric', 'min:0', 'lte:old_price'],
             'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status' => ['required', 'in:active,inactive'],
         ];

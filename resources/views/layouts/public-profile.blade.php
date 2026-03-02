@@ -10,7 +10,51 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            $manifestPath = public_path('build/manifest.json');
+            $hotPath = public_path('hot');
+            $useHot = false;
+
+            if (file_exists($hotPath)) {
+                $hotUrl = trim((string) @file_get_contents($hotPath));
+                if ($hotUrl !== '') {
+                    $parts = parse_url($hotUrl);
+                    $host = $parts['host'] ?? null;
+                    $port = $parts['port'] ?? (($parts['scheme'] ?? '') === 'https' ? 443 : 80);
+                    if ($host && $port) {
+                        $conn = @fsockopen($host, (int) $port, $errno, $errstr, 0.15);
+                        if (is_resource($conn)) {
+                            fclose($conn);
+                            $useHot = true;
+                        }
+                    }
+                }
+            }
+
+            $manifest = null;
+            if (! $useHot && file_exists($manifestPath)) {
+                $manifest = json_decode((string) file_get_contents($manifestPath), true) ?: [];
+            }
+        @endphp
+
+        @if ($useHot)
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @elseif (is_array($manifest))
+            @if (!empty($manifest['resources/css/app.css']['file']))
+                <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
+            @endif
+            @if (!empty($manifest['resources/js/app.js']['file']))
+                <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+            @endif
+        @else
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @endif
+
+        @if (session('auth_modal'))
+            <script>
+                window.__authModalToOpen = @json(session('auth_modal'));
+            </script>
+        @endif
 
         <style>
             [x-cloak] { display: none !important; }
@@ -43,11 +87,11 @@
                                 {{ __('Dashboard') }}
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10">
+                            <a href="{{ route('login') }}" data-auth-trigger="login" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10">
                                 {{ __('Log in') }}
                             </a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="rounded-md bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-3 py-2 text-sm font-medium text-white hover:from-indigo-600 hover:to-fuchsia-600 shadow-sm shadow-indigo-500/20">
+                                <a href="{{ route('register') }}" data-auth-trigger="register" class="rounded-md bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-3 py-2 text-sm font-medium text-white hover:from-indigo-600 hover:to-fuchsia-600 shadow-sm shadow-indigo-500/20">
                                     {{ __('Register') }}
                                 </a>
                             @endif
@@ -71,5 +115,11 @@
                 </footer>
             </div>
         </div>
+
+        @guest
+            <x-auth.login-modal />
+            <x-auth.register-modal />
+            <x-auth.forgot-password-modal />
+        @endguest
     </body>
 </html>

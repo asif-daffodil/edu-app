@@ -576,7 +576,7 @@
                         <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                             <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.enroll_now') }}</a>
+                                <a href="{{ route('register') }}" data-auth-trigger="register" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.enroll_now') }}</a>
                             @else
                                 <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.contact') }}</a>
                             @endif

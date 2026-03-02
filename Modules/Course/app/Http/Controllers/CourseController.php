@@ -36,12 +36,43 @@ class CourseController extends Controller implements HasMiddleware
 
         if (request()->ajax() && request()->has('draw')) {
             $query = Course::query()
-                ->select(['id', 'title', 'description', 'status', 'created_at'])
+                ->select(['id', 'title', 'description', 'old_price', 'discount_price', 'status', 'created_at'])
                 ->withCount('batches')
                 ->latest();
 
             return DataTables::eloquent($query)
                 ->addIndexColumn()
+                ->addColumn('fee', function (Course $course) {
+                    $oldPrice = $course->old_price;
+                    $discountPrice = $course->discount_price;
+
+                    $hasDiscount = !is_null($oldPrice)
+                        && !is_null($discountPrice)
+                        && (float) $discountPrice < (float) $oldPrice;
+
+                    if ($hasDiscount) {
+                        $old = e(number_format((float) $oldPrice, 2));
+                        $discount = e(number_format((float) $discountPrice, 2));
+
+                        return '<div class="text-sm">'
+                            . '<span class="font-semibold text-slate-500 line-through">' . $old . '</span>'
+                            . '<span class="mx-2 text-slate-300">•</span>'
+                            . '<span class="font-semibold text-emerald-700">' . $discount . '</span>'
+                            . '</div>';
+                    }
+
+                    if (!is_null($discountPrice)) {
+                        $discount = e(number_format((float) $discountPrice, 2));
+                        return '<div class="text-sm font-semibold text-emerald-700">' . $discount . '</div>';
+                    }
+
+                    if (!is_null($oldPrice)) {
+                        $old = e(number_format((float) $oldPrice, 2));
+                        return '<div class="text-sm font-semibold text-slate-900">' . $old . '</div>';
+                    }
+
+                    return '<span class="text-sm text-slate-500">—</span>';
+                })
                 ->addColumn('status_badge', function (Course $course) {
                     if ($course->status === 'active') {
                         return '<span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">Active</span>';
@@ -81,7 +112,7 @@ class CourseController extends Controller implements HasMiddleware
                             ->orWhere('description', 'like', "%{$keyword}%");
                     });
                 })
-                ->rawColumns(['status_badge', 'actions'])
+                ->rawColumns(['fee', 'status_badge', 'actions'])
                 ->toJson();
         }
 

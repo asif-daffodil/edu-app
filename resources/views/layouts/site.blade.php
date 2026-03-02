@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script>
         (function () {
@@ -25,8 +26,42 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+    @php
+        $manifestPath = public_path('build/manifest.json');
+        $hotPath = public_path('hot');
+        $useHot = false;
+
+        if (file_exists($hotPath)) {
+            $hotUrl = trim((string) @file_get_contents($hotPath));
+            if ($hotUrl !== '') {
+                $parts = parse_url($hotUrl);
+                $host = $parts['host'] ?? null;
+                $port = $parts['port'] ?? (($parts['scheme'] ?? '') === 'https' ? 443 : 80);
+                if ($host && $port) {
+                    $conn = @fsockopen($host, (int) $port, $errno, $errstr, 0.15);
+                    if (is_resource($conn)) {
+                        fclose($conn);
+                        $useHot = true;
+                    }
+                }
+            }
+        }
+
+        $manifest = null;
+        if (! $useHot && file_exists($manifestPath)) {
+            $manifest = json_decode((string) file_get_contents($manifestPath), true) ?: [];
+        }
+    @endphp
+
+    @if ($useHot)
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @elseif (is_array($manifest))
+        @if (!empty($manifest['resources/css/app.css']['file']))
+            <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
+        @endif
+        @if (!empty($manifest['resources/js/app.js']['file']))
+            <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+        @endif
     @else
         <script>
             tailwind = window.tailwind || {};
@@ -111,6 +146,12 @@
             scroll-snap-align: start;
         }
     </style>
+
+    @if (session('auth_modal'))
+        <script>
+            window.__authModalToOpen = @json(session('auth_modal'));
+        </script>
+    @endif
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
     <!-- Background -->
@@ -227,13 +268,13 @@
                             {{ __('frontend.dashboard') }}
                         </a>
                     @else
-                        <a href="{{ route('login') }}"
-                           class="hidden rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 sm:inline-flex dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
+                                <a href="{{ route('login') }}" data-auth-trigger="login"
+                                    class="inline-flex rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
                             {{ __('frontend.login') }}
                         </a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
+                            <a href="{{ route('register') }}" data-auth-trigger="register"
                                class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
                                 {{ __('frontend.enroll_now') }}
                             </a>
@@ -428,6 +469,11 @@
             </div>
         </div>
     </footer>
+    @guest
+        <x-auth.login-modal />
+        <x-auth.register-modal />
+        <x-auth.forgot-password-modal />
+    @endguest
 
     @stack('scripts')
 </body>

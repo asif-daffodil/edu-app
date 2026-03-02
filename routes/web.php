@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\WysiwygUploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,31 @@ Route::middleware('frontend.locale')->group(
         Route::get('/courses/{course}', [SiteController::class, 'course'])
             ->whereNumber('course')
             ->name('courses.show');
+
+        Route::middleware('auth')->group(
+            function () {
+                Route::get(
+                    '/courses/{course}/checkout',
+                    [CheckoutController::class, 'show']
+                )
+                    ->whereNumber('course')
+                    ->name('checkout.show');
+
+                Route::post(
+                    '/courses/{course}/checkout',
+                    [CheckoutController::class, 'store']
+                )
+                    ->whereNumber('course')
+                    ->name('checkout.store');
+
+                Route::get(
+                    '/checkout/orders/{order}',
+                    [CheckoutController::class, 'success']
+                )
+                    ->whereNumber('order')
+                    ->name('checkout.success');
+            }
+        );
 
         Route::get('/mentors', [SiteController::class, 'mentors'])->name('mentors');
 

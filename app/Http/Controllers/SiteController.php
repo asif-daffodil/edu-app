@@ -145,10 +145,24 @@ class SiteController extends Controller
 
     /**
      * Show a public single course details page.
+     *
+     * @param Course $course Course model (route model binding).
+     *
+     * @return View
      */
     public function course(Course $course): View
     {
         abort_unless($course->status === 'active', 404);
+
+        $course->load(
+            [
+                'batches' => function ($query) {
+                    $query
+                        ->whereIn('status', ['upcoming', 'running'])
+                        ->orderBy('start_date');
+                },
+            ]
+        );
 
         return view('pages.course-show', compact('course'));
     }
