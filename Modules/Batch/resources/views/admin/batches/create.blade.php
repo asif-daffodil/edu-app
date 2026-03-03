@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="max-w-3xl">
-        <form method="POST" action="{{ route('dashboard.courses.batches.store', $course) }}" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
+        <form method="POST" action="{{ route('dashboard.batches.store.course', $course) }}" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
             @csrf
 
             <div>
@@ -61,7 +61,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.courses.batches.index', $course) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                <a href="{{ route('dashboard.batches.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create</button>
             </div>
         </form>

@@ -2,9 +2,11 @@
 
 namespace Modules\Batch\Providers;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Batch\Console\Commands\SyncBatchStatusesCommand;
 use Modules\Batch\Models\Batch;
 use Modules\Batch\Models\ClassSchedule;
 use Modules\Batch\Policies\BatchPolicy;
@@ -49,7 +51,9 @@ class BatchServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        $this->commands([
+            SyncBatchStatusesCommand::class,
+        ]);
     }
 
     /**
@@ -57,10 +61,13 @@ class BatchServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+
+            $schedule
+                ->command('batches:sync-statuses')
+                ->hourly();
+        });
     }
 
     /**

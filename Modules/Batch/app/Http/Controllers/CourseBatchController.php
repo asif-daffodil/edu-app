@@ -145,8 +145,13 @@ class CourseBatchController extends Controller implements HasMiddleware
             'created_by' => (int) Auth::id(),
         ]);
 
+        // Ensure a newly created batch starts with no assignments.
+        // Mentors/students should only be attached manually by an admin.
+        $batch->mentors()->detach();
+        $batch->students()->detach();
+
         return redirect()
-            ->route('dashboard.courses.batches.show', [$course, $batch])
+            ->route('dashboard.batches.index')
             ->with('success', 'Batch created successfully.');
     }
 
@@ -198,8 +203,8 @@ class CourseBatchController extends Controller implements HasMiddleware
         ]);
 
         return redirect()
-            ->route('dashboard.courses.batches.show', [$course, $batch])
-            ->with('success', 'Batch updated successfully.');
+            ->route('dashboard.batches.index')
+            ->with('success', 'Batch updated successfully');
     }
 
     /**

@@ -6,10 +6,12 @@
                 <p class="mt-1 text-sm text-slate-500">All batches across courses.</p>
             </div>
 
-            <a href="{{ route('dashboard.courses.index') }}"
-                class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                Go to Courses
-            </a>
+            @can('create', \Modules\Batch\Models\Batch::class)
+                <a href="{{ route('dashboard.batches.create') }}"
+                    class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                    Add New Batch
+                </a>
+            @endcan
         </div>
     </x-slot>
 

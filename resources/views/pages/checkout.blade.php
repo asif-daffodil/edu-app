@@ -30,8 +30,30 @@
                             </div>
                         </div>
 
-                        <form method="POST" action="{{ route('checkout.store', $course) }}" class="mt-8">
+                        <form method="POST" action="{{ route('checkout.store', $course) }}" class="mt-8 space-y-4">
                             @csrf
+
+                            @if($course->relationLoaded('batches') && $course->batches->count())
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Select batch</label>
+                                    <select name="batch_id" class="mt-2 w-full rounded-2xl border-slate-300 bg-white text-slate-900 dark:border-white/10 dark:bg-slate-900 dark:text-slate-100 dark:[color-scheme:dark]">
+                                        <option value="" class="text-slate-900 dark:text-slate-100">-- Select a batch --</option>
+                                        @foreach($course->batches as $batch)
+                                            @php($isJoined = isset($joinedBatchIds) && in_array((int) $batch->id, (array) $joinedBatchIds, true))
+                                            <option value="{{ $batch->id }}"
+                                                    class="text-slate-900 dark:text-slate-100"
+                                                    @selected((string) old('batch_id') === (string) $batch->id)
+                                                    @disabled($isJoined)>
+                                                {{ $batch->name }} — starts {{ optional($batch->start_date)->format('d M, Y') }} ({{ ucfirst($batch->status) }})@if($isJoined) — Already joined @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('batch_id')
+                                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endif
+
                             <button type="submit" class="inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
                                 {{ __('frontend.confirm_order') }}
                             </button>

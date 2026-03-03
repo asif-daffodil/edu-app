@@ -6,8 +6,8 @@
                 <p class="mt-1 text-sm text-slate-500">Manage batches for: <span class="font-semibold">{{ $course->title }}</span></p>
             </div>
 
-            @can('addBatch')
-                <a href="{{ route('dashboard.courses.batches.create', $course) }}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            @can('create', \Modules\Batch\Models\Batch::class)
+                <a href="{{ route('dashboard.batches.create.course', $course) }}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
                     Add Batch
                 </a>
             @endcan

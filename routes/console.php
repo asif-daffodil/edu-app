@@ -4,6 +4,9 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Modules\Course\Models\Course;
+use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -79,3 +82,25 @@ Artisan::command('courses:backfill-fees {--fee=} {--dry-run}', function () {
     $this->info("Done. Updated {$updated} course(s).");
     return 0;
 })->purpose('Backfill missing course fees (sets old_price when null).');
+
+Artisan::command('user:make-admin {user : User id or email}', function () {
+    /** @var string $userInput */
+    $userInput = (string) $this->argument('user');
+
+    $user = is_numeric($userInput)
+        ? User::query()->find((int) $userInput)
+        : User::query()->where('email', $userInput)->first();
+
+    if (! $user) {
+        $this->error('User not found: ' . $userInput);
+        return 1;
+    }
+
+    $adminRole = Role::query()->firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+    $user->assignRole($adminRole);
+
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+    $this->info("OK: {$user->email} is now role=admin");
+    return 0;
+})->purpose('Assign the admin role to a user (by email or id).');

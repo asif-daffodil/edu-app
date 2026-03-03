@@ -10,7 +10,10 @@
                 @can('editCourse')
                     <a href="{{ route('dashboard.courses.edit', $course) }}" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit</a>
                 @endcan
-                @can('addBatch')
+                @can('create', \Modules\Batch\Models\Batch::class)
+                    <a href="{{ route('dashboard.batches.create.course', $course) }}" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Add Batch</a>
+                @endcan
+                @can('viewAny', \Modules\Batch\Models\Batch::class)
                     <a href="{{ route('dashboard.courses.batches.index', $course) }}" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Manage Batches</a>
                 @endcan
             </div>
@@ -69,7 +72,7 @@
                         <div class="mt-1 text-xs text-slate-500">
                             {{ $batch->status }} • mentors: {{ $batch->mentors_count }} • students: {{ $batch->students_count }}
                         </div>
-                        @can('readBatch')
+                        @can('view', $batch)
                             <div class="mt-2">
                                 <a class="text-sm font-semibold text-indigo-600 hover:text-indigo-500" href="{{ route('dashboard.courses.batches.show', [$course, $batch]) }}">Open batch</a>
                             </div>

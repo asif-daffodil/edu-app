@@ -9,7 +9,14 @@ function normalizeTheme(value) {
 	return value === 'light' || value === 'dark' ? value : null;
 }
 
+function getForcedTheme() {
+	return normalizeTheme(document.documentElement?.dataset?.forceTheme);
+}
+
 function getInitialTheme() {
+	const forced = getForcedTheme();
+	if (forced) return forced;
+
 	const stored = normalizeTheme(window.localStorage?.getItem(THEME_KEY));
 	if (stored) return stored;
 
@@ -27,6 +34,12 @@ function applyTheme(theme) {
 }
 
 function setTheme(theme) {
+	const forced = getForcedTheme();
+	if (forced) {
+		applyTheme(forced);
+		return;
+	}
+
 	const resolved = normalizeTheme(theme) ?? 'dark';
 	try {
 		window.localStorage?.setItem(THEME_KEY, resolved);
@@ -37,6 +50,8 @@ function setTheme(theme) {
 }
 
 function toggleTheme() {
+	if (getForcedTheme()) return;
+
 	const current = normalizeTheme(document.documentElement.dataset.theme)
 		?? (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 	setTheme(current === 'dark' ? 'light' : 'dark');

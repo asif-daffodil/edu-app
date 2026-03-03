@@ -7,8 +7,11 @@ namespace Modules\Batch\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Batch\Models\Batch;
+use Modules\Course\Models\Course;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminBatchesController extends Controller implements HasMiddleware
@@ -17,6 +20,7 @@ class AdminBatchesController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('role:admin|permission:readBatch', only: ['index']),
+            new Middleware('role:admin|permission:addBatch', only: ['create', 'redirectToCourseCreate']),
         ];
     }
 
@@ -87,6 +91,32 @@ class AdminBatchesController extends Controller implements HasMiddleware
         }
 
         return view('batch::admin.batches.all');
+    }
+
+    public function create(Request $request)
+    {
+        abort_unless(Gate::allows('create', Batch::class), 403);
+
+        $courses = Course::query()
+            ->select(['id', 'title', 'status'])
+            ->orderBy('title')
+            ->limit(500)
+            ->get();
+
+        return view('batch::admin.batches.create_from_all', [
+            'courses' => $courses,
+        ]);
+    }
+
+    public function redirectToCourseCreate(Request $request)
+    {
+        abort_unless(Gate::allows('create', Batch::class), 403);
+
+        $validated = $request->validate([
+            'course_id' => ['required', 'integer', 'exists:courses,id'],
+        ]);
+
+        return redirect()->route('dashboard.batches.create.course', (int) $validated['course_id']);
     }
 }
 

@@ -37,7 +37,10 @@ class BatchPolicy
 
         // Mentors/students can only view batches they belong to.
         return $batch->mentors()->where('users.id', $user->id)->exists()
-            || $batch->students()->where('users.id', $user->id)->exists();
+            || $batch->students()
+                ->wherePivot('status', 'approved')
+                ->where('users.id', $user->id)
+                ->exists();
     }
 
     public function create(User $user): bool

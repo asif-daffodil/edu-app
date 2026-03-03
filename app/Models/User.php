@@ -101,6 +101,7 @@ class User extends Authenticatable
     public function studentBatches(): BelongsToMany
     {
         return $this->belongsToMany(Batch::class, 'batch_students', 'student_id', 'batch_id')
+            ->withPivot(['status', 'approved_at', 'approved_by'])
             ->withTimestamps();
     }
 
