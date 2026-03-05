@@ -24,10 +24,10 @@ class MentorController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readMentor', only: ['index', 'show']),
-            new Middleware('role:admin|permission:addMentor', only: ['create', 'store']),
-            new Middleware('role:admin|permission:editMentor', only: ['edit', 'update']),
-            new Middleware('role:admin|permission:deleteMentor', only: ['destroy']),
+            new Middleware('role_or_permission:admin|readMentor', only: ['index', 'show']),
+            new Middleware('role_or_permission:admin|addMentor', only: ['create', 'store']),
+            new Middleware('role_or_permission:admin|editMentor', only: ['edit', 'update']),
+            new Middleware('role_or_permission:admin|deleteMentor', only: ['destroy']),
         ];
     }
 

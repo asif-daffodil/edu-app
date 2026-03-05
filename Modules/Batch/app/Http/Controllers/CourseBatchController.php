@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Modules\Batch\Http\Requests\StoreBatchRequest;
 use Modules\Batch\Http\Requests\UpdateBatchRequest;
@@ -18,10 +19,10 @@ class CourseBatchController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readBatch', only: ['index', 'show']),
-            new Middleware('role:admin|permission:addBatch', only: ['create', 'store']),
-            new Middleware('role:admin|permission:editBatch', only: ['edit', 'update']),
-            new Middleware('role:admin|permission:deleteBatch', only: ['destroy']),
+            new Middleware('role_or_permission:admin|readBatch', only: ['index', 'show']),
+            new Middleware('role_or_permission:admin|addBatch', only: ['create', 'store']),
+            new Middleware('role_or_permission:admin|editBatch', only: ['edit', 'update']),
+            new Middleware('role_or_permission:admin|deleteBatch', only: ['destroy']),
         ];
     }
 
@@ -72,8 +73,8 @@ class CourseBatchController extends Controller implements HasMiddleware
                 ->addColumn('actions', function (Batch $batch) use ($course) {
                     $user = Auth::user();
 
-                    $viewUrl = route('dashboard.courses.batches.show', [$course, $batch]);
-                    $editUrl = route('dashboard.courses.batches.edit', [$course, $batch]);
+                    $viewUrl = route('dashboard.batches.show', $batch);
+                    $editUrl = route('dashboard.batches.edit', $batch);
                     $deleteUrl = route('dashboard.courses.batches.destroy', [$course, $batch]);
                     $scheduleUrl = route('dashboard.batches.schedules.index', $batch);
                     $mentorsUrl = route('dashboard.batches.mentors.edit', $batch);
@@ -134,21 +135,32 @@ class CourseBatchController extends Controller implements HasMiddleware
 
         $validated = $request->validated();
 
-        $batch = Batch::query()->create([
-            'course_id' => $course->id,
-            'name' => $validated['name'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'class_days' => $validated['class_days'],
-            'class_time' => $validated['class_time'],
-            'status' => $validated['status'],
-            'created_by' => (int) Auth::id(),
-        ]);
+        $adminId = (int) Auth::id();
 
-        // Ensure a newly created batch starts with no assignments.
-        // Mentors/students should only be attached manually by an admin.
-        $batch->mentors()->detach();
-        $batch->students()->detach();
+        $batch = DB::transaction(
+            function () use ($course, $validated, $adminId) {
+                $batch = Batch::query()->create([
+                    'course_id' => $course->id,
+                    'name' => $validated['name'],
+                    'start_date' => $validated['start_date'],
+                    'end_date' => $validated['end_date'],
+                    'class_days' => $validated['class_days'],
+                    'class_time' => $validated['class_time'],
+                    'live_class_link' => $validated['live_class_link'] ?? null,
+                    'status' => $validated['status'],
+                    'created_by' => $adminId,
+                ]);
+
+                // Ensure a newly created batch starts with no assignments.
+                // Mentors/students should only be attached manually by an admin.
+                $batch->mentors()->detach();
+                $batch->students()->detach();
+
+                $batch->autoGenerateClassSchedules($adminId);
+
+                return $batch;
+            }
+        );
 
         return redirect()
             ->route('dashboard.batches.index')
@@ -161,15 +173,7 @@ class CourseBatchController extends Controller implements HasMiddleware
     public function show(Course $course, Batch $batch)
     {
         $this->assertBatchBelongsToCourse($course, $batch);
-        abort_unless(Gate::allows('view', $batch), 403);
-
-        $batch->load([
-            'mentors:id,name,email',
-            'students:id,name,email',
-            'classSchedules' => fn ($q) => $q->orderBy('class_date'),
-        ]);
-
-        return view('batch::admin.batches.show', compact('course', 'batch'));
+        return redirect()->route('dashboard.batches.show', $batch);
     }
 
     /**
@@ -178,9 +182,7 @@ class CourseBatchController extends Controller implements HasMiddleware
     public function edit(Course $course, Batch $batch)
     {
         $this->assertBatchBelongsToCourse($course, $batch);
-        abort_unless(Gate::allows('update', $batch), 403);
-
-        return view('batch::admin.batches.edit', compact('course', 'batch'));
+        return redirect()->route('dashboard.batches.edit', $batch);
     }
 
     /**
@@ -189,6 +191,7 @@ class CourseBatchController extends Controller implements HasMiddleware
     public function update(UpdateBatchRequest $request, Course $course, Batch $batch)
     {
         $this->assertBatchBelongsToCourse($course, $batch);
+
         abort_unless(Gate::allows('update', $batch), 403);
 
         $validated = $request->validated();
@@ -199,11 +202,12 @@ class CourseBatchController extends Controller implements HasMiddleware
             'end_date' => $validated['end_date'],
             'class_days' => $validated['class_days'],
             'class_time' => $validated['class_time'],
+            'live_class_link' => $validated['live_class_link'] ?? null,
             'status' => $validated['status'],
         ]);
 
         return redirect()
-            ->route('dashboard.batches.index')
+            ->route('dashboard.batches.show', $batch)
             ->with('success', 'Batch updated successfully');
     }
 

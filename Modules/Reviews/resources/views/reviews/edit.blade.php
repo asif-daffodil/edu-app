@@ -57,7 +57,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.reviews.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                <a href="/dashboard/reviews" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Save</button>
             </div>
         </form>

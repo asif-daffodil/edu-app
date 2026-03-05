@@ -64,13 +64,13 @@
 
                             <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ $excerpt }}</p>
                             <div class="mt-4 flex items-center justify-between">
-                                <a href="{{ route('checkout.show', $course) }}"
-                                   @guest data-auth-trigger="login" data-auth-redirect="{{ route('checkout.show', $course) }}" @endguest
+                                <a href="/courses/{{ $course->getRouteKey() }}/checkout"
+                                   @guest data-auth-trigger="login" data-auth-redirect="/courses/{{ $course->getRouteKey() }}/checkout" @endguest
                                    class="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/10 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
                                     {{ __('frontend.buy_now') }}
                                 </a>
                                 <div class="flex items-center gap-4">
-                                    <a href="{{ route('courses.show', $course) }}" class="text-sm font-semibold text-slate-900 hover:text-slate-950 dark:text-white/90 dark:hover:text-white">
+                                    <a href="/courses/{{ $course->getRouteKey() }}" class="text-sm font-semibold text-slate-900 hover:text-slate-950 dark:text-white/90 dark:hover:text-white">
                                         {{ __('frontend.view_details') }} →
                                     </a>
                                 </div>

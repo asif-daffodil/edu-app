@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="max-w-3xl">
-        <form method="POST" action="{{ route('dashboard.courses.batches.update', [$course, $batch]) }}" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
+        <form method="POST" action="{{ route('dashboard.batches.update', $batch) }}" class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-5">
             @csrf
             @method('PUT')
 
@@ -53,6 +53,12 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-slate-700">Live class link (optional)</label>
+                <input name="live_class_link" value="{{ old('live_class_link', $batch->live_class_link) }}" class="mt-1 w-full rounded-lg border-slate-300" />
+                @error('live_class_link') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-slate-700">Status</label>
                 <select name="status" class="mt-1 w-full rounded-lg border-slate-300" required>
                     <option value="upcoming" @selected(old('status', $batch->status) === 'upcoming')>Upcoming</option>
@@ -63,7 +69,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.courses.batches.show', [$course, $batch]) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Save</button>
             </div>
         </form>

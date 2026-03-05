@@ -20,10 +20,10 @@ class CourseController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readCourse', only: ['index', 'show']),
-            new Middleware('role:admin|permission:addCourse', only: ['create', 'store']),
-            new Middleware('role:admin|permission:editCourse', only: ['edit', 'update']),
-            new Middleware('role:admin|permission:deleteCourse', only: ['destroy']),
+            new Middleware('role_or_permission:admin|readCourse', only: ['index', 'show']),
+            new Middleware('role_or_permission:admin|addCourse', only: ['create', 'store']),
+            new Middleware('role_or_permission:admin|editCourse', only: ['edit', 'update']),
+            new Middleware('role_or_permission:admin|deleteCourse', only: ['destroy']),
         ];
     }
 

@@ -22,10 +22,23 @@ class UserController extends Controller implements HasMiddleware
     public function index()
     {
         if (request()->ajax() && request()->has('draw')) {
+            $roleFilter = request()->string('role')->trim()->lower()->value();
+            $allowedRoles = ['student', 'mentor', 'admin'];
+            if (!in_array($roleFilter, $allowedRoles, true)) {
+                $roleFilter = null;
+            }
+
             $query = User::query()
                 ->with(['roles:id,name'])
                 ->select(['id', 'name', 'email', 'created_at'])
                 ->latest();
+
+            if ($roleFilter) {
+                $query->whereHas(
+                    'roles',
+                    fn ($rolesQuery) => $rolesQuery->where('name', $roleFilter),
+                );
+            }
 
             return DataTables::eloquent($query)
                 ->addIndexColumn()

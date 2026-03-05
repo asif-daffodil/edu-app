@@ -7,7 +7,7 @@
             </div>
 
             @can('create', \Modules\Batch\Models\Batch::class)
-                <a href="{{ route('dashboard.batches.create') }}"
+                <a href="/dashboard/batches/create"
                     class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
                     Add New Batch
                 </a>

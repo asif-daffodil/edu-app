@@ -18,7 +18,7 @@
                         <div class="font-semibold text-slate-900">{{ $batch->name }}</div>
                         <div class="mt-1 text-xs text-slate-500">{{ $batch->status }} • {{ $batch->class_time }}</div>
                     </div>
-                    <a href="{{ route('dashboard.student.batches.show', $batch) }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Open batch</a>
+                    <a href="/dashboard/student/batches/{{ $batch->getRouteKey() }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Open batch</a>
                 </div>
             @empty
                 <div class="px-6 py-8 text-sm text-slate-500">No enrolled batches.</div>

@@ -123,7 +123,7 @@
                     </p>
 
                     <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <a href="{{ optional($heroCtaPrimary)->button_link ?: route('courses') }}"
+                        <a href="{{ optional($heroCtaPrimary)->button_link ?: '/courses' }}"
                            class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">
                             {{ optional($heroCtaPrimary)->button_text ?: 'Explore Courses' }}
                         </a>
@@ -525,7 +525,7 @@
                         <h2 class="text-2xl font-semibold text-slate-900 dark:text-white sm:text-3xl">{{ __('frontend.home_news_title') }}</h2>
                         <p class="mt-2 max-w-2xl text-slate-600 dark:text-slate-200">{{ __('frontend.home_news_subtitle') }}</p>
                     </div>
-                    <a href="{{ route('contact') }}" class="text-sm font-medium text-sky-700 hover:text-sky-800 dark:text-sky-200 dark:hover:text-sky-100">Get schedule & fees →</a>
+                    <a href="/contact" class="text-sm font-medium text-sky-700 hover:text-sky-800 dark:text-sky-200 dark:hover:text-sky-100">Get schedule & fees →</a>
                 </div>
 
                 <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -574,11 +574,11 @@
                             <p class="mt-1 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.faq_cta_subtitle') }}</p>
                         </div>
                         <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                            <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
+                            <a href="/courses" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" data-auth-trigger="register" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.enroll_now') }}</a>
+                                <a href="/register" data-auth-trigger="register" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.enroll_now') }}</a>
                             @else
-                                <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.contact') }}</a>
+                                <a href="/contact" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.contact') }}</a>
                             @endif
                         </div>
                     </div>

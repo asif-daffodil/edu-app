@@ -27,7 +27,7 @@
                         class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
                     Add mentor
                 </button>
-                <a href="{{ route('dashboard.batches.schedules.index', $batch) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View Schedule</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View Schedule</a>
             </div>
 
             <template x-if="addOpen">

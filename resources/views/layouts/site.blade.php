@@ -202,9 +202,9 @@
                     </a>
 
                     <div class="hidden sm:flex items-center gap-2 border-l border-slate-200/70 pl-4 dark:border-white/10">
-                        <a href="{{ route('language.switch', ['lang' => 'bn']) }}" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_bn') }}</a>
+                        <a href="/language/bn" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_bn') }}</a>
                         <span class="text-slate-400 dark:text-slate-500">|</span>
-                        <a href="{{ route('language.switch', ['lang' => 'en']) }}" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_en') }}</a>
+                        <a href="/language/en" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_en') }}</a>
                     </div>
                 </div>
             </div>
@@ -268,13 +268,13 @@
                             {{ __('frontend.dashboard') }}
                         </a>
                     @else
-                                <a href="{{ route('login') }}" data-auth-trigger="login"
+                                <a href="/login" data-auth-trigger="login"
                                     class="inline-flex rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
                             {{ __('frontend.login') }}
                         </a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" data-auth-trigger="register"
+                            <a href="/register" data-auth-trigger="register"
                                class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
                                 {{ __('frontend.enroll_now') }}
                             </a>
@@ -318,8 +318,8 @@
                         </div>
 
                         <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                            <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
-                            <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900/5 px-6 py-3 text-sm font-semibold text-slate-900 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.contact') }}</a>
+                            <a href="/courses" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">{{ __('frontend.explore_courses') }}</a>
+                            <a href="/contact" class="inline-flex items-center justify-center rounded-2xl bg-slate-900/5 px-6 py-3 text-sm font-semibold text-slate-900 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">{{ __('frontend.contact') }}</a>
                         </div>
                     </div>
                 </div>
@@ -376,13 +376,13 @@
                     <div class="flex h-full flex-col rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
                         <div class="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ __('frontend.footer_quick_links') }}</div>
                         <div class="mt-4 grid gap-2">
-                            <a href="{{ route('home') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.home') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('about') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.about') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('courses') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.courses') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('mentors') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.mentors') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('reviews') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.reviews') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('news') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.news') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
-                            <a href="{{ route('contact') }}" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.contact') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.home') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/about" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.about') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/courses" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.courses') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/mentors" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.mentors') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/reviews" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.reviews') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/news" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.news') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
+                            <a href="/contact" class="group inline-flex items-center justify-between rounded-xl px-2 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/5 dark:hover:text-white"><span>{{ __('frontend.contact') }}</span><span class="opacity-0 transition group-hover:opacity-100">→</span></a>
                         </div>
                     </div>
                 </div>
@@ -463,8 +463,8 @@
             <div class="mt-10 flex items-center justify-between gap-4 border-t border-slate-200/70 pt-6 text-[11px] text-slate-500 sm:text-xs dark:border-white/10 dark:text-slate-400">
                 <div class="min-w-0 truncate whitespace-nowrap">© {{ date('Y') }} {{ config('app.name', 'iTechBD Ltd') }}. All rights reserved.</div>
                 <div class="flex shrink-0 items-center gap-4 whitespace-nowrap">
-                    <a href="{{ route('privacy') }}" class="hover:text-slate-700 dark:hover:text-slate-200">Privacy</a>
-                    <a href="{{ route('terms') }}" class="hover:text-slate-700 dark:hover:text-slate-200">Terms</a>
+                    <a href="/privacy" class="hover:text-slate-700 dark:hover:text-slate-200">Privacy</a>
+                    <a href="/terms" class="hover:text-slate-700 dark:hover:text-slate-200">Terms</a>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ class UpdateBatchRequest extends FormRequest
             'class_days' => ['required', 'array', 'min:1'],
             'class_days.*' => ['required', 'string', 'in:Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday'],
             'class_time' => ['required', 'string', 'max:255'],
+            'live_class_link' => ['nullable', 'url', 'max:2048'],
             'status' => ['required', 'in:upcoming,running,completed'],
         ];
     }

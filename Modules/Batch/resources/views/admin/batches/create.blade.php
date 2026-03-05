@@ -51,6 +51,12 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-slate-700">Live class link (optional)</label>
+                <input name="live_class_link" value="{{ old('live_class_link') }}" class="mt-1 w-full rounded-lg border-slate-300" />
+                @error('live_class_link') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-slate-700">Status</label>
                 <select name="status" class="mt-1 w-full rounded-lg border-slate-300" required>
                     <option value="upcoming" @selected(old('status', 'upcoming') === 'upcoming')>Upcoming</option>
@@ -61,7 +67,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.batches.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                <a href="/dashboard/batches" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create</button>
             </div>
         </form>

@@ -23,19 +23,13 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">Live class link (optional)</label>
-                <input name="live_class_link" value="{{ old('live_class_link') }}" class="mt-1 w-full rounded-lg border-slate-300" />
-                @error('live_class_link') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
                 <label class="block text-sm font-medium text-slate-700">Recorded video link (optional)</label>
                 <input name="recorded_video_link" value="{{ old('recorded_video_link') }}" class="mt-1 w-full rounded-lg border-slate-300" />
                 @error('recorded_video_link') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.batches.schedules.index', $batch) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create</button>
             </div>
         </form>

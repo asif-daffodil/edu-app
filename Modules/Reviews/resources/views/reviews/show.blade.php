@@ -8,7 +8,7 @@
 
             <div class="flex items-center gap-2">
                 @can('editReview')
-                    <a href="{{ route('dashboard.reviews.edit', $review) }}" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit</a>
+                    <a href="/dashboard/reviews/{{ $review->getRouteKey() }}/edit" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit</a>
                 @endcan
             </div>
         </div>

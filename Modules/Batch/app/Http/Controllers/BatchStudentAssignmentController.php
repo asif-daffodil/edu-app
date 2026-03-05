@@ -34,7 +34,7 @@ class BatchStudentAssignmentController extends Controller implements HasMiddlewa
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:assignStudentsToBatch'),
+            new Middleware('role_or_permission:admin|assignStudentsToBatch'),
         ];
     }
 

@@ -7,7 +7,7 @@
             </div>
 
             @can('addCourse')
-                <a href="{{ route('dashboard.courses.create') }}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                <a href="/dashboard/courses/create" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
                     Add Course
                 </a>
             @endcan

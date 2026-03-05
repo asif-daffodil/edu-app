@@ -13,7 +13,7 @@
 						<h3 class="text-lg font-semibold text-gray-900">Edit User</h3>
 						<p class="mt-1 text-sm text-gray-600">Update user roles and submit.</p>
 						<div class="mt-3">
-							<a href="{{ route('admin.users.profile.edit', $user) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+							<a href="/admin/users/{{ $user->getRouteKey() }}/profile" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
 								Edit Profile Details
 							</a>
 						</div>
@@ -112,7 +112,7 @@
 
 						<div class="flex items-center justify-end gap-3 pt-2">
 							<a
-								href="{{ route('users.index') }}"
+								href="/users"
 								class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 							>
 								Cancel

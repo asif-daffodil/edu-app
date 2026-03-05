@@ -19,8 +19,8 @@ class AdminBatchesController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readBatch', only: ['index']),
-            new Middleware('role:admin|permission:addBatch', only: ['create', 'redirectToCourseCreate']),
+            new Middleware('role_or_permission:admin|readBatch', only: ['index']),
+            new Middleware('role_or_permission:admin|addBatch', only: ['create', 'redirectToCourseCreate']),
         ];
     }
 
@@ -60,9 +60,7 @@ class AdminBatchesController extends Controller implements HasMiddleware
                         . '</div>';
                 })
                 ->addColumn('actions', function (Batch $batch) {
-                    $openUrl = $batch->course_id
-                        ? route('dashboard.courses.batches.show', [$batch->course_id, $batch])
-                        : null;
+                    $openUrl = route('dashboard.batches.show', $batch);
 
                     $scheduleUrl = route('dashboard.batches.schedules.index', $batch);
                     $mentorsUrl = route('dashboard.batches.mentors.edit', $batch);

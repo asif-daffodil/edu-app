@@ -14,7 +14,6 @@ class StoreClassScheduleRequest extends FormRequest
         return [
             'class_date' => ['required', 'date'],
             'topic' => ['required', 'string', 'max:255'],
-            'live_class_link' => ['nullable', 'url', 'max:2048'],
             'recorded_video_link' => ['nullable', 'url', 'max:2048'],
         ];
     }

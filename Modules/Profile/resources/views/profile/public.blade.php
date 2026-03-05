@@ -100,7 +100,7 @@
 
                                     @if ($profile?->public_url)
                                         <a
-                                            href="{{ route('profile.public.show', ['public_url' => $profile->public_url]) }}"
+                                            href="/p/{{ $profile->public_url }}"
                                             class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white hover:from-indigo-600 hover:to-fuchsia-600"
                                             target="_blank"
                                             rel="noreferrer"

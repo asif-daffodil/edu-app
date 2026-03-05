@@ -74,7 +74,7 @@
 
             <div class="mt-4 text-center text-sm text-slate-600 dark:text-slate-200">
                 {{ __('frontend.already_registered') }}
-                <a href="{{ route('login') }}" data-auth-switch="login" class="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
+                <a href="/login" data-auth-switch="login" class="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
                     {{ __('frontend.login') }}
                 </a>
             </div>

@@ -83,15 +83,15 @@
 
                     <div class="flex items-center gap-2">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="rounded-md bg-white/10 px-3 py-2 text-sm font-medium text-white hover:bg-white/15 ring-1 ring-white/10">
+                            <a href="/dashboard" class="rounded-md bg-white/10 px-3 py-2 text-sm font-medium text-white hover:bg-white/15 ring-1 ring-white/10">
                                 {{ __('Dashboard') }}
                             </a>
                         @else
-                            <a href="{{ route('login') }}" data-auth-trigger="login" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10">
+                            <a href="/login" data-auth-trigger="login" class="rounded-md px-3 py-2 text-sm font-medium text-slate-200 hover:bg-white/10">
                                 {{ __('Log in') }}
                             </a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" data-auth-trigger="register" class="rounded-md bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-3 py-2 text-sm font-medium text-white hover:from-indigo-600 hover:to-fuchsia-600 shadow-sm shadow-indigo-500/20">
+                                <a href="/register" data-auth-trigger="register" class="rounded-md bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-3 py-2 text-sm font-medium text-white hover:from-indigo-600 hover:to-fuchsia-600 shadow-sm shadow-indigo-500/20">
                                     {{ __('Register') }}
                                 </a>
                             @endif

@@ -50,7 +50,7 @@
                     <span>{{ __('frontend.remember_me') }}</span>
                 </label>
 
-                <a href="{{ route('password.request') }}" data-auth-switch="forgot" class="text-sm font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
+                <a href="/forgot-password" data-auth-switch="forgot" class="text-sm font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
                     {{ __('frontend.forgot_password') }}
                 </a>
             </div>
@@ -63,7 +63,7 @@
 
             <div class="mt-4 text-center text-sm text-slate-600 dark:text-slate-200">
                 {{ __('frontend.no_account') }}
-                <a href="{{ route('register') }}" data-auth-switch="register" class="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
+                <a href="/register" data-auth-switch="register" class="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
                     {{ __('frontend.register') }}
                 </a>
             </div>

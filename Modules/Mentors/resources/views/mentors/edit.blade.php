@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('dashboard.mentors.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
+                    <a href="/dashboard/mentors" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</a>
                     <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Update</button>
                 </div>
             </form>

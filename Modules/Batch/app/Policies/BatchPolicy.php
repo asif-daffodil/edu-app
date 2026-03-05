@@ -53,6 +53,19 @@ class BatchPolicy
         return $user->can('editBatch');
     }
 
+    public function updateLiveClassLink(User $user, Batch $batch): bool
+    {
+        if ($user->can('editBatch')) {
+            return true;
+        }
+
+        if (! $user->can('editClassSchedule')) {
+            return false;
+        }
+
+        return $batch->mentors()->where('users.id', $user->id)->exists();
+    }
+
     public function delete(User $user, Batch $batch): bool
     {
         return $user->can('deleteBatch');

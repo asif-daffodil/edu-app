@@ -6,7 +6,7 @@
 <main>
     <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-            <a href="{{ route('courses.show', $order->course) }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.view_details') }}</a>
+            <a href="/courses/{{ $order->course->getRouteKey() }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.view_details') }}</a>
 
             <div class="mt-4 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none sm:p-10">
                 <div class="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-500/20 dark:text-emerald-200">
@@ -34,10 +34,10 @@
                 </div>
 
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
+                    <a href="/contact" class="inline-flex items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
                         {{ __('frontend.contact') }}
                     </a>
-                    <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
+                    <a href="/courses" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
                         {{ __('frontend.explore_courses') }}
                     </a>
                 </div>

@@ -7,9 +7,9 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('dashboard.mentors.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
+                <a href="/dashboard/mentors" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
                 @can('update', $mentor)
-                    <a href="{{ route('dashboard.mentors.edit', $mentor) }}" class="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-500">Edit</a>
+                    <a href="/dashboard/mentors/{{ $mentor->getRouteKey() }}/edit" class="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-500">Edit</a>
                 @endcan
             </div>
         </div>

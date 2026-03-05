@@ -6,7 +6,7 @@
 <main>
     <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-            <a href="{{ route('courses.show', $course) }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.view_details') }}</a>
+            <a href="/courses/{{ $course->getRouteKey() }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.view_details') }}</a>
 
             <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div class="lg:col-span-2">
@@ -71,7 +71,7 @@
                             <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ __('frontend.need_details') }}</div>
                             <div class="mt-1 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.course_details_help') }}</div>
                             <div class="mt-5">
-                                <a href="{{ route('contact') }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
+                                <a href="/contact" class="inline-flex w-full items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
                                     {{ __('frontend.contact') }}
                                 </a>
                             </div>

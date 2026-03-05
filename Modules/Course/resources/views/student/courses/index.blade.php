@@ -21,11 +21,11 @@
                         <tr class="hover:bg-slate-50/70">
                             <td class="px-4 py-3">
                                 <div class="font-semibold text-slate-900">{{ $course->title }}</div>
-                                <div class="mt-1 line-clamp-1 text-xs text-slate-500">{{ \Illuminate\Support\Str::limit($course->description, 90) }}</div>
+                                <div class="mt-1 line-clamp-1 text-xs text-slate-500">{{ \Illuminate\Support\Str::limit(strip_tags((string) $course->description), 90) }}</div>
                             </td>
                             <td class="px-4 py-3 text-sm text-slate-700">{{ $course->batches_count }}</td>
                             <td class="px-4 py-3 text-right">
-                                <a href="{{ route('dashboard.student.courses.show', $course) }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
+                                <a href="/dashboard/student/courses/{{ $course->getRouteKey() }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
                             </td>
                         </tr>
                     @empty

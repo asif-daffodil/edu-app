@@ -7,8 +7,8 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('dashboard.courses.batches.index', $course) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
-                <a href="{{ route('dashboard.batches.schedules.index', $batch) }}" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Schedule</a>
+                <a href="/dashboard/batches" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Schedule</a>
             </div>
         </div>
     </x-slot>
@@ -40,13 +40,13 @@
 
             <div class="mt-6 flex flex-wrap gap-2">
                 @can('assignMentorsToBatch')
-                    <a href="{{ route('dashboard.batches.mentors.edit', $batch) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Assign mentors</a>
+                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/mentors" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Assign mentors</a>
                 @endcan
                 @can('assignStudentsToBatch')
-                    <a href="{{ route('dashboard.batches.students.edit', $batch) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Assign students</a>
+                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/students" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Assign students</a>
                 @endcan
                 @can('editBatch')
-                    <a href="{{ route('dashboard.courses.batches.edit', [$course, $batch]) }}" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit batch</a>
+                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/edit" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit batch</a>
                 @endcan
             </div>
         </div>

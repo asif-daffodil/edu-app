@@ -32,31 +32,79 @@
 						</div>
 					</div>
 
-					<table id="users-table" class="min-w-full divide-y divide-gray-200">
-						<thead class="bg-gray-50">
-							<tr>
-								<th scope="col"
-									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									SL</th>
-								<th scope="col"
-									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Name</th>
-								<th scope="col"
-									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Email</th>
-								<th scope="col"
-									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Registration Date</th>
-								<th scope="col"
-									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Roles</th>
-								<th scope="col"
-									class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Actions</th>
-							</tr>
-						</thead>
-						<tbody class="bg-white divide-y divide-gray-200"></tbody>
-					</table>
+					<div class="border-b border-gray-200 mb-4">
+						<nav class="-mb-px flex gap-6" aria-label="Tabs">
+							<button
+								type="button"
+								data-users-tab="student"
+								class="users-tab-btn whitespace-nowrap border-b-2 border-indigo-600 px-1 pb-3 text-sm font-medium text-indigo-600"
+							>
+								Students
+							</button>
+							<button
+								type="button"
+								data-users-tab="mentor"
+								class="users-tab-btn whitespace-nowrap border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+							>
+								Mentors
+							</button>
+							<button
+								type="button"
+								data-users-tab="admin"
+								class="users-tab-btn whitespace-nowrap border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+							>
+								Admins
+							</button>
+						</nav>
+					</div>
+
+					<div id="users-tab-student" class="users-tab-panel">
+						<table id="users-table-student" class="min-w-full divide-y divide-gray-200">
+							<thead class="bg-gray-50">
+								<tr>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Date</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roles</th>
+									<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+								</tr>
+							</thead>
+							<tbody class="bg-white divide-y divide-gray-200"></tbody>
+						</table>
+					</div>
+
+					<div id="users-tab-mentor" class="users-tab-panel hidden">
+						<table id="users-table-mentor" class="min-w-full divide-y divide-gray-200">
+							<thead class="bg-gray-50">
+								<tr>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Date</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roles</th>
+									<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+								</tr>
+							</thead>
+							<tbody class="bg-white divide-y divide-gray-200"></tbody>
+						</table>
+					</div>
+
+					<div id="users-tab-admin" class="users-tab-panel hidden">
+						<table id="users-table-admin" class="min-w-full divide-y divide-gray-200">
+							<thead class="bg-gray-50">
+								<tr>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Date</th>
+									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roles</th>
+									<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+								</tr>
+							</thead>
+							<tbody class="bg-white divide-y divide-gray-200"></tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -67,50 +115,94 @@
 		<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 		<script>
 			$(function () {
-				$('#users-table').DataTable({
-					processing: true,
-					serverSide: true,
-					ajax: '{{ route('users.index') }}',
-					columns: [
-						{
-							data: 'DT_RowIndex',
-							name: 'DT_RowIndex',
-							orderable: false,
-							searchable: false,
-							className: 'px-6 py-4 whitespace-nowrap'
+				const ajaxUrl = @json(route('users.index'));
+				const tableByRole = {};
+
+				function initUsersTable(role) {
+					if (tableByRole[role]) {
+						return tableByRole[role];
+					}
+
+					const tableId = '#users-table-' + role;
+
+					tableByRole[role] = $(tableId).DataTable({
+						processing: true,
+						serverSide: true,
+						autoWidth: false,
+						ajax: {
+							url: ajaxUrl,
+							data: function (d) {
+								d.role = role;
+							}
 						},
-						{
-							data: 'name',
-							name: 'name',
-							className: 'px-6 py-4 whitespace-nowrap'
-						},
-						{
-							data: 'email',
-							name: 'email',
-							className: 'px-6 py-4 whitespace-nowrap'
-						},
-						{
-							data: 'registration_date',
-							name: 'created_at',
-							className: 'px-6 py-4 whitespace-nowrap'
-						},
-								{
-									data: 'roles',
-									name: 'roles.name',
-									orderable: false,
-									searchable: false,
-									className: 'px-6 py-4 whitespace-normal'
-								},
-						{
-							data: 'actions',
-							name: 'actions',
-							orderable: false,
-							searchable: false,
-							className: 'px-6 py-4 whitespace-nowrap text-right'
-						},
-					],
-					order: [[3, 'desc']],
+						columns: [
+							{
+								data: 'DT_RowIndex',
+								name: 'DT_RowIndex',
+								orderable: false,
+								searchable: false,
+								className: 'px-6 py-4 whitespace-nowrap'
+							},
+							{
+								data: 'name',
+								name: 'name',
+								className: 'px-6 py-4 whitespace-nowrap'
+							},
+							{
+								data: 'email',
+								name: 'email',
+								className: 'px-6 py-4 whitespace-nowrap'
+							},
+							{
+								data: 'registration_date',
+								name: 'created_at',
+								className: 'px-6 py-4 whitespace-nowrap'
+							},
+							{
+								data: 'roles',
+								name: 'roles.name',
+								orderable: false,
+								searchable: false,
+								className: 'px-6 py-4 whitespace-normal'
+							},
+							{
+								data: 'actions',
+								name: 'actions',
+								orderable: false,
+								searchable: false,
+								className: 'px-6 py-4 whitespace-nowrap text-right'
+							},
+						],
+						order: [[3, 'desc']],
+					});
+
+					return tableByRole[role];
+				}
+
+				function setActiveTab(role) {
+					$('.users-tab-panel').addClass('hidden');
+					$('#users-tab-' + role).removeClass('hidden');
+
+					$('.users-tab-btn')
+						.removeClass('border-indigo-600 text-indigo-600')
+						.addClass('border-transparent text-gray-500');
+
+					$('[data-users-tab="' + role + '"]')
+						.removeClass('border-transparent text-gray-500')
+						.addClass('border-indigo-600 text-indigo-600');
+
+					const table = initUsersTable(role);
+					setTimeout(function () {
+						table.columns.adjust();
+					}, 0);
+				}
+
+				$(document).on('click', '.users-tab-btn', function () {
+					const role = $(this).data('users-tab');
+					setActiveTab(role);
 				});
+
+				setActiveTab('student');
 			});
 		</script>
 	@endpush

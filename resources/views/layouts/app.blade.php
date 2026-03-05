@@ -77,7 +77,7 @@
                 <div class="absolute inset-0 z-40 bg-slate-900/60" @click="sidebarOpen = false"></div>
                 <div class="absolute inset-y-0 left-0 z-50 w-72 bg-slate-900 p-4 shadow-xl" @click.stop>
                     <div class="flex items-center justify-between">
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+                        <a href="/dashboard" class="flex items-center gap-2">
                             <div class="h-9 w-9 rounded-lg bg-indigo-600/90 text-white grid place-items-center font-bold">{{ strtoupper(substr(config('app.name', 'A'), 0, 1)) }}</div>
                             <div class="text-white">
                                 <div class="text-sm font-semibold leading-5">{{ config('app.name', 'Laravel') }}</div>
@@ -136,13 +136,13 @@
                                     </x-slot>
 
                                     <x-slot name="content">
-                                        <x-dropdown-link :href="route('profile.edit')">
+                                        <x-dropdown-link href="/profile">
                                             {{ __('Profile') }}
                                         </x-dropdown-link>
 
-                                        <form method="POST" action="{{ route('logout') }}">
+                                        <form method="POST" action="/logout">
                                             @csrf
-                                            <x-dropdown-link :href="route('logout')"
+                                            <x-dropdown-link href="/logout"
                                                 onclick="event.preventDefault(); this.closest('form').submit();">
                                                 {{ __('Log Out') }}
                                             </x-dropdown-link>

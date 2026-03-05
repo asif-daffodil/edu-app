@@ -6,8 +6,8 @@
                 <p class="mt-1 text-sm text-slate-500">Course: <span class="font-semibold">{{ $batch->course?->title }}</span></p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ route('dashboard.student.batches.index') }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
-                <a href="{{ route('dashboard.batches.schedules.index', $batch) }}" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Schedule</a>
+                <a href="/dashboard/student/batches" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Schedule</a>
             </div>
         </div>
     </x-slot>
@@ -24,7 +24,7 @@
                             <div class="font-semibold text-slate-900">{{ $classSchedule->topic }}</div>
                             <div class="mt-1 text-xs text-slate-500">{{ $classSchedule->class_date?->format('d M Y') }}</div>
                         </div>
-                        <a href="{{ route('dashboard.batches.schedules.show', [$batch, $classSchedule]) }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
+                        <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules/{{ $classSchedule->getRouteKey() }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
                     </div>
                 @empty
                     <div class="px-6 py-8 text-sm text-slate-500">No schedule yet.</div>

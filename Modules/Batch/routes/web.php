@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Batch\Http\Controllers\AdminBatchesController;
+use Modules\Batch\Http\Controllers\AdminBatchDetailsController;
 use Modules\Batch\Http\Controllers\BatchStudentApprovalController;
 use Modules\Batch\Http\Controllers\BatchMentorAssignmentController;
 use Modules\Batch\Http\Controllers\BatchStudentAssignmentController;
+use Modules\Batch\Http\Controllers\BatchLiveClassLinkController;
 use Modules\Batch\Http\Controllers\ClassScheduleController;
 use Modules\Batch\Http\Controllers\CourseBatchController;
 use Modules\Batch\Http\Controllers\MyMentorBatchesController;
@@ -93,6 +95,16 @@ $adminBatchRoutes = static function () use ($adminAssignmentRoutes): void {
     Route::post('batches/create', $adminBatchesCreateRedirectAction)
         ->name('batches.create.redirect');
 
+    Route::get('batches/{batch}', [AdminBatchDetailsController::class, 'show'])
+        ->whereNumber('batch')
+        ->name('batches.show');
+    Route::get('batches/{batch}/edit', [AdminBatchDetailsController::class, 'edit'])
+        ->whereNumber('batch')
+        ->name('batches.edit');
+    Route::put('batches/{batch}', [AdminBatchDetailsController::class, 'update'])
+        ->whereNumber('batch')
+        ->name('batches.update');
+
     // Canonical per-course create/store under the Batches section
     Route::get('batches/create/{course}', [CourseBatchController::class, 'create'])
         ->name('batches.create.course');
@@ -139,6 +151,11 @@ $dashboardRoutes = static function () use (
     Route::resource('batches.schedules', ClassScheduleController::class)
         ->parameters(['schedules' => 'classSchedule'])
         ->except(['destroy']);
+
+    Route::get('batches/{batch}/live-link', [BatchLiveClassLinkController::class, 'edit'])
+        ->name('batches.live_link.edit');
+    Route::put('batches/{batch}/live-link', [BatchLiveClassLinkController::class, 'update'])
+        ->name('batches.live_link.update');
 
     $mentorGroup = Route::middleware(['role:mentor']);
     $mentorGroup = $mentorGroup->prefix('mentor');

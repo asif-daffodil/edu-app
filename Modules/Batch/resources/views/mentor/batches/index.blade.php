@@ -29,7 +29,7 @@
                             <td class="px-4 py-3 text-sm text-slate-700">{{ $batch->students_count }}</td>
                             <td class="px-4 py-3 text-sm text-slate-700">{{ $batch->class_schedules_count }}</td>
                             <td class="px-4 py-3 text-right">
-                                <a href="{{ route('dashboard.mentor.batches.show', $batch) }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Open</a>
+                                <a href="/dashboard/mentor/batches/{{ $batch->getRouteKey() }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Open</a>
                             </td>
                         </tr>
                     @empty

@@ -7,9 +7,9 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('dashboard.batches.schedules.index', $batch) }}" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
+                <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
                 @can('editClassSchedule')
-                    <a href="{{ route('dashboard.batches.schedules.edit', [$batch, $classSchedule]) }}" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit</a>
+                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/schedules/{{ $classSchedule->getRouteKey() }}/edit" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit</a>
                 @endcan
             </div>
         </div>
@@ -19,8 +19,8 @@
         <div>
             <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Live class link</div>
             <div class="mt-1 text-sm">
-                @if($classSchedule->live_class_link)
-                    <a class="text-indigo-600 hover:text-indigo-500" href="{{ $classSchedule->live_class_link }}" target="_blank" rel="noreferrer">{{ $classSchedule->live_class_link }}</a>
+                @if($batch->live_class_link)
+                    <a class="text-indigo-600 hover:text-indigo-500" href="{{ $batch->live_class_link }}" target="_blank" rel="noreferrer">{{ $batch->live_class_link }}</a>
                 @else
                     <span class="text-slate-500">-</span>
                 @endif

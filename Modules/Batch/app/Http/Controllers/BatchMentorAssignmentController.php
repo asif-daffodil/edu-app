@@ -32,7 +32,7 @@ class BatchMentorAssignmentController extends Controller implements HasMiddlewar
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:assignMentorsToBatch'),
+            new Middleware('role_or_permission:admin|assignMentorsToBatch'),
         ];
     }
 

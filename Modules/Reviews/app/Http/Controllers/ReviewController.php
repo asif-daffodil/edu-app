@@ -17,10 +17,10 @@ class ReviewController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readReview', only: ['index', 'show']),
-            new Middleware('role:admin|permission:addReview', only: ['create', 'store']),
-            new Middleware('role:admin|permission:editReview', only: ['edit', 'update']),
-            new Middleware('role:admin|permission:deleteReview', only: ['destroy']),
+            new Middleware('role_or_permission:admin|readReview', only: ['index', 'show']),
+            new Middleware('role_or_permission:admin|addReview', only: ['create', 'store']),
+            new Middleware('role_or_permission:admin|editReview', only: ['edit', 'update']),
+            new Middleware('role_or_permission:admin|deleteReview', only: ['destroy']),
         ];
     }
 

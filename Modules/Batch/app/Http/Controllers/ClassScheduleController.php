@@ -3,6 +3,7 @@
 namespace Modules\Batch\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +19,18 @@ class ClassScheduleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:admin|permission:readClassSchedule', only: ['index', 'show']),
-            new Middleware('role:admin|permission:addClassSchedule', only: ['create', 'store']),
-            new Middleware('role:admin|permission:editClassSchedule', only: ['edit', 'update']),
+            new Middleware(
+                'role_or_permission:admin|readClassSchedule',
+                only: ['index', 'show']
+            ),
+            new Middleware(
+                'role_or_permission:admin|addClassSchedule',
+                only: ['create', 'store']
+            ),
+            new Middleware(
+                'role_or_permission:admin|editClassSchedule',
+                only: ['edit', 'update']
+            ),
         ];
     }
 
@@ -40,7 +50,6 @@ class ClassScheduleController extends Controller implements HasMiddleware
                     'batch_id',
                     'class_date',
                     'topic',
-                    'live_class_link',
                     'recorded_video_link',
                     'created_at',
                 ])
@@ -51,26 +60,14 @@ class ClassScheduleController extends Controller implements HasMiddleware
                 ->addColumn('class_date_display', function (ClassSchedule $classSchedule) {
                     return e(optional($classSchedule->class_date)->format('d M Y'));
                 })
-                ->addColumn('links', function (ClassSchedule $classSchedule) {
-                    $parts = [];
-
-                    if ($classSchedule->live_class_link) {
-                        $parts[] = '<a class="text-indigo-600 hover:text-indigo-500" href="'
-                            . e($classSchedule->live_class_link)
-                            . '" target="_blank" rel="noreferrer">Live link</a>';
-                    } else {
-                        $parts[] = '<span class="text-slate-400">Live: -</span>';
-                    }
-
+                ->addColumn('recording_link', function (ClassSchedule $classSchedule) {
                     if ($classSchedule->recorded_video_link) {
-                        $parts[] = '<a class="text-indigo-600 hover:text-indigo-500" href="'
+                        return '<a class="text-indigo-600 hover:text-indigo-500" href="'
                             . e($classSchedule->recorded_video_link)
-                            . '" target="_blank" rel="noreferrer">Recording</a>';
-                    } else {
-                        $parts[] = '<span class="text-slate-400">Recording: -</span>';
+                            . '" target="_blank" rel="noreferrer">Recording link</a>';
                     }
 
-                    return '<div class="flex flex-col gap-1">' . implode('', $parts) . '</div>';
+                    return '<span class="text-slate-400">-</span>';
                 })
                 ->addColumn('actions', function (ClassSchedule $classSchedule) use ($batch) {
                     $viewUrl = route('dashboard.batches.schedules.show', [$batch, $classSchedule]);
@@ -87,11 +84,22 @@ class ClassScheduleController extends Controller implements HasMiddleware
 
                     return $buttons;
                 })
-                ->rawColumns(['links', 'actions'])
+                ->rawColumns(['recording_link', 'actions'])
                 ->toJson();
         }
 
-        return view('batch::schedules.index', compact('batch'));
+        $nextSchedule = $batch->classSchedules()
+            ->whereDate('class_date', '>=', today())
+            ->orderBy('class_date')
+            ->first();
+
+        if (! $nextSchedule) {
+            $nextSchedule = $batch->classSchedules()
+                ->orderBy('class_date')
+                ->first();
+        }
+
+        return view('batch::schedules.index', compact('batch', 'nextSchedule'));
     }
 
     /**
@@ -116,7 +124,6 @@ class ClassScheduleController extends Controller implements HasMiddleware
         $schedule = $batch->classSchedules()->create([
             'class_date' => $validated['class_date'],
             'topic' => $validated['topic'],
-            'live_class_link' => $validated['live_class_link'] ?? null,
             'recorded_video_link' => $validated['recorded_video_link'] ?? null,
             'created_by' => (int) Auth::id(),
         ]);
@@ -164,7 +171,6 @@ class ClassScheduleController extends Controller implements HasMiddleware
         $classSchedule->update([
             'class_date' => $validated['class_date'],
             'topic' => $validated['topic'],
-            'live_class_link' => $validated['live_class_link'] ?? null,
             'recorded_video_link' => $validated['recorded_video_link'] ?? null,
         ]);
 
@@ -179,7 +185,11 @@ class ClassScheduleController extends Controller implements HasMiddleware
     private function assertCanManageSchedulesForBatch(Batch $batch): void
     {
         $user = Auth::user();
-        abort_unless($user, 403);
+        abort_if(! $user, 403);
+
+        if (! $user instanceof User) {
+            abort(403);
+        }
 
         if ($user->hasRole('admin')) {
             return;

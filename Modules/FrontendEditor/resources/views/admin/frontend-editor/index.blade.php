@@ -25,7 +25,7 @@
                 $inactive = 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50';
             @endphp
 
-            <a href="{{ route('admin.frontend-editor.index', ['page' => $page->slug]) }}"
+            <a href="/admin/frontend-editor?page={{ $page->slug }}"
                class="{{ $base }} {{ $isActive ? $active : $inactive }}">
                 {{ ucfirst($page->slug) }}
             </a>
@@ -36,7 +36,7 @@
             $active = 'bg-indigo-600 text-white';
             $inactive = 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50';
         @endphp
-        <a href="{{ route('admin.frontend-editor.index', ['tab' => 'header']) }}"
+        <a href="/admin/frontend-editor?tab=header"
            class="{{ $base }} {{ $isHeaderTab ? $active : $inactive }}">
             Header Settings
         </a>

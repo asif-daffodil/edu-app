@@ -28,7 +28,7 @@
 
     <section class="border-b border-slate-200/70 dark:border-white/10">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-            <a href="{{ route('courses') }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.courses') }}</a>
+            <a href="/courses" class="text-sm font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">← {{ __('frontend.courses') }}</a>
 
             <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div class="lg:col-span-2">
@@ -86,7 +86,7 @@
                                                 <span>{{ $batch->class_time }}</span>
                                             </div>
                                         </div>
-                                        <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
+                                        <a href="/contact" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
                                             {{ __('frontend.get_schedule') }}
                                         </a>
                                     </div>
@@ -99,10 +99,10 @@
                         <div class="text-sm font-semibold uppercase tracking-wide text-white/80">{{ __('frontend.need_details') }}</div>
                         <div class="mt-2 text-2xl font-semibold">{{ __('frontend.need_details_subtitle') }}</div>
                         <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-                            <a href="{{ route('contact') }}" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+                            <a href="/contact" class="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
                                 {{ __('frontend.contact') }}
                             </a>
-                            <a href="{{ route('courses') }}" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/20 hover:bg-white/15">
+                            <a href="/courses" class="inline-flex items-center justify-center rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/20 hover:bg-white/15">
                                 {{ __('frontend.explore_courses') }}
                             </a>
                         </div>
@@ -135,12 +135,12 @@
                             @endif
 
                             <div class="mt-6 flex flex-col gap-3">
-                                <a href="{{ route('checkout.show', $course) }}"
-                                   @guest data-auth-trigger="login" data-auth-redirect="{{ route('checkout.show', $course) }}" @endguest
+                                          <a href="/courses/{{ $course->getRouteKey() }}/checkout"
+                                              @guest data-auth-trigger="login" data-auth-redirect="/courses/{{ $course->getRouteKey() }}/checkout" @endguest
                                    class="inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
                                     {{ __('frontend.buy_now') }}
                                 </a>
-                                <a href="{{ route('contact') }}" class="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
+                                <a href="/contact" class="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/10 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/[0.07]">
                                     {{ __('frontend.contact') }}
                                 </a>
                             </div>
@@ -167,7 +167,7 @@
                             </div>
 
                             <div class="mt-6">
-                                <a href="{{ route('contact') }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
+                                <a href="/contact" class="inline-flex w-full items-center justify-center rounded-2xl bg-sky-700 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-800">
                                     {{ __('frontend.contact') }}
                                 </a>
                             </div>

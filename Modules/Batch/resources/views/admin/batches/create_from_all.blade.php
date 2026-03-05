@@ -6,7 +6,7 @@
                 <p class="mt-1 text-sm text-slate-500">Select a course to create a batch under it.</p>
             </div>
 
-            <a href="{{ route('dashboard.batches.index') }}"
+            <a href="/dashboard/batches"
                class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                 Back
             </a>
@@ -34,7 +34,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-2">
-                <a href="{{ route('dashboard.batches.index') }}"
+                <a href="/dashboard/batches"
                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                     Cancel
                 </a>

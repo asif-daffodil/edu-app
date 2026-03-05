@@ -35,7 +35,7 @@
 @endphp
 
 <nav class="space-y-1">
-    <a href="{{ route('dashboard') }}"
+    <a href="/dashboard"
         @click="sidebarOpen = false"
         class="{{ $linkBase }} {{ request()->routeIs('dashboard') ? $active : $inactive }}">
         <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -44,7 +44,7 @@
         <span>Dashboard</span>
     </a>
 
-    <a href="{{ route('profile.edit') }}"
+    <a href="/profile"
         @click="sidebarOpen = false"
         class="{{ $linkBase }} {{ request()->routeIs('profile.*') ? $active : $inactive }}">
         <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -55,7 +55,7 @@
     </a>
 
     @if($isAdmin || $canManageCourses)
-        <a href="{{ route('dashboard.courses.index') }}"
+        <a href="/dashboard/courses"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.courses.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -67,7 +67,7 @@
     @endif
 
     @if($isAdmin || $canManageReviews || ($user && $user->can('readReview')))
-        <a href="{{ route('dashboard.reviews.index') }}"
+        <a href="/dashboard/reviews"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.reviews.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -78,7 +78,7 @@
     @endif
 
     @if($isAdmin)
-        <a href="{{ route('dashboard.batches.index') }}"
+        <a href="/dashboard/batches"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.batches.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -90,7 +90,7 @@
     @endif
 
     @if($isMentor || $canSeeMentorBatches)
-        <a href="{{ route('dashboard.mentor.batches.index') }}"
+        <a href="/dashboard/mentor/batches"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentor.batches.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -102,7 +102,7 @@
     @endif
 
     @if($isStudent || $canSeeStudentPanel)
-        <a href="{{ route('dashboard.student.courses.index') }}"
+        <a href="/dashboard/student/courses"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.student.courses.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -112,7 +112,7 @@
             <span>My Courses</span>
         </a>
 
-        <a href="{{ route('dashboard.student.batches.index') }}"
+        <a href="/dashboard/student/batches"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.student.batches.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -124,7 +124,7 @@
     @endif
 
     @if($isAdmin)
-        <a href="{{ route('users.index') }}"
+        <a href="/users"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('users.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -134,7 +134,7 @@
             <span>Users</span>
         </a>
 
-        <a href="{{ route('admin.frontend-editor.index') }}"
+        <a href="/admin/frontend-editor"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('admin.frontend-editor.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -146,7 +146,7 @@
     @endif
 
     @if($user && $user->can('readMentor'))
-        <a href="{{ route('dashboard.mentors.index') }}"
+        <a href="/dashboard/mentors"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentors.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -159,7 +159,7 @@
     @endif
 
     @if($isAdmin)
-        <a href="{{ route('roles.index') }}"
+        <a href="/roles"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('roles.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -168,7 +168,7 @@
             <span>Roles</span>
         </a>
 
-        <a href="{{ route('permissions.index') }}"
+        <a href="/permissions"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('permissions.*') ? $active : $inactive }}">
             <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
