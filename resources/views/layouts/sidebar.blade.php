@@ -87,6 +87,16 @@
             </svg>
             <span>Batches</span>
         </a>
+
+        <a href="/dashboard/admin/invoices"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.admin.invoices.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V6.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 3H4z" />
+                <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
+            </svg>
+            <span>Invoices</span>
+        </a>
     @endif
 
     @if($isMentor || $canSeeMentorBatches)
@@ -120,6 +130,16 @@
                 <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
             </svg>
             <span>My Batches</span>
+        </a>
+
+        <a href="/dashboard/student/mentors"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.student.mentors.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 2a4 4 0 100 8 4 4 0 000-8z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M.458 16.944A10 10 0 0110 12c3.59 0 6.73 1.89 8.542 4.944A1 1 0 0117.66 18H2.34a1 1 0 01-1.882-1.056z" clip-rule="evenodd" />
+            </svg>
+            <span>My Mentors</span>
         </a>
 
         <a href="/dashboard/student/invoices"
@@ -156,6 +176,7 @@
     @endif
 
     @if($user && $user->can('readMentor'))
+        @if(! ($isStudent || $canSeeStudentPanel))
         <a href="/dashboard/mentors"
             @click="sidebarOpen = false"
             class="{{ $linkBase }} {{ request()->routeIs('dashboard.mentors.*') ? $active : $inactive }}">
@@ -166,6 +187,7 @@
             </svg>
             <span>Mentors</span>
         </a>
+        @endif
     @endif
 
     @if($isAdmin)

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Invoice\Http\Controllers\AdminInvoicesController;
 use Modules\Invoice\Http\Controllers\MyInvoicesController;
 
 $studentInvoicesIndexAction = [MyInvoicesController::class, 'index'];
@@ -19,11 +20,31 @@ $studentInvoiceRoutes = static function () use (
         ->name('invoices.download');
 };
 
-$dashboardRoutes = static function () use ($studentInvoiceRoutes): void {
+$adminInvoicesIndexAction = [AdminInvoicesController::class, 'index'];
+$adminInvoicesUpdateStatusAction = [AdminInvoicesController::class, 'updateStatus'];
+
+$adminInvoiceRoutes = static function () use (
+    $adminInvoicesIndexAction,
+    $adminInvoicesUpdateStatusAction
+): void {
+    Route::get('invoices', $adminInvoicesIndexAction)->name('invoices.index');
+    Route::patch('invoices/{order}', $adminInvoicesUpdateStatusAction)
+        ->name('invoices.update');
+};
+
+$dashboardRoutes = static function () use (
+    $studentInvoiceRoutes,
+    $adminInvoiceRoutes
+): void {
     $studentGroup = Route::middleware(['role:student']);
     $studentGroup = $studentGroup->prefix('student');
     $studentGroup = $studentGroup->name('student.');
     $studentGroup->group($studentInvoiceRoutes);
+
+    $adminGroup = Route::middleware(['role:admin']);
+    $adminGroup = $adminGroup->prefix('admin');
+    $adminGroup = $adminGroup->name('admin.');
+    $adminGroup->group($adminInvoiceRoutes);
 };
 
 $webRoutes = static function () use ($dashboardRoutes): void {
