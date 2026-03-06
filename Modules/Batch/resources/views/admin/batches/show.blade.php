@@ -46,7 +46,7 @@
                     <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/students" class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Assign students</a>
                 @endcan
                 @can('editBatch')
-                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/edit" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Edit batch</a>
+                    <a href="/dashboard/batches/{{ $batch->getRouteKey() }}/edit" class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100">Change Status</a>
                 @endcan
             </div>
         </div>

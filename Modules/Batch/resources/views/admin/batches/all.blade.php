@@ -15,6 +15,16 @@
         </div>
     </x-slot>
 
+    @php
+        /** @var string $activeStatus */
+        $activeStatus = $activeStatus ?? (string) request()->query('status', 'upcoming');
+        $tabs = [
+            'upcoming' => 'Upcoming',
+            'running' => 'Running',
+            'completed' => 'Completed',
+        ];
+    @endphp
+
     @push('styles')
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
         <style>
@@ -30,6 +40,23 @@
     @if (session('success'))
         <div class="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-800 ring-1 ring-emerald-100">{{ session('success') }}</div>
     @endif
+
+    <div class="mb-4">
+        <nav class="inline-flex rounded-lg bg-slate-100 p-1 ring-1 ring-slate-200" aria-label="Batch status tabs">
+            @foreach ($tabs as $key => $label)
+                @php
+                    $isActive = $activeStatus === $key;
+                    $classes = $isActive
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900';
+                @endphp
+                <a href="{{ route('dashboard.batches.index', ['status' => $key]) }}"
+                    class="{{ $classes }} rounded-md px-4 py-2 text-sm font-semibold">
+                    {{ $label }}
+                </a>
+            @endforeach
+        </nav>
+    </div>
 
     <div class="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
         <div class="overflow-x-auto p-4">
@@ -59,7 +86,7 @@
                 $('#admin-batches-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: '{{ route('dashboard.batches.index') }}',
+                    ajax: '{{ route('dashboard.batches.index', ['status' => $activeStatus]) }}',
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                         { data: 'batch_display', name: 'name' },

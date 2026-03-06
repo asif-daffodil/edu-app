@@ -26,6 +26,21 @@ class AdminBatchesController extends Controller implements HasMiddleware
 
     public function index()
     {
+        $allowedStatuses = ['upcoming', 'running', 'completed'];
+        $activeStatus = (string) request()->query('status', 'upcoming');
+        if (! in_array($activeStatus, $allowedStatuses, true)) {
+            $activeStatus = 'upcoming';
+        }
+
+        if ($activeStatus === 'upcoming') {
+            $today = now()->toDateString();
+
+            Batch::query()
+                ->where('status', 'upcoming')
+                ->whereDate('start_date', '<=', $today)
+                ->update(['status' => 'running']);
+        }
+
         if (request()->ajax() && request()->has('draw')) {
             $query = Batch::query()
                 ->with(['course:id,title'])
@@ -41,6 +56,7 @@ class AdminBatchesController extends Controller implements HasMiddleware
                     'created_at',
                 ])
                 ->withCount(['mentors', 'students', 'classSchedules'])
+                ->where('status', $activeStatus)
                 ->latest();
 
             return DataTables::eloquent($query)
@@ -88,7 +104,9 @@ class AdminBatchesController extends Controller implements HasMiddleware
                 ->toJson();
         }
 
-        return view('batch::admin.batches.all');
+        return view('batch::admin.batches.all', [
+            'activeStatus' => $activeStatus,
+        ]);
     }
 
     public function create(Request $request)

@@ -6,6 +6,33 @@
         </div>
     </x-slot>
 
+    @php
+        /** @var string $activeStatus */
+        $activeStatus = $activeStatus ?? (string) request()->query('status', 'upcoming');
+        $tabs = [
+            'upcoming' => 'Upcoming',
+            'running' => 'Running',
+            'completed' => 'Completed',
+        ];
+    @endphp
+
+    <div class="mb-4">
+        <nav class="inline-flex rounded-lg bg-slate-100 p-1 ring-1 ring-slate-200" aria-label="Batch status tabs">
+            @foreach ($tabs as $key => $label)
+                @php
+                    $isActive = $activeStatus === $key;
+                    $classes = $isActive
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900';
+                @endphp
+                <a href="{{ route('dashboard.mentor.batches.index', ['status' => $key]) }}"
+                    class="{{ $classes }} rounded-md px-4 py-2 text-sm font-semibold">
+                    {{ $label }}
+                </a>
+            @endforeach
+        </nav>
+    </div>
+
     <div class="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-200">

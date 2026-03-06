@@ -22,6 +22,8 @@
             </div>
 
             <div class="flex items-center gap-2">
+                <a href="{{ route('dashboard.batches.show', $batch) }}"
+                   class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
                 <button type="button"
                         @click="addOpen = true; query = ''; $nextTick(() => $refs.studentSearch?.focus())"
                         class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
