@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Rules\Recaptcha;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -26,10 +28,19 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
+
+        $shouldRequireRecaptcha = config('recaptcha.enabled')
+            && ! (config('recaptcha.skip_in_testing') && app()->environment('testing'));
+
+        if ($shouldRequireRecaptcha) {
+            $rules['g-recaptcha-response'] = ['required', new Recaptcha('login')];
+        }
+
+        return $rules;
     }
 
     /**
@@ -46,6 +57,15 @@ class LoginRequest extends FormRequest
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        $user = Auth::user();
+        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => [trans('frontend.email_not_verified')],
             ]);
         }
 

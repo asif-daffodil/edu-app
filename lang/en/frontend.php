@@ -35,6 +35,15 @@ return [
     'login_success' => 'Logged in successfully.',
     'register_success' => 'Account created successfully.',
 
+    'verify_email_title' => 'Verify your email',
+    'verify_email_notice' => 'Please verify your email address by clicking the link we sent to your email. If you did not receive the email, we can send another one.',
+    'verification_link_sent' => 'Verification link sent to your email.',
+    'verification_sent_to' => 'Sent to:',
+    'resend_verification' => 'Resend verification email',
+    'email_not_verified' => 'Please verify your email before logging in.',
+    'email_already_verified' => 'Your email is already verified.',
+    'verification_invalid' => 'This verification link is invalid or has expired. Please request a new one.',
+
     'enroll_now' => 'Enroll Now',
     'explore_courses' => 'Explore Courses',
     'view_details' => 'View details',

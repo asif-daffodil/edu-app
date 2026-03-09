@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" data-recaptcha-action="register">
         @csrf
 
         <!-- Name -->
@@ -38,6 +38,34 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+
+        @if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+            @once
+                @push('scripts')
+                    @if (config('recaptcha.version') === 'v3')
+                        <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
+                    @else
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                    @endif
+                    <script>
+                        window.__recaptcha = {
+                            enabled: true,
+                            version: @json(config('recaptcha.version')),
+                            siteKey: @json(config('recaptcha.site_key')),
+                        };
+                    </script>
+                @endpush
+            @endonce
+
+            <div class="mt-4">
+                @if (config('recaptcha.version') === 'v3')
+                    <input type="hidden" name="g-recaptcha-response" value="" />
+                @else
+                    <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}"></div>
+                @endif
+                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            </div>
+        @endif
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="/login">

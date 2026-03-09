@@ -16,6 +16,8 @@ test('new users can register', function () {
         'password_confirmation' => 'password',
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $this->assertGuest();
+    $response
+        ->assertRedirect(route('verification.notice', absolute: false))
+        ->assertSessionHas('status', 'verification-link-sent');
 });

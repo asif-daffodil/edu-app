@@ -121,5 +121,7 @@
             <x-auth.register-modal />
             <x-auth.forgot-password-modal />
         @endguest
+
+        @stack('scripts')
     </body>
 </html>

@@ -18,7 +18,7 @@
 
         <div data-auth-alert class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90"></div>
 
-        <form method="POST" action="{{ route('login') }}" class="mt-5" data-auth-form="login">
+        <form method="POST" action="{{ route('login') }}" class="mt-5" data-auth-form="login" data-recaptcha-action="login">
             @csrf
             <input type="hidden" name="redirect_to" value="" data-auth-redirect-to>
 
@@ -54,6 +54,38 @@
                     {{ __('frontend.forgot_password') }}
                 </a>
             </div>
+
+            @if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+                @once
+                    @push('scripts')
+                        @if (config('recaptcha.version') === 'v3')
+                            <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
+                        @else
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        @endif
+                        <script>
+                            window.__recaptcha = {
+                                enabled: true,
+                                version: @json(config('recaptcha.version')),
+                                siteKey: @json(config('recaptcha.site_key')),
+                            };
+                        </script>
+                    @endpush
+                @endonce
+
+                <div class="mt-4">
+                    @if (config('recaptcha.version') === 'v3')
+                        <input type="hidden" name="g-recaptcha-response" value="" />
+                    @else
+                        <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}"></div>
+                    @endif
+                    <div class="mt-2 text-sm text-rose-600" data-auth-error-for="g-recaptcha-response">
+                        @foreach($errors->get('g-recaptcha-response') as $message)
+                            <div>{{ $message }}</div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <button type="submit"
                     class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"

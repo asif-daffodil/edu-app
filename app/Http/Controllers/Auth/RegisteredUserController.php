@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Rules\Recaptcha;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -49,11 +49,20 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse|JsonResponse
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        ];
+
+        $shouldRequireRecaptcha = config('recaptcha.enabled')
+            && ! (config('recaptcha.skip_in_testing') && app()->environment('testing'));
+
+        if ($shouldRequireRecaptcha) {
+            $rules['g-recaptcha-response'] = ['required', new Recaptcha('register')];
+        }
+
+        $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,
@@ -70,39 +79,17 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        session()->put('verification_email', (string) $user->email);
 
         if ($request->expectsJson()) {
-            $redirectTo = '';
-            $redirectToRaw = trim((string) $request->input('redirect_to', ''));
-
-            if ($redirectToRaw !== '') {
-                if (Str::startsWith($redirectToRaw, ['/']) && ! Str::startsWith($redirectToRaw, ['//'])) {
-                    $redirectTo = $redirectToRaw;
-                } elseif (filter_var($redirectToRaw, FILTER_VALIDATE_URL)) {
-                    $host = (string) parse_url($redirectToRaw, PHP_URL_HOST);
-                    if ($host !== '' && strcasecmp($host, (string) $request->getHost()) === 0) {
-                        $path = (string) (parse_url($redirectToRaw, PHP_URL_PATH) ?? '/');
-                        $query = (string) parse_url($redirectToRaw, PHP_URL_QUERY);
-                        $fragment = (string) parse_url($redirectToRaw, PHP_URL_FRAGMENT);
-                        $redirectTo = $path
-                            . ($query !== '' ? ('?' . $query) : '')
-                            . ($fragment !== '' ? ('#' . $fragment) : '');
-                    }
-                }
-            }
-
-            if ($redirectTo === '') {
-                $redirectTo = (string) $request->session()->pull('url.intended', route('dashboard', absolute: false));
-            }
-
             return response()->json([
                 'ok' => true,
-                'redirect' => $redirectTo,
-                'message' => __('frontend.register_success'),
+                'verification_required' => true,
+                'email' => (string) $user->email,
+                'message' => __('frontend.verification_link_sent'),
             ]);
         }
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('verification.notice')->with('status', 'verification-link-sent');
     }
 }

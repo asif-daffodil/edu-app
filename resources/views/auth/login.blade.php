@@ -2,7 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" data-recaptcha-action="login">
         @csrf
 
         <!-- Email Address -->
@@ -23,6 +23,34 @@
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
+
+        @if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+            @once
+                @push('scripts')
+                    @if (config('recaptcha.version') === 'v3')
+                        <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
+                    @else
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                    @endif
+                    <script>
+                        window.__recaptcha = {
+                            enabled: true,
+                            version: @json(config('recaptcha.version')),
+                            siteKey: @json(config('recaptcha.site_key')),
+                        };
+                    </script>
+                @endpush
+            @endonce
+
+            <div class="mt-4">
+                @if (config('recaptcha.version') === 'v3')
+                    <input type="hidden" name="g-recaptcha-response" value="" />
+                @else
+                    <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}"></div>
+                @endif
+                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+            </div>
+        @endif
 
         <!-- Remember Me -->
         <div class="block mt-4">

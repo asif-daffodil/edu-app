@@ -1,5 +1,6 @@
 import './bootstrap';
 import './auth-modals';
+import './recaptcha-forms';
 
 import Alpine from 'alpinejs';
 

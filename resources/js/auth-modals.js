@@ -1,5 +1,7 @@
 /* global axios */
 
+import { ensureV3Token } from './recaptcha-forms';
+
 const MODAL_NAMES = {
     login: 'auth-login',
     register: 'auth-register',
@@ -42,6 +44,27 @@ function clearErrors(root) {
     root.querySelectorAll('[data-auth-error-for]').forEach((el) => {
         el.textContent = '';
     });
+}
+
+function showVerificationPanel(modalRoot, email, message) {
+    const formPanel = modalRoot.querySelector('[data-auth-panel="register-form"]');
+    const verifyPanel = modalRoot.querySelector('[data-auth-panel="register-verify"]');
+    if (!formPanel || !verifyPanel) {
+        setAlert(modalRoot, message || 'Verification link sent.', 'success');
+        return;
+    }
+
+    formPanel.classList.add('hidden');
+    verifyPanel.classList.remove('hidden');
+
+    const emailEl = verifyPanel.querySelector('[data-verify-email]');
+    if (emailEl) emailEl.textContent = email || '';
+
+    const input = verifyPanel.querySelector('input[name="email"]');
+    if (input) input.value = email || '';
+
+    const msgEl = verifyPanel.querySelector('[data-verify-message]');
+    if (msgEl && message) msgEl.textContent = message;
 }
 
 function showErrors(root, errors) {
@@ -112,6 +135,17 @@ async function submitAuthForm(form) {
     }
 
     try {
+        // reCAPTCHA v3: generate a fresh token per submission.
+        if (window.__recaptcha?.enabled && window.__recaptcha?.version === 'v3') {
+            const recaptchaAction = form.dataset.recaptchaAction || form.dataset.authForm || 'submit';
+            try {
+                await ensureV3Token(form, recaptchaAction);
+            } catch (e) {
+                setAlert(modalRoot, 'Captcha failed to load. Please refresh and try again.', 'error');
+                return;
+            }
+        }
+
         const response = await axios.post(action, formData, {
             headers: {
                 'Accept': 'application/json',
@@ -126,6 +160,11 @@ async function submitAuthForm(form) {
         }
 
         // Login/register: redirect or reload
+        if (form.dataset.authForm === 'register' && data?.verification_required) {
+            showVerificationPanel(modalRoot, data?.email, data?.message);
+            return;
+        }
+
         const redirectTo = data.redirect;
         if (redirectTo) {
             window.location.assign(redirectTo);
@@ -141,6 +180,14 @@ async function submitAuthForm(form) {
         if (status === 422) {
             showErrors(modalRoot, data?.errors);
             setAlert(modalRoot, data?.message || 'Please fix the errors and try again.', 'error');
+
+            if (data?.errors?.['g-recaptcha-response'] && window.grecaptcha?.reset) {
+                try {
+                    window.grecaptcha.reset();
+                } catch (e) {
+                    // ignore
+                }
+            }
             return;
         }
 
@@ -206,6 +253,30 @@ document.addEventListener('submit', (event) => {
 
     event.preventDefault();
     submitAuthForm(form);
+});
+
+document.addEventListener('click', async (event) => {
+    const btn = event.target?.closest?.('[data-auth-resend-verification]');
+    if (!btn) return;
+    event.preventDefault();
+
+    const root = btn.closest('[data-auth-modal]') || document;
+    const form = btn.closest('form');
+    if (!(form instanceof HTMLFormElement)) return;
+
+    clearAlert(root);
+
+    try {
+        const formData = new FormData(form);
+        const response = await axios.post(form.getAttribute('action'), formData, {
+            headers: { 'Accept': 'application/json' },
+        });
+        const data = response?.data || {};
+        setAlert(root, data.message || 'Verification link sent.', 'success');
+    } catch (err) {
+        const data = err?.response?.data;
+        setAlert(root, data?.message || 'Unable to send verification email.', 'error');
+    }
 });
 
 // Auto-open on initial load

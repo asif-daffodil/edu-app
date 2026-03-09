@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Notifications\VerifyEmailNotification;
 use Modules\Profile\Models\Address;
 use Modules\Profile\Models\Education;
 use Modules\Profile\Models\Experience;
@@ -23,6 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
  * User model.
  */
 class User extends Authenticatable
+    implements MustVerifyEmail
 {
     /**
      * @use HasFactory<\Database\Factories\UserFactory>
@@ -147,5 +149,15 @@ class User extends Authenticatable
         }
 
         return Str::upper(Str::substr($name, 0, 2));
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification);
+    }
+
+    public function preferredLocale(): string
+    {
+        return (string) app()->getLocale();
     }
 }

@@ -18,7 +18,8 @@
 
         <div data-auth-alert class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90"></div>
 
-        <form method="POST" action="{{ route('register') }}" class="mt-5" data-auth-form="register">
+        <div data-auth-panel="register-form">
+            <form method="POST" action="{{ route('register') }}" class="mt-5" data-auth-form="register" data-recaptcha-action="register">
             @csrf
             <input type="hidden" name="redirect_to" value="" data-auth-redirect-to>
 
@@ -66,6 +67,38 @@
                 </div>
             </div>
 
+            @if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+                @once
+                    @push('scripts')
+                        @if (config('recaptcha.version') === 'v3')
+                            <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
+                        @else
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        @endif
+                        <script>
+                            window.__recaptcha = {
+                                enabled: true,
+                                version: @json(config('recaptcha.version')),
+                                siteKey: @json(config('recaptcha.site_key')),
+                            };
+                        </script>
+                    @endpush
+                @endonce
+
+                <div class="mt-4">
+                    @if (config('recaptcha.version') === 'v3')
+                        <input type="hidden" name="g-recaptcha-response" value="" />
+                    @else
+                        <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}"></div>
+                    @endif
+                    <div class="mt-2 text-sm text-rose-600" data-auth-error-for="g-recaptcha-response">
+                        @foreach($errors->get('g-recaptcha-response') as $message)
+                            <div>{{ $message }}</div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             <button type="submit"
                     class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"
                     data-auth-submit>
@@ -78,6 +111,36 @@
                     {{ __('frontend.login') }}
                 </a>
             </div>
-        </form>
+            </form>
+        </div>
+
+        <div data-auth-panel="register-verify" class="hidden mt-5">
+            <h3 class="text-base font-semibold text-slate-900 dark:text-white">{{ __('frontend.verify_email_title') }}</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-200" data-verify-message>
+                {{ __('frontend.verification_link_sent') }}
+            </p>
+
+            <p class="mt-2 text-xs text-slate-500 dark:text-slate-300">
+                {{ __('frontend.verification_sent_to') }}
+                <span class="font-medium" data-verify-email></span>
+            </p>
+
+            <form method="POST" action="{{ route('verification.send') }}" class="mt-4">
+                @csrf
+                <input type="hidden" name="email" value="">
+
+                <button type="submit"
+                        class="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100"
+                        data-auth-resend-verification>
+                    {{ __('frontend.resend_verification') }}
+                </button>
+            </form>
+
+            <div class="mt-4 text-center text-sm text-slate-600 dark:text-slate-200">
+                <a href="/login" data-auth-switch="login" class="font-semibold text-sky-700 hover:text-sky-800 dark:text-sky-300 dark:hover:text-sky-200">
+                    {{ __('frontend.back_to_login') }}
+                </a>
+            </div>
+        </div>
     </div>
 </x-modal>
