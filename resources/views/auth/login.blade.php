@@ -2,7 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}" data-recaptcha-action="login">
+    <form method="POST" action="{{ route('login', absolute: false) }}" data-recaptcha-action="login">
         @csrf
 
         <!-- Email Address -->

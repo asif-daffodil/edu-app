@@ -19,7 +19,7 @@
         <div data-auth-alert class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90"></div>
 
         <div data-auth-panel="register-form">
-            <form method="POST" action="{{ route('register') }}" class="mt-5" data-auth-form="register" data-recaptcha-action="register">
+            <form method="POST" action="{{ route('register', absolute: false) }}" class="mt-5" data-auth-form="register" data-recaptcha-action="register">
             @csrf
             <input type="hidden" name="redirect_to" value="" data-auth-redirect-to>
 
@@ -125,7 +125,7 @@
                 <span class="font-medium" data-verify-email></span>
             </p>
 
-            <form method="POST" action="{{ route('verification.send') }}" class="mt-4">
+            <form method="POST" action="{{ route('verification.send', absolute: false) }}" class="mt-4">
                 @csrf
                 <input type="hidden" name="email" value="">
 

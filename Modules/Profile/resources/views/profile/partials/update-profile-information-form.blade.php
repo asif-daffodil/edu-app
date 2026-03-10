@@ -16,7 +16,7 @@
     </header>
 
     @if ($showVerification)
-        <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+        <form id="send-verification" method="post" action="{{ route('verification.send', absolute: false) }}">
             @csrf
         </form>
     @endif

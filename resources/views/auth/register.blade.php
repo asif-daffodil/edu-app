@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" data-recaptcha-action="register">
+    <form method="POST" action="{{ route('register', absolute: false) }}" data-recaptcha-action="register">
         @csrf
 
         <!-- Name -->

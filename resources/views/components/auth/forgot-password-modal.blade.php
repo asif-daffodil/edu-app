@@ -22,7 +22,7 @@
             @endif
         </div>
 
-        <form method="POST" action="{{ route('password.email') }}" class="mt-5" data-auth-form="forgot">
+        <form method="POST" action="{{ route('password.email', absolute: false) }}" class="mt-5" data-auth-form="forgot">
             @csrf
 
             <div>

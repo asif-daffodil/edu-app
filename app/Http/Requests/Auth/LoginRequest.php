@@ -62,11 +62,30 @@ class LoginRequest extends FormRequest
 
         $user = Auth::user();
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            $email = (string) ($user->email ?? '');
+
             Auth::logout();
 
-            throw ValidationException::withMessages([
+            if ($email !== '') {
+                $this->session()->put('verification_email', $email);
+
+                try {
+                    $user->sendEmailVerificationNotification();
+                    $this->session()->flash('status', 'verification-link-sent');
+                } catch (\Throwable $e) {
+                    // Mail may be misconfigured; still redirect to verification prompt.
+                }
+            }
+
+            $exception = ValidationException::withMessages([
                 'email' => [trans('frontend.email_not_verified')],
             ]);
+
+            if ($email !== '') {
+                $exception->redirectTo(route('verification.notice', ['email' => $email]));
+            }
+
+            throw $exception;
         }
 
         RateLimiter::clear($this->throttleKey());

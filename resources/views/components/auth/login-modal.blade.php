@@ -18,7 +18,7 @@
 
         <div data-auth-alert class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90"></div>
 
-        <form method="POST" action="{{ route('login') }}" class="mt-5" data-auth-form="login" data-recaptcha-action="login">
+        <form method="POST" action="{{ route('login', absolute: false) }}" class="mt-5" data-auth-form="login" data-recaptcha-action="login">
             @csrf
             <input type="hidden" name="redirect_to" value="" data-auth-redirect-to>
 

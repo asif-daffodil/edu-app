@@ -104,3 +104,37 @@ Artisan::command('user:make-admin {user : User id or email}', function () {
     $this->info("OK: {$user->email} is now role=admin");
     return 0;
 })->purpose('Assign the admin role to a user (by email or id).');
+
+Artisan::command('user:verify-email {user : User id or email} {--force : Re-verify even if already verified}', function () {
+    /** @var string $userInput */
+    $userInput = (string) $this->argument('user');
+
+    $user = is_numeric($userInput)
+        ? User::query()->find((int) $userInput)
+        : User::query()->where('email', $userInput)->first();
+
+    if (! $user) {
+        $this->error('User not found: ' . $userInput);
+        return 1;
+    }
+
+    $alreadyVerified = method_exists($user, 'hasVerifiedEmail') && $user->hasVerifiedEmail();
+    $force = (bool) $this->option('force');
+
+    if ($alreadyVerified && ! $force) {
+        $this->info('Already verified: ' . $user->email);
+        $this->line('email_verified_at=' . (string) ($user->email_verified_at ?? ''));
+        return 0;
+    }
+
+    if (method_exists($user, 'markEmailAsVerified')) {
+        $user->markEmailAsVerified();
+    } else {
+        $user->forceFill(['email_verified_at' => now()])->save();
+    }
+
+    $user->refresh();
+    $this->info('OK: verified email for ' . $user->email);
+    $this->line('email_verified_at=' . (string) ($user->email_verified_at ?? ''));
+    return 0;
+})->purpose('Mark a user email as verified (sets email_verified_at).');
