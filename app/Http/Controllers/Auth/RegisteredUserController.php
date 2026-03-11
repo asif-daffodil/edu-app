@@ -34,6 +34,10 @@ class RegisteredUserController extends Controller
         $isUnsafePrevious = $previousPath === ''
             || Str::startsWith($previousPath, ['/login', '/register', '/forgot-password', '/admin', '/dashboard']);
 
+        if (! $isUnsafePrevious && preg_match('#^/email/verify(?:/|$)#', $previousPath)) {
+            $isUnsafePrevious = true;
+        }
+
         $target = $isUnsafePrevious ? '' : $previous;
         if ($target === '') {
             $target = route('home', absolute: false);

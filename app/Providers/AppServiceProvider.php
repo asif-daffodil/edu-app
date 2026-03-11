@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::composer(
-            'layouts.site',
+            ['layouts.site', 'layouts.app', 'layouts.guest', 'layouts.public-profile'],
             function ($view) {
                 $defaults = [
                     'site_address' => app()->getLocale() === 'bn'
@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
                     'site_phone' => '+880 10 0000 0000',
                     'site_email' => 'info@example.com',
                     'site_logo_path' => null,
+                    'site_favicon_path' => null,
                 ];
 
                 if (! Schema::hasTable('frontend_settings')) {
@@ -71,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
                     'site_phone' => $get('site_phone'),
                     'site_email' => $get('site_email'),
                     'site_logo_path' => $get('site_logo_path'),
+                    'site_favicon_path' => $get('site_favicon_path'),
                 ];
 
                 $view->with('frontendSettings', $frontendSettings);

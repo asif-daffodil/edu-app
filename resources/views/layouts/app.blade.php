@@ -6,6 +6,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        @php
+            $faviconPath = $frontendSettings['site_favicon_path'] ?? null;
+            $faviconUrl = $faviconPath ? asset('storage/' . ltrim((string) $faviconPath, '/')) : asset('favicon.ico');
+        @endphp
+        <link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+        <link rel="shortcut icon" href="{{ $faviconUrl }}">
+        <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -164,6 +171,20 @@
                     </header>
 
                     <main class="flex-1 px-4 lg:px-6 py-6">
+                        @php
+                            $globalSuccess = session('success');
+
+                            if (! $globalSuccess && session('status') === 'password-updated') {
+                                $globalSuccess = __('frontend.password_updated_success');
+                            }
+                        @endphp
+
+                        @if ($globalSuccess)
+                            <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 ring-1 ring-emerald-100">
+                                {{ $globalSuccess }}
+                            </div>
+                        @endif
+
                         {{ $slot }}
                     </main>
                 </div>

@@ -52,7 +52,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    // Normalize to avoid double-slash URLs and signed URL mismatches.
+    'url' => rtrim((string) env('APP_URL', 'http://localhost'), '/'),
 
     /*
     |--------------------------------------------------------------------------

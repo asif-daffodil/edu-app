@@ -6,6 +6,7 @@ const MODAL_NAMES = {
     login: 'auth-login',
     register: 'auth-register',
     forgot: 'auth-forgot',
+    verifyStatus: 'auth-verify-status',
 };
 
 function toModalName(keyOrName) {
@@ -62,6 +63,15 @@ function showVerificationPanel(modalRoot, email, message) {
 
     const input = verifyPanel.querySelector('input[name="email"]');
     if (input) input.value = email || '';
+
+    const changeEmailLink = verifyPanel.querySelector('[data-verify-change-email-link]');
+    if (changeEmailLink) {
+        const basePath = '/email/verify';
+        changeEmailLink.setAttribute(
+            'href',
+            email ? `${basePath}?email=${encodeURIComponent(email)}` : basePath,
+        );
+    }
 
     const msgEl = verifyPanel.querySelector('[data-verify-message]');
     if (msgEl && message) msgEl.textContent = message;

@@ -40,6 +40,10 @@ class FrontendSettingsSeeder extends Seeder
                 'value_en' => 'logo/itechbd-logo.svg',
                 'value_bn' => 'logo/itechbd-logo.svg',
             ],
+            'site_favicon_path' => [
+                'value_en' => null,
+                'value_bn' => null,
+            ],
         ];
 
         foreach ($defaults as $key => $values) {

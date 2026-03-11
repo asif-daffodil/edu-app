@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\UpdateUnverifiedEmailController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,3 +61,7 @@ Route::get('email/verify/{id}/{hash}', VerifyEmailController::class)
 Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
     ->middleware('throttle:6,1')
     ->name('verification.send');
+
+Route::post('email/verification-email', UpdateUnverifiedEmailController::class)
+    ->middleware('throttle:6,1')
+    ->name('verification.email.update');

@@ -22,6 +22,13 @@
     </script>
 
     <title>@yield('title', config('app.name', 'iTechBD Ltd'))</title>
+    @php
+        $faviconPath = $frontendSettings['site_favicon_path'] ?? null;
+        $faviconUrl = $faviconPath ? asset('storage/' . ltrim((string) $faviconPath, '/')) : asset('favicon.ico');
+    @endphp
+    <link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+    <link rel="shortcut icon" href="{{ $faviconUrl }}">
+    <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
@@ -152,6 +159,7 @@
             window.__authModalToOpen = @json(session('auth_modal'));
         </script>
     @endif
+
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
     <!-- Background -->
@@ -473,6 +481,9 @@
         <x-auth.login-modal />
         <x-auth.register-modal />
         <x-auth.forgot-password-modal />
+        @if (session('status') === 'verified' || session('status') === 'already-verified')
+            <x-auth.verification-status-modal />
+        @endif
     @endguest
 
     @stack('scripts')

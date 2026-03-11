@@ -42,6 +42,7 @@ class UpdateFrontendHeaderSettingsRequest extends FormRequest
             'site_phone' => ['required', 'string', 'max:50'],
             'site_email' => ['required', 'email', 'max:255'],
             'site_logo' => ['nullable', 'image', 'max:2048'],
+            'site_favicon' => ['nullable', 'file', 'mimes:ico,png,jpg,jpeg,svg,webp', 'max:1024'],
         ];
     }
 }

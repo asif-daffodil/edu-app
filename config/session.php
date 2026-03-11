@@ -156,7 +156,17 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    // Treat empty / "null" as actual null (common .env pitfall: SESSION_DOMAIN=null).
+    'domain' => (function () {
+        $domain = env('SESSION_DOMAIN');
+        if (is_string($domain)) {
+            $domain = trim($domain);
+            if ($domain === '' || strtolower($domain) === 'null') {
+                return null;
+            }
+        }
+        return $domain;
+    })(),
 
     /*
     |--------------------------------------------------------------------------

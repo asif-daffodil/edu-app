@@ -7,6 +7,10 @@
         <div class="mb-4 font-medium text-sm text-green-600">
             {{ __('frontend.verification_link_sent') }}
         </div>
+    @elseif (session('status') == 'verification-email-updated')
+        <div class="mb-4 font-medium text-sm text-green-600">
+            {{ __('frontend.verification_email_updated') }}
+        </div>
     @elseif (session('status') == 'verification-invalid')
         <div class="mb-4 font-medium text-sm text-red-600">
             {{ __('frontend.verification_invalid') }}
@@ -35,6 +39,40 @@
                     {{ __('frontend.back_to_login') }}
                 </a>
             </div>
+        </form>
+    </div>
+
+    <div class="mt-8 border-t border-gray-200 pt-6">
+        <h3 class="text-sm font-semibold text-gray-900">{{ __('frontend.change_verification_email') }}</h3>
+        <p class="mt-1 text-sm text-gray-600">{{ __('frontend.verification_change_help') }}</p>
+
+        <form method="POST" action="{{ route('verification.email.update', absolute: false) }}" class="mt-4 space-y-4">
+            @csrf
+
+            <div>
+                <x-input-label for="current_email" :value="__('frontend.current_email')" />
+                <x-text-input id="current_email" class="block mt-1 w-full" type="email" name="current_email"
+                    :value="old('current_email', $verificationEmail ?? auth()->user()?->email ?? '')" required autocomplete="email" />
+                <x-input-error :messages="$errors->get('current_email')" class="mt-2" />
+            </div>
+
+            <div>
+                <x-input-label for="new_email" :value="__('frontend.new_email')" />
+                <x-text-input id="new_email" class="block mt-1 w-full" type="email" name="new_email"
+                    :value="old('new_email')" required autocomplete="email" />
+                <x-input-error :messages="$errors->get('new_email')" class="mt-2" />
+            </div>
+
+            <div>
+                <x-input-label for="verify_password" :value="__('frontend.account_password')" />
+                <x-text-input id="verify_password" class="block mt-1 w-full" type="password" name="password"
+                    required autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
+
+            <x-primary-button>
+                {{ __('frontend.update_email_and_resend') }}
+            </x-primary-button>
         </form>
     </div>
 </x-guest-layout>

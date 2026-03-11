@@ -7,8 +7,10 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -52,7 +54,44 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only('email', 'password');
+        $remember = $this->boolean('remember');
+
+        $attempted = false;
+
+        try {
+            $attempted = Auth::attempt($credentials, $remember);
+        } catch (RuntimeException $e) {
+            // Fallback for legacy bcrypt hashes (e.g. "$2a$") that may fail strict algorithm checks.
+            if (! Str::contains($e->getMessage(), 'Bcrypt algorithm')) {
+                throw $e;
+            }
+
+            $provider = Auth::getProvider();
+            $legacyUser = $provider->retrieveByCredentials([
+                'email' => $credentials['email'] ?? null,
+            ]);
+
+            $plainPassword = (string) ($credentials['password'] ?? '');
+            $storedHash = (string) ($legacyUser?->password ?? '');
+
+            if ($legacyUser && Str::startsWith($storedHash, '$2a$') && password_verify($plainPassword, $storedHash)) {
+                Auth::login($legacyUser, $remember);
+                $attempted = true;
+
+                try {
+                    if (Hash::needsRehash($storedHash)) {
+                        $legacyUser->forceFill([
+                            'password' => Hash::make($plainPassword),
+                        ])->save();
+                    }
+                } catch (\Throwable $rehashError) {
+                    // Ignore rehash/storage issues; keep successful login.
+                }
+            }
+        }
+
+        if (! $attempted) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

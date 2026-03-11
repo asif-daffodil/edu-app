@@ -6,6 +6,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        @php
+            $faviconPath = $frontendSettings['site_favicon_path'] ?? null;
+            $faviconUrl = $faviconPath ? asset('storage/' . ltrim((string) $faviconPath, '/')) : asset('favicon.ico');
+        @endphp
+        <link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+        <link rel="shortcut icon" href="{{ $faviconUrl }}">
+        <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

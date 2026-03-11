@@ -13,6 +13,15 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    private function isUnsafeRedirectPath(string $path): bool
+    {
+        if ($path === '') {
+            return true;
+        }
+
+        return Str::startsWith($path, ['/login', '/register', '/forgot-password', '/email/verify']);
+    }
+
     /**
      * Display the login view.
      */
@@ -33,12 +42,20 @@ class AuthenticatedSessionController extends Controller
         $previous = (string) url()->previous();
         $previousPath = (string) parse_url($previous, PHP_URL_PATH);
 
+        // If user landed here from email verification (or directly), show the full login page.
+        // This avoids a confusing redirect loop where /login redirects to home but the modal
+        // cannot open due to missing flash/session in some environments.
+        if ($previousPath === '' || preg_match('#^/email/verify(?:/|$)#', $previousPath)) {
+            return view('auth.login');
+        }
+
         if (is_null($courseIdForCheckout) && preg_match('#^/courses/(\d+)/checkout$#', $previousPath, $m)) {
             $courseIdForCheckout = (string) $m[1];
         }
 
         $isUnsafePrevious = $previousPath === ''
             || Str::startsWith($previousPath, ['/login', '/register', '/forgot-password', '/admin', '/dashboard'])
+            || preg_match('#^/email/verify(?:/|$)#', $previousPath)
             || preg_match('#^/courses/\d+/checkout$#', $previousPath)
             || preg_match('#^/checkout/orders/\d+$#', $previousPath);
 
@@ -110,6 +127,11 @@ class AuthenticatedSessionController extends Controller
                 $redirectTo = (string) $request->session()->pull('url.intended', route('dashboard', absolute: false));
             }
 
+            $redirectToPath = (string) parse_url($redirectTo, PHP_URL_PATH);
+            if ($this->isUnsafeRedirectPath($redirectToPath)) {
+                $redirectTo = route('dashboard', [], false);
+            }
+
             return response()->json([
                 'ok' => true,
                 'redirect' => $redirectTo,
@@ -117,7 +139,15 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $fallback = route('dashboard', [], false);
+        $intended = (string) $request->session()->pull('url.intended', '');
+        $intendedPath = (string) parse_url($intended, PHP_URL_PATH);
+
+        if ($intended !== '' && ! $this->isUnsafeRedirectPath($intendedPath)) {
+            return redirect()->to($intended);
+        }
+
+        return redirect()->to($fallback);
     }
 
     /**

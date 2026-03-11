@@ -150,6 +150,39 @@
                             </p>
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Favicon Upload</label>
+                            @php
+                                $faviconPath = optional($settings->get('site_favicon_path'))->value_en
+                                    ?: optional($settings->get('site_favicon_path'))->value_bn;
+                            @endphp
+
+                            @if ($faviconPath)
+                                <div class="mt-3 flex items-center gap-4">
+                                    <img
+                                        src="{{ asset('storage/' . $faviconPath) }}"
+                                        alt="Site favicon"
+                                        class="h-10 w-10 rounded bg-slate-50 ring-1 ring-slate-200 object-contain"
+                                    />
+                                    <div class="text-xs text-slate-500">Current favicon</div>
+                                </div>
+                            @endif
+
+                            <input
+                                type="file"
+                                name="site_favicon"
+                                accept=".ico,image/png,image/jpeg,image/webp,image/svg+xml"
+                                class="mt-3 block w-full text-sm text-slate-700"
+                            />
+                            @error('site_favicon')
+                                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+                            @enderror
+
+                            <p class="mt-2 text-xs text-slate-500">
+                                Stored in <span class="font-mono">storage/app/public/favicon</span>
+                            </p>
+                        </div>
+
                         <div class="flex items-center justify-end">
                             <button
                                 type="submit"

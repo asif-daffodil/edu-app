@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * Manage frontend settings.
@@ -83,16 +84,52 @@ class FrontendSettingsController extends Controller implements HasMiddleware
                 ? ($existing->value_en ?: $existing->value_bn)
                 : null;
 
+            $oldPath = is_string($oldPath)
+                ? $this->normalizePublicStoragePath($oldPath)
+                : null;
+
+            $newPath = $this->normalizePublicStoragePath($logoPath);
+
             $this->upsertSetting(
                 'site_logo_path',
                 [
-                    'value_en' => $logoPath,
-                    'value_bn' => $logoPath,
+                    'value_en' => $newPath,
+                    'value_bn' => $newPath,
                 ]
             );
 
-            if ($oldPath && $oldPath !== $logoPath) {
+            if ($oldPath && $oldPath !== $newPath) {
                 Storage::disk('public')->delete($oldPath);
+            }
+        }
+
+        if ($request->hasFile('site_favicon')) {
+            $faviconPath = $request->file('site_favicon')->store('favicon', 'public');
+
+            $existingFavicon = FrontendSetting::query()
+                ->where('key', 'site_favicon_path')
+                ->first();
+
+            $oldFaviconPath = $existingFavicon
+                ? ($existingFavicon->value_en ?: $existingFavicon->value_bn)
+                : null;
+
+            $oldFaviconPath = is_string($oldFaviconPath)
+                ? $this->normalizePublicStoragePath($oldFaviconPath)
+                : null;
+
+            $newFaviconPath = $this->normalizePublicStoragePath($faviconPath);
+
+            $this->upsertSetting(
+                'site_favicon_path',
+                [
+                    'value_en' => $newFaviconPath,
+                    'value_bn' => $newFaviconPath,
+                ]
+            );
+
+            if ($oldFaviconPath && $oldFaviconPath !== $newFaviconPath) {
+                Storage::disk('public')->delete($oldFaviconPath);
             }
         }
 
@@ -117,5 +154,32 @@ class FrontendSettingsController extends Controller implements HasMiddleware
             ['key' => $key],
             array_merge(['key' => $key], $values)
         );
+    }
+
+    /**
+     * Normalize a logo path to a public-disk relative path.
+     *
+     * Examples:
+     * - https://domain.com/storage/logo/a.png -> logo/a.png
+     * - /storage/logo/a.png -> logo/a.png
+     * - storage/logo/a.png -> logo/a.png
+     * - logo/a.png -> logo/a.png
+     */
+    protected function normalizePublicStoragePath(string $path): string
+    {
+        $value = trim($path);
+
+        $parsedPath = parse_url($value, PHP_URL_PATH);
+        if (is_string($parsedPath) && $parsedPath !== '') {
+            $value = $parsedPath;
+        }
+
+        $value = ltrim($value, '/');
+
+        if (Str::startsWith($value, 'storage/')) {
+            $value = (string) Str::after($value, 'storage/');
+        }
+
+        return $value;
     }
 }
