@@ -22,12 +22,12 @@ class VerifyEmailController extends Controller
         /** @var \App\Models\User|null $user */
         $user = User::query()->find($userId);
         if (! $user) {
-            return redirect()->route('verification.notice')->with('status', 'verification-invalid');
+            return redirect()->route('verification.notice', absolute: false)->with('status', 'verification-invalid');
         }
 
         // Match Laravel's default hash: sha1(email)
         if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-            return redirect()->route('verification.notice')->with('status', 'verification-invalid');
+            return redirect()->route('verification.notice', absolute: false)->with('status', 'verification-invalid');
         }
 
         if (! $user->hasVerifiedEmail()) {

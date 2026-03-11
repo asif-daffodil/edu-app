@@ -31,7 +31,7 @@ class PasswordResetLinkController extends Controller
 
         $target = $isUnsafePrevious ? '' : $previous;
         if ($target === '') {
-            $target = route('home');
+            $target = route('home', absolute: false);
         }
 
         return redirect()->to($target)->with('auth_modal', 'forgot');

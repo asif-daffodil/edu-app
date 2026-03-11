@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
 
         $target = $isUnsafePrevious ? '' : $previous;
         if ($target === '') {
-            $target = route('home');
+            $target = route('home', absolute: false);
         }
 
         return redirect()->to($target)->with('auth_modal', 'register');
@@ -90,6 +90,7 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        return redirect()->route('verification.notice')->with('status', 'verification-link-sent');
+        return redirect()->to(route('verification.notice', absolute: false))
+            ->with('status', 'verification-link-sent');
     }
 }

@@ -18,6 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(
         function (Middleware $middleware): void {
+            // Production is commonly behind Nginx/Apache/Cloudflare where the app
+            // receives requests as HTTP from a reverse proxy. Trusting forwarded
+            // headers prevents HTTPS / host detection issues (redirect loops,
+            // wrong absolute URLs in emails, lost secure cookies).
+            $middleware->trustProxies(at: '*');
+
             $middleware->alias(
                 [
                     'frontend.locale' => SetFrontendLocale::class,

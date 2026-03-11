@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($target === '') {
-            $target = route('home');
+            $target = route('home', absolute: false);
         }
 
         return redirect()->to($target)->with('auth_modal', 'login');
@@ -73,12 +73,13 @@ class AuthenticatedSessionController extends Controller
                     if ($request->expectsJson()) {
                         return response()->json([
                             'ok' => true,
-                            'redirect' => route('profile.edit'),
+                            'redirect' => route('profile.edit', absolute: false),
                             'message' => 'must-change-password',
                         ]);
                     }
 
-                    return redirect()->route('profile.edit')->with('status', 'must-change-password');
+                    return redirect()->to(route('profile.edit', absolute: false))
+                        ->with('status', 'must-change-password');
                 }
             } catch (\Throwable $e) {
                 // If role check fails for any reason, continue normal flow.

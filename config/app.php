@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Force HTTPS Scheme
+    |--------------------------------------------------------------------------
+    |
+    | When your app is behind a proxy/SSL terminator, Laravel may see the
+    | request as HTTP unless proxies are trusted. This option allows forcing
+    | generated URLs to use HTTPS (useful for signed verification links).
+    |
+    */
+
+    'force_https' => (bool) env('APP_FORCE_HTTPS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
