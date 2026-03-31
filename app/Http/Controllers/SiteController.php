@@ -80,10 +80,11 @@ class SiteController extends Controller
         $cms = $this->loadCms('home');
 
         $mentors = Mentor::query()
+            ->with(['user:id,name,profile_image'])
             ->where('is_active', true)
             ->orderByDesc('id')
             ->limit(12)
-            ->get(['id', 'name', 'topic', 'bio']);
+            ->get(['id', 'user_id', 'name', 'topic', 'bio']);
 
         return view('welcome', array_merge($cms, compact('mentors')));
     }
@@ -98,11 +99,44 @@ class SiteController extends Controller
         $cms = $this->loadCms('mentors');
 
         $mentors = Mentor::query()
+            ->with(['user:id,name,profile_image'])
             ->where('is_active', true)
             ->orderByDesc('id')
             ->paginate(12);
 
         return view('pages.mentors', array_merge($cms, compact('mentors')));
+    }
+
+    /**
+     * Show a public mentor profile page.
+     */
+    public function mentorShow(Mentor $mentor): View
+    {
+        abort_unless($mentor->is_active, 404);
+
+        $mentor->loadMissing(
+            [
+                'user' => fn ($query) => $query
+                    ->select(['id', 'name', 'email', 'profile_image'])
+                    ->with(
+                        [
+                            'profile',
+                            'address',
+                            'educations' => fn ($q) => $q
+                                ->orderByDesc('end_year')
+                                ->orderByDesc('start_year')
+                                ->orderByDesc('id'),
+                            'experiences' => fn ($q) => $q
+                                ->orderByDesc('end_date')
+                                ->orderByDesc('start_date')
+                                ->orderByDesc('id'),
+                            'skills' => fn ($q) => $q->orderBy('name'),
+                        ]
+                    ),
+            ]
+        );
+
+        return view('pages.mentor-show', compact('mentor'));
     }
 
     /**

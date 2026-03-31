@@ -18,6 +18,8 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+
         <!-- Scripts -->
         @php
             $manifestPath = public_path('build/manifest.json');
@@ -78,6 +80,18 @@
         </style>
     </head>
     <body class="font-sans antialiased">
+        @php
+            $panelLabel = 'Student Panel';
+            $user = auth()->user();
+
+            if ($user && method_exists($user, 'hasRole')) {
+                if ($user->hasRole('admin')) {
+                    $panelLabel = 'Admin Panel';
+                } elseif ($user->hasRole('mentor')) {
+                    $panelLabel = 'Mentor Panel';
+                }
+            }
+        @endphp
         <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-100">
             <!-- Mobile sidebar -->
             <div x-show="sidebarOpen" x-cloak style="display: none;" class="fixed inset-0 z-40 lg:hidden" aria-hidden="true">
@@ -88,7 +102,7 @@
                             <div class="h-9 w-9 rounded-lg bg-indigo-600/90 text-white grid place-items-center font-bold">{{ strtoupper(substr(config('app.name', 'A'), 0, 1)) }}</div>
                             <div class="text-white">
                                 <div class="text-sm font-semibold leading-5">{{ config('app.name', 'Laravel') }}</div>
-                                <div class="text-xs text-slate-300">Admin Panel</div>
+                                <div class="text-xs text-slate-300">{{ $panelLabel }}</div>
                             </div>
                         </a>
                         <button type="button" class="rounded-md p-2 text-slate-200 hover:bg-slate-800" @click="sidebarOpen = false" aria-label="Close sidebar">
@@ -109,7 +123,7 @@
                         <div class="h-9 w-9 rounded-lg bg-indigo-600/90 text-white grid place-items-center font-bold">{{ strtoupper(substr(config('app.name', 'A'), 0, 1)) }}</div>
                         <div class="min-w-0">
                             <div class="text-sm font-semibold leading-5 truncate">{{ config('app.name', 'Laravel') }}</div>
-                            <div class="text-xs text-slate-300">Admin Panel</div>
+                            <div class="text-xs text-slate-300">{{ $panelLabel }}</div>
                         </div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-4">

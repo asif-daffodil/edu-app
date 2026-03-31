@@ -273,6 +273,7 @@
                 @php
                     $defaultSkillTracks = [
                         [
+                            'icon' => 'fa-solid fa-code',
                             'title' => 'Web Development',
                             'desc' => 'Front-end + back-end fundamentals with real projects.',
                             'bullets' => [
@@ -282,6 +283,7 @@
                             ],
                         ],
                         [
+                            'icon' => 'fa-solid fa-magnifying-glass',
                             'title' => 'SEO (Search Engine Optimization)',
                             'desc' => 'Technical SEO + content + analytics.',
                             'bullets' => [
@@ -291,6 +293,7 @@
                             ],
                         ],
                         [
+                            'icon' => 'fa-brands fa-microsoft',
                             'title' => '.NET Development',
                             'desc' => 'C# + ASP.NET Core for modern applications.',
                             'bullets' => [
@@ -300,6 +303,7 @@
                             ],
                         ],
                         [
+                            'icon' => 'fa-solid fa-palette',
                             'title' => 'Graphics Design',
                             'desc' => 'Branding + marketing visuals + portfolio.',
                             'bullets' => [
@@ -309,6 +313,7 @@
                             ],
                         ],
                         [
+                            'icon' => 'fa-solid fa-star',
                             'title' => 'Extra Topics (Optional)',
                             'desc' => 'UI/UX, Git, communication and teamwork.',
                             'bullets' => [
@@ -317,6 +322,14 @@
                                 'Client communication',
                             ],
                         ],
+                    ];
+
+                    $defaultSkillTrackIcons = [
+                        1 => 'fa-solid fa-code',
+                        2 => 'fa-solid fa-magnifying-glass',
+                        3 => 'fa-brands fa-microsoft',
+                        4 => 'fa-solid fa-palette',
+                        5 => 'fa-solid fa-star',
                     ];
 
                     $skillTrackSections = $cmsSectionsByKey
@@ -360,6 +373,7 @@
                         }
 
                         $skillTracks[] = [
+                            'icon' => is_string(optional($section)->icon) ? (string) optional($section)->icon : '',
                             'title' => $title,
                             'desc' => $desc,
                             'bullets' => $bullets,
@@ -374,10 +388,40 @@
 
                 <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     @foreach($skillTracks as $track)
-                        <article class="reveal rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 transition hover:bg-slate-50 dark:bg-white/5 dark:shadow-none dark:ring-white/10 dark:hover:bg-white/7">
+                        <article class="reveal rounded-3xl bg-white p-6 text-center shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 transition hover:bg-slate-50 dark:bg-white/5 dark:shadow-none dark:ring-white/10 dark:hover:bg-white/7">
+                            @php
+                                $iconValue = trim((string) ($track['icon'] ?? ''));
+                                if ($iconValue === '') {
+                                    $iconValue = (string) ($defaultSkillTrackIcons[$loop->iteration] ?? 'fa-solid fa-star');
+                                }
+
+                                $legacyToFa = [
+                                    'code' => 'fa-solid fa-code',
+                                    'search' => 'fa-solid fa-magnifying-glass',
+                                    'dotnet' => 'fa-brands fa-microsoft',
+                                    'design' => 'fa-solid fa-palette',
+                                    'sparkles' => 'fa-solid fa-star',
+                                    'rocket' => 'fa-solid fa-rocket',
+                                    'chart' => 'fa-solid fa-chart-line',
+                                    'shield' => 'fa-solid fa-shield-halved',
+                                ];
+
+                                if (array_key_exists($iconValue, $legacyToFa)) {
+                                    $iconValue = $legacyToFa[$iconValue];
+                                }
+
+                                if (! preg_match('/^fa-(solid|regular|brands)\s+fa-[a-z0-9-]+$/', $iconValue)) {
+                                    $iconValue = 'fa-solid fa-star';
+                                }
+                            @endphp
+
+                            <div class="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-50 text-sky-700 shadow-sm ring-1 ring-sky-100/80 dark:from-sky-500/15 dark:to-indigo-500/10 dark:text-sky-200 dark:ring-white/10" aria-hidden="true">
+                                <i class="{{ $iconValue }} text-2xl"></i>
+                            </div>
+
                             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ $track['title'] }}</h3>
                             @if(!empty($track['html']))
-                                <div class="mt-2 text-sm text-slate-600 dark:text-slate-200 [&_p]:m-0 [&_p]:text-slate-600 dark:[&_p]:text-slate-200 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2 [&_li]:text-slate-600 dark:[&_li]:text-slate-200">
+                                <div class="mt-2 text-sm text-slate-600 dark:text-slate-200 [&_p]:m-0 [&_p]:text-slate-600 dark:[&_p]:text-slate-200 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:list-inside [&_ul]:pl-0 [&_ul]:space-y-2 [&_li]:text-slate-600 dark:[&_li]:text-slate-200">
                                     {!! $track['html'] !!}
                                 </div>
                             @elseif(($track['desc'] ?? '') !== '')
@@ -430,16 +474,35 @@
                             @else
                                 @foreach ($mentorItems as $mentor)
                                     <div class="mentor-card shrink-0 basis-full overflow-hidden rounded-3xl bg-white shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10 sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(25%-1.125rem)]">
-                                        <div class="aspect-square w-full bg-slate-100 grid place-items-center dark:bg-slate-950/30">
-                                            <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-500 dark:text-slate-200/70 sm:h-28 sm:w-28" aria-hidden="true">
-                                                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
-                                                <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
-                                            </svg>
+                                        @php
+                                            $mentorImageUrl = optional($mentor->user)->profile_image_url;
+                                        @endphp
+                                        <div class="aspect-square w-full overflow-hidden bg-slate-100 grid place-items-center dark:bg-slate-950/30">
+                                            @if (is_string($mentorImageUrl) && $mentorImageUrl !== '')
+                                                <img
+                                                    src="{{ $mentorImageUrl }}"
+                                                    alt="{{ $mentor->name }}"
+                                                    class="h-full w-full object-cover"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            @else
+                                                <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-500 dark:text-slate-200/70 sm:h-28 sm:w-28" aria-hidden="true">
+                                                    <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
+                                                    <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
+                                                </svg>
+                                            @endif
                                         </div>
                                         <div class="p-6">
                                             <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ $mentor->name }}</div>
                                             <div class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
-                                            <p class="mt-3 text-sm text-slate-600 dark:text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
+
+										<a
+											href="{{ route('mentors.show', $mentor) }}"
+											class="mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15"
+										>
+											See details
+										</a>
                                         </div>
                                     </div>
                                 @endforeach

@@ -5,6 +5,7 @@ namespace Modules\AccessControl\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Modules\Course\Models\CourseOrder;
@@ -171,11 +172,26 @@ class UserController extends Controller implements HasMiddleware
      *
      * @param string $id User id.
      *
-     * @return mixed
+     * @return RedirectResponse
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::query()->findOrFail($id);
+
+        if (auth()->id() === $user->id) {
+            return redirect()
+                ->back()
+                ->with('error', 'You cannot delete your own account.');
+        }
+
+        // Detach roles to avoid orphaned records in model_has_roles.
+        $user->syncRoles([]);
+
+        $user->delete();
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User deleted successfully.');
     }
 
     /**

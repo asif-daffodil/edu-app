@@ -36,6 +36,7 @@ class FrontendSection extends Model
         'content_en',
         'content_bn',
         'image_path',
+        'icon',
         'button_text_en',
         'button_text_bn',
         'button_link',

@@ -59,7 +59,8 @@
 					</div>
 
 					<div id="users-tab-student" class="users-tab-panel">
-						<table id="users-table-student" class="min-w-full divide-y divide-gray-200">
+						<div class="w-full overflow-x-auto">
+							<table id="users-table-student" class="w-full min-w-max divide-y divide-gray-200">
 							<thead class="bg-gray-50">
 								<tr>
 									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
@@ -71,11 +72,13 @@
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200"></tbody>
-						</table>
+							</table>
+						</div>
 					</div>
 
 					<div id="users-tab-mentor" class="users-tab-panel hidden">
-						<table id="users-table-mentor" class="min-w-full divide-y divide-gray-200">
+						<div class="w-full overflow-x-auto">
+							<table id="users-table-mentor" class="w-full min-w-max divide-y divide-gray-200">
 							<thead class="bg-gray-50">
 								<tr>
 									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
@@ -87,11 +90,13 @@
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200"></tbody>
-						</table>
+							</table>
+						</div>
 					</div>
 
 					<div id="users-tab-admin" class="users-tab-panel hidden">
-						<table id="users-table-admin" class="min-w-full divide-y divide-gray-200">
+						<div class="w-full overflow-x-auto">
+							<table id="users-table-admin" class="w-full min-w-max divide-y divide-gray-200">
 							<thead class="bg-gray-50">
 								<tr>
 									<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SL</th>
@@ -103,7 +108,8 @@
 								</tr>
 							</thead>
 							<tbody class="bg-white divide-y divide-gray-200"></tbody>
-						</table>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -129,6 +135,8 @@
 						processing: true,
 						serverSide: true,
 						autoWidth: false,
+							scrollX: true,
+							scrollCollapse: true,
 						ajax: {
 							url: ajaxUrl,
 							data: function (d) {

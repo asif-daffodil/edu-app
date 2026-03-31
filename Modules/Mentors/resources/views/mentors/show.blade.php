@@ -33,7 +33,15 @@
 
             <div class="mt-5">
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Bio</div>
-                <div class="mt-1 whitespace-pre-line text-sm text-slate-800">{{ $mentor->bio ?: '-' }}</div>
+                @php
+                    $mentorBioText = trim((string) ($mentor->bio ?? ''));
+                    if ($mentorBioText !== '') {
+                        $mentorBioText = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $mentorBioText) ?? $mentorBioText;
+                        $mentorBioText = preg_replace('/<\s*\/\s*p\s*>/i', "\n\n", $mentorBioText) ?? $mentorBioText;
+                        $mentorBioText = trim(strip_tags($mentorBioText));
+                    }
+                @endphp
+                <div class="mt-1 whitespace-pre-line text-sm text-slate-800">{!! nl2br(e($mentorBioText !== '' ? $mentorBioText : '-')) !!}</div>
             </div>
         </div>
 

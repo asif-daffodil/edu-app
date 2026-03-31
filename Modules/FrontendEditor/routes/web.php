@@ -10,12 +10,17 @@ Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
     ->group(function (): void {
         Route::get('/', [FrontendEditorController::class, 'index'])->name('index');
 
+        Route::get('/fontawesome/icons', [FrontendEditorController::class, 'fontAwesomeIcons'])
+            ->name('fontawesome.icons');
+
         Route::patch('/header-settings', [FrontendSettingsController::class, 'updateHeader'])
             ->name('header-settings.update');
 
         Route::post('/{page}/sections', [FrontendEditorController::class, 'store'])->name('sections.store');
 
         Route::patch('/sections/{section}', [FrontendEditorController::class, 'update'])->name('sections.update');
+
+        Route::delete('/sections/{section}', [FrontendEditorController::class, 'destroy'])->name('sections.destroy');
 
         Route::patch('/{page}/sections/bulk', [FrontendEditorController::class, 'bulkUpdate'])
             ->name('sections.bulk-update');

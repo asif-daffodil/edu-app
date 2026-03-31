@@ -110,7 +110,20 @@
 							@endif
 						</div>
 
-						<div class="flex items-center justify-end gap-3 pt-2">
+						<div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+							<div>
+								@if(auth()->id() !== $user->id)
+									<button
+										type="submit"
+										form="delete-user-form"
+										class="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+									>
+										Delete
+									</button>
+								@endif
+							</div>
+
+							<div class="flex items-center justify-end gap-3">
 							<a
 								href="/users"
 								class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -125,8 +138,22 @@
 							>
 								Update
 							</button>
+							</div>
 						</div>
 					</form>
+
+					@if(auth()->id() !== $user->id)
+						<form
+							id="delete-user-form"
+							action="{{ route('users.destroy', $user) }}"
+							method="POST"
+							onsubmit="return confirm('Delete this user? This action cannot be undone.');"
+							class="hidden"
+						>
+							@csrf
+							@method('DELETE')
+						</form>
+					@endif
 
 					@if($roles->isNotEmpty())
 						@push('scripts')

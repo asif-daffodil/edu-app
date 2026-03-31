@@ -45,6 +45,13 @@ class StoreFrontendSectionRequest extends FormRequest
 
             'image' => ['nullable', 'image', 'max:2048'],
 
+            'icon' => [
+                'nullable',
+                'string',
+                'max:80',
+                'regex:/^(code|search|dotnet|design|sparkles|rocket|chart|shield|fa-(solid|regular|brands)\s+fa-[a-z0-9-]+)$/',
+            ],
+
             'button_text_bn' => ['nullable', 'string', 'max:255'],
             'button_text_en' => ['nullable', 'string', 'max:255'],
             'button_link' => ['nullable', 'string', 'max:255'],

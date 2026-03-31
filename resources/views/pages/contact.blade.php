@@ -11,13 +11,40 @@
                 $emailSection = $cmsSectionsByKey->get('contact_email');
                 $phoneSection = $cmsSectionsByKey->get('contact_phone');
 
+                $normalizeInlineText = function ($value): string {
+                    $text = trim((string) $value);
+                    if ($text === '') {
+                        return '';
+                    }
+
+                    $text = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $text) ?? $text;
+                    $text = strip_tags($text);
+                    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+                    return trim($text);
+                };
+
+                $rawEmailText = $normalizeInlineText(optional($emailSection)->content);
+                $rawPhoneText = $normalizeInlineText(optional($phoneSection)->content);
+
                 $emailLabel = optional($emailSection)->title ?: __('frontend.contact_email_label');
-                $emailValue = trim((string) (optional($emailSection)->content ?: 'info@example.com'));
+                $emailValue = $rawEmailText;
+                if ($emailValue !== '' && preg_match('/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i', $emailValue, $m)) {
+                    $emailValue = $m[0];
+                }
+                $emailValue = $emailValue !== '' ? $emailValue : 'info@example.com';
                 $emailHref = optional($emailSection)->button_link ?: ('mailto:' . $emailValue);
 
                 $phoneLabel = optional($phoneSection)->title ?: __('frontend.contact_phone_label');
-                $phoneValue = trim((string) (optional($phoneSection)->content ?: '+880 10 0000 0000'));
-                $phoneHref = optional($phoneSection)->button_link ?: ('tel:' . preg_replace('/\s+/', '', $phoneValue));
+                $phoneValue = $rawPhoneText;
+                if ($phoneValue !== '' && preg_match('/\+?[0-9][0-9\s\-().]{6,}/', $phoneValue, $m)) {
+                    $phoneValue = trim($m[0]);
+                }
+                $phoneValue = $phoneValue !== '' ? $phoneValue : '+880 10 0000 0000';
+
+                $phoneTel = preg_replace('/[^\d+]/', '', $phoneValue);
+                $phoneHref = optional($phoneSection)->button_link ?: ('tel:' . $phoneTel);
             @endphp
 
             <div class="reveal">

@@ -18,15 +18,34 @@
             <div class="reveal mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                 @forelse ($mentors as $mentor)
                     <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                        @php
+                            $mentorImageUrl = optional($mentor->user)->profile_image_url;
+                            $mentorBioText = trim((string) ($mentor->bio ?? ''));
+                            if ($mentorBioText !== '') {
+                                $mentorBioText = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $mentorBioText) ?? $mentorBioText;
+                                $mentorBioText = preg_replace('/<\s*\/\s*p\s*>/i', "\n\n", $mentorBioText) ?? $mentorBioText;
+                                $mentorBioText = trim(strip_tags($mentorBioText));
+                            }
+                        @endphp
                         <div class="aspect-square w-full overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200/70 grid place-items-center dark:bg-slate-950/30 dark:ring-white/10">
-                            <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-500 dark:text-slate-200/70" aria-hidden="true">
-                                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
-                                <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
-                            </svg>
+                            @if (is_string($mentorImageUrl) && $mentorImageUrl !== '')
+                                <img
+                                    src="{{ $mentorImageUrl }}"
+                                    alt="{{ $mentor->name }}"
+                                    class="h-full w-full object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            @else
+                                <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-500 dark:text-slate-200/70" aria-hidden="true">
+                                    <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />
+                                    <path d="M3.2 21c2.3-4.3 6.2-6.7 8.8-6.7S18.5 16.7 20.8 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
+                                </svg>
+                            @endif
                         </div>
                         <div class="mt-4 text-sm font-semibold text-slate-900 dark:text-white">{{ $mentor->name }}</div>
                         <div class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
-                        <p class="mt-3 text-sm text-slate-600 dark:text-slate-200">{{ $mentor->bio ?: 'Project review, guidance, and best practices to level up fast.' }}</p>
+                        <p class="mt-3 text-sm text-slate-600 dark:text-slate-200">{!! nl2br(e($mentorBioText !== '' ? $mentorBioText : 'Project review, guidance, and best practices to level up fast.')) !!}</p>
                     </div>
                 @empty
                     <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 text-slate-600 dark:bg-white/5 dark:ring-white/10 dark:text-slate-200 dark:shadow-none">No mentors available yet.</div>
