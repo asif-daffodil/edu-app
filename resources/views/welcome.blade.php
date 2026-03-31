@@ -513,6 +513,43 @@
             </div>
         </section>
 
+        <!-- News & Updates -->
+        <section id="news" class="border-t border-slate-200/70 dark:border-white/10">
+            <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+                <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-slate-900 dark:text-white sm:text-3xl">News &amp; Updates</h2>
+                        <p class="mt-2 max-w-2xl text-slate-600 dark:text-slate-200">Latest announcements, updates, and events.</p>
+                    </div>
+                    <a href="{{ route('news') }}" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">See all</a>
+                </div>
+
+                @php
+                    /** @var \Illuminate\Support\Collection<int, \Modules\NewsUpdates\Models\NewsUpdate> $latestNewsItems */
+                    $latestNewsItems = $latestNews ?? collect();
+                @endphp
+
+                <div class="mt-10 grid gap-6 md:grid-cols-3">
+                    @forelse($latestNewsItems as $n)
+                        @php
+                            $dt = $n->published_at ?: $n->created_at;
+                            $excerpt = is_string($n->excerpt) ? trim($n->excerpt) : '';
+                        @endphp
+                        <article class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                            <div class="text-xs text-slate-500 dark:text-slate-300">{{ $dt ? $dt->format('d M Y') : '' }}</div>
+                            <h3 class="mt-2 text-base font-semibold text-slate-900 dark:text-white">{{ $n->title }}</h3>
+                            <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ $excerpt !== '' ? $excerpt : 'Read the latest update.' }}</p>
+                            <a href="{{ route('news.show', $n) }}" class="mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">Read</a>
+                        </article>
+                    @empty
+                        <div class="reveal rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 text-slate-600 dark:bg-white/5 dark:ring-white/10 dark:text-slate-200 md:col-span-3">
+                            No news available yet.
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </section>
+
         <!-- Reviews -->
         <section id="reviews" class="border-t border-slate-200/70 dark:border-white/10">
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">

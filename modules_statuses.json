@@ -6,5 +6,6 @@
     "Batch": true,
     "FrontendEditor": true,
     "Reviews": true,
-    "Invoice": true
+    "Invoice": true,
+    "NewsUpdates": true
 }

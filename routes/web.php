@@ -67,9 +67,9 @@ Route::middleware('frontend.locale')->group(
             ->defaults('slug', 'reviews')
             ->name('reviews');
 
-        Route::get('/news', [SiteController::class, 'page'])
-            ->defaults('slug', 'news')
-            ->name('news');
+        Route::get('/news', [SiteController::class, 'news'])->name('news');
+        Route::get('/news/data', [SiteController::class, 'newsData'])->name('news.data');
+        Route::get('/news/{newsUpdate}', [SiteController::class, 'newsShow'])->name('news.show');
 
         Route::get('/contact', [SiteController::class, 'page'])
             ->defaults('slug', 'contact')

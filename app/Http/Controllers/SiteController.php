@@ -10,6 +10,8 @@ use Illuminate\View\View;
 use Modules\Course\Models\Course;
 use Modules\Mentors\Models\Mentor;
 use Modules\Reviews\Models\Review;
+use Modules\NewsUpdates\Models\NewsUpdate;
+use Yajra\DataTables\Facades\DataTables;
 
 /**
  * Public site controller.
@@ -79,6 +81,16 @@ class SiteController extends Controller
     {
         $cms = $this->loadCms('home');
 
+        $latestNews = new Collection();
+        if (Schema::hasTable('news_updates')) {
+            $latestNews = NewsUpdate::query()
+                ->published()
+                ->orderByDesc('published_at')
+                ->orderByDesc('id')
+                ->limit(3)
+                ->get(['id', 'title', 'slug', 'excerpt', 'published_at', 'created_at']);
+        }
+
         $mentors = Mentor::query()
             ->with(['user:id,name,profile_image'])
             ->where('is_active', true)
@@ -86,7 +98,52 @@ class SiteController extends Controller
             ->limit(12)
             ->get(['id', 'user_id', 'name', 'topic', 'bio']);
 
-        return view('welcome', array_merge($cms, compact('mentors')));
+        return view('welcome', array_merge($cms, compact('mentors', 'latestNews')));
+    }
+
+    /**
+     * Public News listing page (uses Yajra DataTables).
+     */
+    public function news(): View
+    {
+        $cms = $this->loadCms('news');
+
+        return view('pages.news', $cms);
+    }
+
+    /**
+     * DataTables JSON for public news page.
+     */
+    public function newsData()
+    {
+        abort_unless(Schema::hasTable('news_updates'), 404);
+
+        $query = NewsUpdate::query()
+            ->published()
+            ->select(['id', 'title', 'slug', 'excerpt', 'published_at', 'created_at'])
+            ->orderByDesc('published_at')
+            ->orderByDesc('id');
+
+        return DataTables::eloquent($query)
+            ->addColumn('date', function (NewsUpdate $item) {
+                $dt = $item->published_at ?: $item->created_at;
+                return $dt ? $dt->format('d M Y') : '';
+            })
+            ->addColumn('actions', function (NewsUpdate $item) {
+                return route('news.show', $item);
+            })
+            ->rawColumns(['actions'])
+            ->toJson();
+    }
+
+    /**
+     * Public News details page.
+     */
+    public function newsShow(NewsUpdate $newsUpdate): View
+    {
+        abort_unless($newsUpdate->status === 'published', 404);
+
+        return view('pages.news-show', compact('newsUpdate'));
     }
 
     /**
@@ -172,6 +229,11 @@ class SiteController extends Controller
             }
 
             return view('pages.' . $slug, array_merge($cms, compact('reviews')));
+        }
+
+        if ($slug === 'news') {
+            // Keep backward-compatibility: route now points to SiteController@news.
+            return view('pages.news', $cms);
         }
 
         return view('pages.' . $slug, $cms);

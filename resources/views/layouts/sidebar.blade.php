@@ -173,6 +173,16 @@
             </svg>
             <span>Frontend Editor</span>
         </a>
+
+        <a href="{{ route('dashboard.admin.news.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.admin.news.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M4 3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6.414a1 1 0 0 0-.293-.707l-2.414-2.414A1 1 0 0 0 13.586 3H4z" />
+                <path d="M6 8h8v2H6V8zm0 4h8v2H6v-2z" />
+            </svg>
+            <span>News &amp; Updates</span>
+        </a>
     @endif
 
     @if($user && $user->can('readMentor'))
