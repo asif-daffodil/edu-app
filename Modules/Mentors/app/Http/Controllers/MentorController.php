@@ -9,6 +9,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Modules\Mentors\Models\Mentor;
 use Yajra\DataTables\Facades\DataTables;
@@ -221,7 +222,7 @@ class MentorController extends Controller implements HasMiddleware
     {
         abort_unless(Gate::allows('update', $mentor), 403);
 
-        $mentor->load(['user:id,name,email']);
+        $mentor->load(['user:id,name,email,profile_image']);
 
         return view('mentors::mentors.edit', compact('mentor'));
     }
@@ -244,6 +245,8 @@ class MentorController extends Controller implements HasMiddleware
                 'name' => 'required|string|max:255',
                 'topic' => 'nullable|string|max:255',
                 'bio' => 'nullable|string|max:2000',
+                'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+                'remove_profile_image' => 'nullable|boolean',
                 'is_active' => 'sometimes|boolean',
             ]
         );
@@ -251,16 +254,11 @@ class MentorController extends Controller implements HasMiddleware
         $validated['is_active'] = (bool) ($request->boolean('is_active'));
 
         DB::transaction(
-            function () use ($mentor, $validated) {
+            function () use ($mentor, $validated, $request) {
                 $mentor->loadMissing(['user']);
 
                 if ($mentor->user) {
-                    $mentor->user->update(
-                        [
-                            'name' => $validated['name'],
-                            'email' => $validated['email'],
-                        ]
-                    );
+                    $user = $mentor->user;
                 } else {
                     $user = User::query()->create(
                         [
@@ -273,6 +271,26 @@ class MentorController extends Controller implements HasMiddleware
                     $user->assignRole('mentor');
                     $mentor->user()->associate($user);
                 }
+
+                $user->fill(
+                    [
+                        'name' => $validated['name'],
+                        'email' => $validated['email'],
+                    ]
+                );
+
+                if ($request->boolean('remove_profile_image')) {
+                    $this->deleteProfileImage($user);
+                    $user->profile_image = null;
+                }
+
+                if ($request->hasFile('profile_image')) {
+                    $this->deleteProfileImage($user);
+                    $user->profile_image = $request->file('profile_image')
+                        ->store('profile-images', 'public');
+                }
+
+                $user->save();
 
                 $mentor->update(
                     [
@@ -288,6 +306,18 @@ class MentorController extends Controller implements HasMiddleware
         return redirect()
             ->route('dashboard.mentors.index')
             ->with('success', 'Mentor updated successfully.');
+    }
+
+    /**
+     * Delete the currently stored mentor profile image.
+     */
+    protected function deleteProfileImage(User $user): void
+    {
+        $path = $user->profile_image;
+
+        if (is_string($path) && $path !== '') {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     /**

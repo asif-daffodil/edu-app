@@ -14,6 +14,16 @@
 
     @php
         $isHeaderTab = ($tab ?? 'pages') === 'header';
+        $isFooterTab = ($tab ?? 'pages') === 'footer';
+        $footerDefaultsEn = \App\Models\FrontendSetting::defaultValues('en');
+        $footerDefaultsBn = \App\Models\FrontendSetting::defaultValues('bn');
+        $footerFieldValue = function (string $key, string $locale) use ($settings, $footerDefaultsEn, $footerDefaultsBn) {
+            $column = $locale === 'bn' ? 'value_bn' : 'value_en';
+            $fallbacks = $locale === 'bn' ? $footerDefaultsBn : $footerDefaultsEn;
+            $setting = $settings->get($key);
+
+            return $setting?->{$column} ?? ($fallbacks[$key] ?? '');
+        };
     @endphp
 
     <div class="mb-6 flex flex-wrap items-center gap-2">
@@ -39,6 +49,10 @@
         <a href="/admin/frontend-editor?tab=header"
            class="{{ $base }} {{ $isHeaderTab ? $active : $inactive }}">
             Header Settings
+        </a>
+        <a href="/admin/frontend-editor?tab=footer"
+           class="{{ $base }} {{ $isFooterTab ? $active : $inactive }}">
+            Footer Settings
         </a>
     </div>
 
@@ -189,6 +203,165 @@
                                 class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
                             >
                                 Save Settings
+                            </button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        @elseif($isFooterTab)
+            <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-slate-900">Footer Settings</h3>
+                    <p class="mt-1 text-sm text-slate-500">Update footer copy, contact labels, social links, and copyright text.</p>
+                </div>
+
+                @if (!\Illuminate\Support\Facades\Schema::hasTable('frontend_settings'))
+                    <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                        Frontend settings table not found. Run migrations first.
+                    </div>
+                @else
+                    <form method="POST"
+                          action="{{ route('admin.frontend-editor.footer-settings.update') }}"
+                          class="grid grid-cols-1 gap-6">
+                        @csrf
+                        @method('PATCH')
+
+                        <div class="rounded-xl border border-slate-200 p-5">
+                            <h4 class="text-base font-semibold text-slate-900">Brand Copy</h4>
+                            <div class="mt-4 grid gap-4 lg:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Brand Tagline (EN)</label>
+                                    <input name="footer_brand_tagline_en" value="{{ old('footer_brand_tagline_en', $footerFieldValue('footer_brand_tagline', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_brand_tagline_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Brand Tagline (BN)</label>
+                                    <input name="footer_brand_tagline_bn" value="{{ old('footer_brand_tagline_bn', $footerFieldValue('footer_brand_tagline', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_brand_tagline_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Brand Description (EN)</label>
+                                    <textarea name="footer_brand_description_en" rows="4" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('footer_brand_description_en', $footerFieldValue('footer_brand_description', 'en')) }}</textarea>
+                                    @error('footer_brand_description_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Brand Description (BN)</label>
+                                    <textarea name="footer_brand_description_bn" rows="4" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('footer_brand_description_bn', $footerFieldValue('footer_brand_description', 'bn')) }}</textarea>
+                                    @error('footer_brand_description_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-slate-200 p-5">
+                            <h4 class="text-base font-semibold text-slate-900">Updates Card</h4>
+                            <div class="mt-4 grid gap-4 lg:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Updates Title (EN)</label>
+                                    <input name="footer_updates_title_en" value="{{ old('footer_updates_title_en', $footerFieldValue('footer_updates_title', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_updates_title_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Updates Title (BN)</label>
+                                    <input name="footer_updates_title_bn" value="{{ old('footer_updates_title_bn', $footerFieldValue('footer_updates_title', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_updates_title_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Updates Subtitle (EN)</label>
+                                    <textarea name="footer_updates_subtitle_en" rows="3" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('footer_updates_subtitle_en', $footerFieldValue('footer_updates_subtitle', 'en')) }}</textarea>
+                                    @error('footer_updates_subtitle_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Updates Subtitle (BN)</label>
+                                    <textarea name="footer_updates_subtitle_bn" rows="3" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>{{ old('footer_updates_subtitle_bn', $footerFieldValue('footer_updates_subtitle', 'bn')) }}</textarea>
+                                    @error('footer_updates_subtitle_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-slate-200 p-5">
+                            <h4 class="text-base font-semibold text-slate-900">Contact Area</h4>
+                            <div class="mt-4 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Contact Title (EN)</label>
+                                    <input name="footer_contact_title_en" value="{{ old('footer_contact_title_en', $footerFieldValue('footer_contact_title', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_contact_title_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Contact Title (BN)</label>
+                                    <input name="footer_contact_title_bn" value="{{ old('footer_contact_title_bn', $footerFieldValue('footer_contact_title', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_contact_title_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Phone Label (EN)</label>
+                                    <input name="footer_phone_label_en" value="{{ old('footer_phone_label_en', $footerFieldValue('footer_phone_label', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_phone_label_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Phone Label (BN)</label>
+                                    <input name="footer_phone_label_bn" value="{{ old('footer_phone_label_bn', $footerFieldValue('footer_phone_label', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_phone_label_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Email Label (EN)</label>
+                                    <input name="footer_email_label_en" value="{{ old('footer_email_label_en', $footerFieldValue('footer_email_label', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_email_label_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Email Label (BN)</label>
+                                    <input name="footer_email_label_bn" value="{{ old('footer_email_label_bn', $footerFieldValue('footer_email_label', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_email_label_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Location Label (EN)</label>
+                                    <input name="footer_location_label_en" value="{{ old('footer_location_label_en', $footerFieldValue('footer_location_label', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_location_label_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Location Label (BN)</label>
+                                    <input name="footer_location_label_bn" value="{{ old('footer_location_label_bn', $footerFieldValue('footer_location_label', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_location_label_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                            </div>
+                            <p class="mt-3 text-xs text-slate-500">Phone, email, and address values still come from Header Settings so they stay in sync across the site.</p>
+                        </div>
+
+                        <div class="rounded-xl border border-slate-200 p-5">
+                            <h4 class="text-base font-semibold text-slate-900">Social Links & Copyright</h4>
+                            <div class="mt-4 grid gap-4 lg:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Facebook URL</label>
+                                    <input type="url" name="footer_facebook_url" value="{{ old('footer_facebook_url', $footerFieldValue('footer_facebook_url', 'en')) }}" placeholder="https://facebook.com/your-page" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                    @error('footer_facebook_url')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">LinkedIn URL</label>
+                                    <input type="url" name="footer_linkedin_url" value="{{ old('footer_linkedin_url', $footerFieldValue('footer_linkedin_url', 'en')) }}" placeholder="https://linkedin.com/company/your-page" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                    @error('footer_linkedin_url')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">YouTube URL</label>
+                                    <input type="url" name="footer_youtube_url" value="{{ old('footer_youtube_url', $footerFieldValue('footer_youtube_url', 'en')) }}" placeholder="https://youtube.com/@your-channel" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                    @error('footer_youtube_url')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Copyright (EN)</label>
+                                    <input name="footer_copyright_en" value="{{ old('footer_copyright_en', $footerFieldValue('footer_copyright', 'en')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_copyright_en')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700">Copyright (BN)</label>
+                                    <input name="footer_copyright_bn" value="{{ old('footer_copyright_bn', $footerFieldValue('footer_copyright', 'bn')) }}" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                                    @error('footer_copyright_bn')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end">
+                            <button
+                                type="submit"
+                                class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                            >
+                                Save Footer Settings
                             </button>
                         </div>
                     </form>

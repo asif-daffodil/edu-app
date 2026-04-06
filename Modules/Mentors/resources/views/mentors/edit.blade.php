@@ -8,9 +8,13 @@
 
     <div class="max-w-3xl">
         <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <form method="POST" action="{{ route('dashboard.mentors.update', $mentor) }}" class="space-y-5">
+            <form method="POST" action="{{ route('dashboard.mentors.update', $mentor) }}" enctype="multipart/form-data" class="space-y-5">
                 @csrf
                 @method('PUT')
+
+                @php
+                    $currentImageUrl = optional($mentor->user)->profile_image_url;
+                @endphp
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700">Email</label>
@@ -40,6 +44,36 @@
                     <label class="block text-sm font-medium text-slate-700">Bio</label>
                     <textarea name="bio" rows="5" class="wysiwyg mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Short description...">{{ old('bio', $mentor->bio) }}</textarea>
                     @error('bio')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">Mentor Image</label>
+
+                    @if (is_string($currentImageUrl) && $currentImageUrl !== '')
+                        <div class="mt-3 flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                            <img
+                                src="{{ $currentImageUrl }}"
+                                alt="{{ $mentor->name }}"
+                                class="h-20 w-20 rounded-2xl object-cover ring-1 ring-slate-200"
+                            />
+                            <div>
+                                <div class="text-sm font-medium text-slate-800">Current image</div>
+                                <label class="mt-2 inline-flex items-center gap-2 text-sm text-slate-600">
+                                    <input type="checkbox" name="remove_profile_image" value="1" class="rounded border-slate-300 text-rose-600 focus:ring-rose-500" @checked(old('remove_profile_image')) />
+                                    Remove current image
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+
+                    <input type="file" name="profile_image" accept="image/png,image/jpeg,image/webp" class="mt-3 block w-full text-sm text-slate-700" />
+                    <p class="mt-2 text-xs text-slate-500">Accepted: JPG, PNG, WEBP. Max size: 2MB.</p>
+                    @error('profile_image')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                    @error('remove_profile_image')
                         <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>

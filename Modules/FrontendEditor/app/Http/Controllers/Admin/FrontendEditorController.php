@@ -56,7 +56,7 @@ class FrontendEditorController extends Controller implements HasMiddleware
         $allowedSlugs = ['home', 'about', 'courses', 'contact'];
 
         $tab = (string) $request->query('tab', 'pages');
-        if (!in_array($tab, ['pages', 'header'], true)) {
+        if (!in_array($tab, ['pages', 'header', 'footer'], true)) {
             $tab = 'pages';
         }
 
@@ -86,7 +86,7 @@ class FrontendEditorController extends Controller implements HasMiddleware
         }
 
         $settings = collect();
-        if ($tab === 'header' && Schema::hasTable('frontend_settings')) {
+        if (in_array($tab, ['header', 'footer'], true) && Schema::hasTable('frontend_settings')) {
             $settings = FrontendSetting::query()->get()->keyBy('key');
         }
 

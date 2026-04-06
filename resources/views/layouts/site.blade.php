@@ -347,6 +347,23 @@
     @yield('content')
 
     <footer class="relative border-t border-slate-200/70 bg-white/70 dark:border-white/10 dark:bg-slate-950/50">
+        @php
+            $footerBrandTagline = $frontendSettings['footer_brand_tagline'] ?? __('frontend.footer_brand_tagline');
+            $footerBrandDescription = $frontendSettings['footer_brand_description'] ?? __('frontend.footer_brand_description');
+            $footerUpdatesTitle = $frontendSettings['footer_updates_title'] ?? 'Updates';
+            $footerUpdatesSubtitle = $frontendSettings['footer_updates_subtitle'] ?? __('frontend.footer_updates_subtitle');
+            $footerContactTitle = $frontendSettings['footer_contact_title'] ?? 'Contact Info';
+            $footerPhoneLabel = $frontendSettings['footer_phone_label'] ?? 'Phone';
+            $footerEmailLabel = $frontendSettings['footer_email_label'] ?? 'Email';
+            $footerLocationLabel = $frontendSettings['footer_location_label'] ?? 'Location';
+            $footerCopyright = $frontendSettings['footer_copyright'] ?? 'All rights reserved.';
+            $footerFacebookUrl = $frontendSettings['footer_facebook_url'] ?? '#';
+            $footerLinkedinUrl = $frontendSettings['footer_linkedin_url'] ?? '#';
+            $footerYoutubeUrl = $frontendSettings['footer_youtube_url'] ?? '#';
+            $sitePhone = $frontendSettings['site_phone'] ?? '+880 10 0000 0000';
+            $siteEmail = $frontendSettings['site_email'] ?? 'info@example.com';
+            $siteAddress = $frontendSettings['site_address'] ?? 'Dhaka, Bangladesh';
+        @endphp
         <div class="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-indigo-400/0 via-sky-300/70 to-emerald-300/0"></div>
 
         <div class="mx-auto max-w-7xl px-4 py-12 text-sm text-slate-600 sm:px-6 lg:px-8 dark:text-slate-300">
@@ -391,27 +408,27 @@
                         </span>
                         <div>
                             <div class="font-semibold text-slate-900 dark:text-white">{{ config('app.name', 'iTechBD Ltd') }}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-300">{{ __('frontend.footer_brand_tagline') }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-300">{{ $footerBrandTagline }}</div>
                         </div>
                     </div>
-                    <p class="mt-4 max-w-md text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.footer_brand_description') }}</p>
+                    <p class="mt-4 max-w-md text-sm text-slate-600 dark:text-slate-200">{{ $footerBrandDescription }}</p>
 
                         <div class="mt-6 rounded-3xl bg-slate-50 p-5 ring-1 ring-slate-200/70 dark:bg-slate-950/30 dark:ring-white/10">
-                            <div class="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ __('frontend.footer_updates_title') }}</div>
-                            <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.footer_updates_subtitle') }}</div>
+                            <div class="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ $footerUpdatesTitle }}</div>
+                            <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ $footerUpdatesSubtitle }}</div>
 
                             <form class="mt-4" onsubmit="return false;">
                                 <label class="sr-only" for="footerEmail">{{ __('frontend.footer_email_label') }}</label>
-                                <div class="flex items-stretch overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200/70 transition focus-within:ring-2 focus-within:ring-sky-400/40 dark:bg-slate-950/40 dark:ring-white/10 dark:focus-within:ring-sky-300/40">
-                                    <div class="flex items-center pl-4 text-slate-400">
+                                <div class="flex items-stretch overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200/70 divide-x divide-slate-200/70 transition focus-within:ring-2 focus-within:ring-sky-400/40 dark:bg-slate-950/40 dark:divide-white/10 dark:ring-white/10 dark:focus-within:ring-sky-300/40">
+                                    <div class="flex shrink-0 items-center px-4 text-slate-400">
                                         <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
                                             <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.7" opacity="0.9" />
                                             <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" opacity="0.9" />
                                         </svg>
                                     </div>
                                     <input id="footerEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"
-                                         class="w-full flex-1 bg-transparent px-3 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none dark:text-white" />
-                                    <button type="button"
+                                         class="w-full flex-1 bg-transparent px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none dark:text-white" />
+                                        <button type="button"
                                             class="inline-flex items-center gap-2 bg-gradient-to-r from-sky-300 to-emerald-300 px-5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
                                         {{ __('frontend.footer_notify') }}
                                         <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4" aria-hidden="true">
@@ -445,13 +462,13 @@
                     <div class="flex h-full flex-col rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
                         <div class="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ __('frontend.footer_social_media') }}</div>
                         <div class="mt-4 grid grid-cols-3 gap-2">
-                            <a href="#" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Facebook">
+                            <a href="{{ $footerFacebookUrl ?: '#' }}" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                                 <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5 text-indigo-100" aria-hidden="true">
                                     <path d="M14 8.5h2V6h-2c-1.9 0-3.5 1.6-3.5 3.5V12H8v2.5h2.5V20H13v-5.5h2.5L16 12h-3V9.5c0-.6.4-1 1-1Z" fill="currentColor" opacity="0.95"/>
                                 </svg>
                                 <span class="text-xs text-slate-600 group-hover:text-slate-900 dark:text-slate-200 dark:group-hover:text-white">Facebook</span>
                             </a>
-                            <a href="#" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="LinkedIn">
+                            <a href="{{ $footerLinkedinUrl ?: '#' }}" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                                 <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5 text-sky-100" aria-hidden="true">
                                     <path d="M6.5 7.5V17.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                                     <path d="M6.5 6.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z" fill="currentColor"/>
@@ -460,7 +477,7 @@
                                 </svg>
                                 <span class="text-xs text-slate-600 group-hover:text-slate-900 dark:text-slate-200 dark:group-hover:text-white">LinkedIn</span>
                             </a>
-                            <a href="#" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="YouTube">
+                            <a href="{{ $footerYoutubeUrl ?: '#' }}" class="group flex flex-col items-center justify-center gap-2 rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200/70 transition hover:bg-slate-100 hover:text-slate-900 dark:bg-white/5 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-white" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
                                 <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5 text-emerald-100" aria-hidden="true">
                                     <path d="M12 20.2c5.1 0 8.2-3.1 8.2-8.2S17.1 3.8 12 3.8 3.8 6.9 3.8 12 6.9 20.2 12 20.2Z" stroke="currentColor" stroke-width="1.3" opacity="0.85"/>
                                     <path d="M10.4 9.8v4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -471,21 +488,21 @@
                             </a>
                         </div>
 
-                        <div class="mt-7 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">Contact Info</div>
+                        <div class="mt-7 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ $footerContactTitle }}</div>
                         <div class="mt-4 grid gap-2">
-                        <a href="tel:+8801000000000" class="group inline-flex items-center gap-3 rounded-2xl bg-white/0 px-3 py-2 ring-1 ring-transparent transition hover:bg-slate-100 hover:text-slate-900 hover:ring-slate-200/70 dark:hover:bg-white/5 dark:hover:text-white dark:hover:ring-white/10">
+                        <a href="tel:{{ preg_replace('/\s+/', '', $sitePhone) }}" class="group inline-flex items-center gap-3 rounded-2xl bg-white/0 px-3 py-2 ring-1 ring-transparent transition hover:bg-slate-100 hover:text-slate-900 hover:ring-slate-200/70 dark:hover:bg-white/5 dark:hover:text-white dark:hover:ring-white/10">
                             <span class="grid h-9 w-9 place-items-center rounded-xl bg-slate-50 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
                                 <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 text-slate-600 dark:text-slate-200" aria-hidden="true">
                                     <path d="M7 3h2l2 5-2 1c1 3 3 5 6 6l1-2 5 2v2c0 1-1 2-2 2-9 0-16-7-16-16 0-1 1-2 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
                                 </svg>
                             </span>
                             <span>
-                                <span class="block text-xs text-slate-500 dark:text-slate-400">Phone</span>
-                                <span class="block text-sm">+880 10 0000 0000</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400">{{ $footerPhoneLabel }}</span>
+                                <span class="block text-sm">{{ $sitePhone }}</span>
                             </span>
                         </a>
 
-                        <a href="mailto:info@example.com" class="group inline-flex items-center gap-3 rounded-2xl bg-white/0 px-3 py-2 ring-1 ring-transparent transition hover:bg-slate-100 hover:text-slate-900 hover:ring-slate-200/70 dark:hover:bg-white/5 dark:hover:text-white dark:hover:ring-white/10">
+                        <a href="mailto:{{ $siteEmail }}" class="group inline-flex items-center gap-3 rounded-2xl bg-white/0 px-3 py-2 ring-1 ring-transparent transition hover:bg-slate-100 hover:text-slate-900 hover:ring-slate-200/70 dark:hover:bg-white/5 dark:hover:text-white dark:hover:ring-white/10">
                             <span class="grid h-9 w-9 place-items-center rounded-xl bg-slate-50 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
                                 <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 text-slate-600 dark:text-slate-200" aria-hidden="true">
                                     <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.7" />
@@ -493,8 +510,8 @@
                                 </svg>
                             </span>
                             <span>
-                                <span class="block text-xs text-slate-500 dark:text-slate-400">Email</span>
-                                <span class="block text-sm">info@example.com</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400">{{ $footerEmailLabel }}</span>
+                                <span class="block text-sm">{{ $siteEmail }}</span>
                             </span>
                         </a>
 
@@ -506,8 +523,8 @@
                                 </svg>
                             </span>
                             <span>
-                                <span class="block text-xs text-slate-500 dark:text-slate-400">Location</span>
-                                <span class="block text-sm">Dhaka, Bangladesh</span>
+                                <span class="block text-xs text-slate-500 dark:text-slate-400">{{ $footerLocationLabel }}</span>
+                                <span class="block text-sm">{{ $siteAddress }}</span>
                             </span>
                         </div>
                     </div>
@@ -515,7 +532,7 @@
             </div>
 
             <div class="mt-10 flex items-center justify-between gap-4 border-t border-slate-200/70 pt-6 text-[11px] text-slate-500 sm:text-xs dark:border-white/10 dark:text-slate-400">
-                <div class="min-w-0 truncate whitespace-nowrap">© {{ date('Y') }} {{ config('app.name', 'iTechBD Ltd') }}. All rights reserved.</div>
+                <div class="min-w-0 truncate whitespace-nowrap">© {{ date('Y') }} {{ config('app.name', 'iTechBD Ltd') }}. {{ $footerCopyright }}</div>
                 <div class="flex shrink-0 items-center gap-4 whitespace-nowrap">
                     <a href="/privacy" class="hover:text-slate-700 dark:hover:text-slate-200">Privacy</a>
                     <a href="/terms" class="hover:text-slate-700 dark:hover:text-slate-200">Terms</a>

@@ -44,13 +44,7 @@ class AppServiceProvider extends ServiceProvider
             ['layouts.site', 'layouts.app', 'layouts.guest', 'layouts.public-profile'],
             function ($view) {
                 $defaults = [
-                    'site_address' => app()->getLocale() === 'bn'
-                        ? 'ঢাকা, বাংলাদেশ'
-                        : 'Dhaka, Bangladesh',
-                    'site_phone' => '+880 10 0000 0000',
-                    'site_email' => 'info@example.com',
-                    'site_logo_path' => null,
-                    'site_favicon_path' => null,
+                    ...FrontendSetting::defaultValues(),
                 ];
 
                 if (! Schema::hasTable('frontend_settings')) {
@@ -73,6 +67,18 @@ class AppServiceProvider extends ServiceProvider
                     'site_email' => $get('site_email'),
                     'site_logo_path' => $get('site_logo_path'),
                     'site_favicon_path' => $get('site_favicon_path'),
+                    'footer_brand_tagline' => $get('footer_brand_tagline'),
+                    'footer_brand_description' => $get('footer_brand_description'),
+                    'footer_updates_title' => $get('footer_updates_title'),
+                    'footer_updates_subtitle' => $get('footer_updates_subtitle'),
+                    'footer_contact_title' => $get('footer_contact_title'),
+                    'footer_phone_label' => $get('footer_phone_label'),
+                    'footer_email_label' => $get('footer_email_label'),
+                    'footer_location_label' => $get('footer_location_label'),
+                    'footer_copyright' => $get('footer_copyright'),
+                    'footer_facebook_url' => $get('footer_facebook_url'),
+                    'footer_linkedin_url' => $get('footer_linkedin_url'),
+                    'footer_youtube_url' => $get('footer_youtube_url'),
                 ];
 
                 $view->with('frontendSettings', $frontendSettings);

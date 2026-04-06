@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateFrontendFooterSettingsRequest;
 use App\Http\Requests\Admin\UpdateFrontendHeaderSettingsRequest;
 use App\Models\FrontendSetting;
 use Illuminate\Http\RedirectResponse;
@@ -138,6 +139,57 @@ class FrontendSettingsController extends Controller implements HasMiddleware
         return redirect()
             ->route('admin.frontend-editor.index', ['tab' => 'header'])
             ->with('success', 'Header settings updated.');
+    }
+
+    /**
+     * Update the footer settings.
+     *
+     * @param UpdateFrontendFooterSettingsRequest $request Request.
+     *
+     * @return RedirectResponse
+     */
+    public function updateFooter(
+        UpdateFrontendFooterSettingsRequest $request
+    ): RedirectResponse {
+        $localizedFields = [
+            'footer_brand_tagline',
+            'footer_brand_description',
+            'footer_updates_title',
+            'footer_updates_subtitle',
+            'footer_contact_title',
+            'footer_phone_label',
+            'footer_email_label',
+            'footer_location_label',
+            'footer_copyright',
+        ];
+
+        foreach ($localizedFields as $field) {
+            $this->upsertSetting(
+                $field,
+                [
+                    'value_en' => $request->validated($field . '_en'),
+                    'value_bn' => $request->validated($field . '_bn'),
+                ]
+            );
+        }
+
+        foreach (['footer_facebook_url', 'footer_linkedin_url', 'footer_youtube_url'] as $field) {
+            $value = $request->validated($field);
+
+            $this->upsertSetting(
+                $field,
+                [
+                    'value_en' => $value,
+                    'value_bn' => $value,
+                ]
+            );
+        }
+
+        FrontendSetting::forgetCache();
+
+        return redirect()
+            ->route('admin.frontend-editor.index', ['tab' => 'footer'])
+            ->with('success', 'Footer settings updated.');
     }
 
     /**

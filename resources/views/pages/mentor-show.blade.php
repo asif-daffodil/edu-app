@@ -74,9 +74,15 @@
             <div class="reveal mt-10 grid gap-8 lg:grid-cols-12">
                 <div class="lg:col-span-5">
                     <div class="overflow-hidden rounded-3xl bg-white shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
-                        <div class="aspect-square w-full overflow-hidden bg-slate-100 grid place-items-center dark:bg-slate-950/30">
+                        <div class="flex min-h-[320px] w-full items-center justify-center overflow-hidden bg-slate-100 p-4 dark:bg-slate-950/30 sm:min-h-[420px]">
                             @if (is_string($mentorImageUrl) && $mentorImageUrl !== '')
-                                <img src="{{ $mentorImageUrl }}" alt="{{ $mentor->name }}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+                                <img
+                                    src="{{ $mentorImageUrl }}"
+                                    alt="{{ $mentor->name }}"
+                                    class="block h-auto max-h-[520px] w-auto max-w-full rounded-2xl object-contain"
+                                    loading="eager"
+                                    decoding="async"
+                                />
                             @else
                                 <svg viewBox="0 0 24 24" fill="none" class="h-24 w-24 text-slate-500 dark:text-slate-200/70" aria-hidden="true">
                                     <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" fill="currentColor" opacity="0.85" />

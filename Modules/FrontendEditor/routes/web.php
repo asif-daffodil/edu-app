@@ -16,6 +16,9 @@ Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
         Route::patch('/header-settings', [FrontendSettingsController::class, 'updateHeader'])
             ->name('header-settings.update');
 
+        Route::patch('/footer-settings', [FrontendSettingsController::class, 'updateFooter'])
+            ->name('footer-settings.update');
+
         Route::post('/{page}/sections', [FrontendEditorController::class, 'store'])->name('sections.store');
 
         Route::patch('/sections/{section}', [FrontendEditorController::class, 'update'])->name('sections.update');
