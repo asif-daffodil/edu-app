@@ -71,10 +71,6 @@ Route::middleware('frontend.locale')->group(
         Route::get('/news/data', [SiteController::class, 'newsData'])->name('news.data');
         Route::get('/news/{newsUpdate}', [SiteController::class, 'newsShow'])->name('news.show');
 
-        Route::get('/contact', [SiteController::class, 'page'])
-            ->defaults('slug', 'contact')
-            ->name('contact');
-
         Route::get('/privacy', [SiteController::class, 'page'])
             ->defaults('slug', 'privacy')
             ->name('privacy');

@@ -211,11 +211,55 @@
                         <span>{{ $siteEmail }}</span>
                     </a>
 
-                    <div class="hidden sm:flex items-center gap-2 border-l border-slate-200/70 pl-4 dark:border-white/10">
-                        <a href="/language/bn" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_bn') }}</a>
-                        <span class="text-slate-400 dark:text-slate-500">|</span>
-                        <a href="/language/en" class="hover:text-slate-900 dark:hover:text-white">{{ __('frontend.language_en') }}</a>
-                    </div>
+                    @php
+                        $currentLocale = app()->getLocale();
+                        $languageOptions = [
+                            'bn' => [
+                                'label' => __('frontend.language_bn'),
+                            ],
+                            'en' => [
+                                'label' => __('frontend.language_en'),
+                            ],
+                        ];
+                        $currentLanguage = $languageOptions[$currentLocale] ?? $languageOptions['en'];
+                        $flagSvg = static function (string $locale): string {
+                            if ($locale === 'bn') {
+                                return '<svg viewBox="0 0 20 14" class="h-3.5 w-5 shrink-0 rounded-[2px] ring-1 ring-black/5" aria-hidden="true"><rect width="20" height="14" fill="#006a4e"/><circle cx="8.6" cy="7" r="3.2" fill="#f42a41"/></svg>';
+                            }
+
+                            return '<svg viewBox="0 0 20 14" class="h-3.5 w-5 shrink-0 rounded-[2px] ring-1 ring-black/5" aria-hidden="true"><rect width="20" height="14" fill="#ffffff"/><rect width="20" height="1.08" y="0" fill="#b22234"/><rect width="20" height="1.08" y="2.16" fill="#b22234"/><rect width="20" height="1.08" y="4.32" fill="#b22234"/><rect width="20" height="1.08" y="6.48" fill="#b22234"/><rect width="20" height="1.08" y="8.64" fill="#b22234"/><rect width="20" height="1.08" y="10.8" fill="#b22234"/><rect width="20" height="1.08" y="12.92" fill="#b22234"/><rect width="8" height="7.54" fill="#3c3b6e"/></svg>';
+                        };
+                    @endphp
+
+                    <details class="relative hidden sm:block">
+                        <summary class="flex cursor-pointer list-none items-center gap-2 rounded-xl border-l border-slate-200/70 pl-4 text-slate-700 transition hover:text-slate-900 dark:border-white/10 dark:text-slate-200 dark:hover:text-white">
+                            {!! $flagSvg($currentLocale) !!}
+                            <span>{{ $currentLanguage['label'] }}</span>
+                            <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4 text-slate-500 dark:text-slate-400" aria-hidden="true">
+                                <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </summary>
+
+                        <div class="absolute right-0 top-full z-50 mt-2 min-w-40 overflow-hidden rounded-2xl border border-slate-200/70 bg-white/95 p-1 text-slate-800 shadow-lg shadow-slate-200/60 backdrop-blur dark:border-slate-300/70 dark:bg-white/95 dark:text-slate-900 dark:shadow-none">
+                            @foreach ($languageOptions as $localeCode => $language)
+                                <a
+                                    href="{{ route('language.switch', ['lang' => $localeCode]) }}"
+                                    class="flex items-center justify-between gap-3 rounded-xl border px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-100 dark:hover:text-slate-900 {{ $currentLocale === $localeCode ? 'border-slate-200 bg-slate-100 text-slate-900 dark:border-slate-200 dark:bg-slate-100 dark:text-slate-900' : 'border-transparent text-slate-700 dark:text-slate-900' }}"
+                                >
+                                    <span class="flex items-center gap-2">
+                                        {!! $flagSvg($localeCode) !!}
+                                        <span>{{ $language['label'] }}</span>
+                                    </span>
+
+                                    @if ($currentLocale === $localeCode)
+                                        <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4" aria-hidden="true">
+                                            <path d="m5 10 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>

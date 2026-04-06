@@ -97,6 +97,15 @@
             </svg>
             <span>Invoices</span>
         </a>
+
+        <a href="{{ route('dashboard.contact-messages.index') }}"
+            @click="sidebarOpen = false"
+            class="{{ $linkBase }} {{ request()->routeIs('dashboard.contact-messages.*') ? $active : $inactive }}">
+            <svg class="h-5 w-5 shrink-0 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M2.94 6.34A2 2 0 014.6 5h10.8a2 2 0 011.66 1.34L10 10.88 2.94 6.34ZM2 8.15V14a2 2 0 002 2h12a2 2 0 002-2V8.15l-7.46 4.8a1 1 0 01-1.08 0L2 8.15Z" clip-rule="evenodd" />
+            </svg>
+            <span>Contact Messages</span>
+        </a>
     @endif
 
     @if($isMentor || $canSeeMentorBatches)

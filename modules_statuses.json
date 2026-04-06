@@ -7,5 +7,6 @@
     "FrontendEditor": true,
     "Reviews": true,
     "Invoice": true,
-    "NewsUpdates": true
+    "NewsUpdates": true,
+    "ContactMessages": true
 }

@@ -31,11 +31,11 @@ class SetFrontendLocale
     {
         $locale = (string) $request->session()->get(
             'locale',
-            'bn'
+            (string) config('app.locale', 'en')
         );
 
         if (! in_array($locale, ['bn', 'en'], true)) {
-            $locale = 'bn';
+            $locale = (string) config('app.locale', 'en');
         }
 
         app()->setLocale($locale);

@@ -17,17 +17,11 @@
 
             <div class="reveal mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                 @forelse ($mentors as $mentor)
-                    <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
+                    <div class="rounded-3xl bg-white p-6 text-center ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none">
                         @php
                             $mentorImageUrl = optional($mentor->user)->profile_image_url;
-                            $mentorBioText = trim((string) ($mentor->bio ?? ''));
-                            if ($mentorBioText !== '') {
-                                $mentorBioText = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $mentorBioText) ?? $mentorBioText;
-                                $mentorBioText = preg_replace('/<\s*\/\s*p\s*>/i', "\n\n", $mentorBioText) ?? $mentorBioText;
-                                $mentorBioText = trim(strip_tags($mentorBioText));
-                            }
                         @endphp
-                        <div class="aspect-square w-full overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200/70 grid place-items-center dark:bg-slate-950/30 dark:ring-white/10">
+                        <div class="mx-auto aspect-square w-full overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200/70 grid place-items-center dark:bg-slate-950/30 dark:ring-white/10">
                             @if (is_string($mentorImageUrl) && $mentorImageUrl !== '')
                                 <img
                                     src="{{ $mentorImageUrl }}"
@@ -45,7 +39,11 @@
                         </div>
                         <div class="mt-4 text-sm font-semibold text-slate-900 dark:text-white">{{ $mentor->name }}</div>
                         <div class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
-                        <p class="mt-3 text-sm text-slate-600 dark:text-slate-200">{!! nl2br(e($mentorBioText !== '' ? $mentorBioText : 'Project review, guidance, and best practices to level up fast.')) !!}</p>
+                        <div class="mt-5">
+                            <a href="{{ route('mentors.show', $mentor->id) }}" class="mx-auto mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15">
+                                See Details
+                            </a>
+                        </div>
                     </div>
                 @empty
                     <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 text-slate-600 dark:bg-white/5 dark:ring-white/10 dark:text-slate-200 dark:shadow-none">No mentors available yet.</div>

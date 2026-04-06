@@ -34,6 +34,7 @@
                     <a href="/users" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Users</a>
                     <a href="/roles" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Roles</a>
                     <a href="/permissions" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Manage Permissions</a>
+                    <a href="{{ route('dashboard.contact-messages.index') }}" class="block rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Contact Messages</a>
                 @endif
             </div>
         </div>

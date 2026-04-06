@@ -493,13 +493,13 @@
                                                 </svg>
                                             @endif
                                         </div>
-                                        <div class="p-6">
+                                        <div class="p-6 text-center">
                                             <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ $mentor->name }}</div>
                                             <div class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
 
 										<a
 											href="{{ route('mentors.show', $mentor) }}"
-											class="mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15"
+										class="mx-auto mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15"
 										>
 											See details
 										</a>
@@ -593,22 +593,22 @@
                 </div>
 
                 <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
+                    <div class="rounded-3xl bg-white p-6 text-center shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm text-slate-500 dark:text-slate-300">Projects</div>
                         <div class="mt-2 text-3xl font-semibold text-slate-900 dark:text-white" data-counter="6">0</div>
                         <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">Portfolio-ready work</div>
                     </div>
-                    <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
+                    <div class="rounded-3xl bg-white p-6 text-center shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm text-slate-500 dark:text-slate-300">Career sessions</div>
                         <div class="mt-2 text-3xl font-semibold text-slate-900 dark:text-white" data-counter="12">0</div>
                         <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">CV + interview practice</div>
                     </div>
-                    <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
+                    <div class="rounded-3xl bg-white p-6 text-center shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm text-slate-500 dark:text-slate-300">Freelancing track</div>
                         <div class="mt-2 text-3xl font-semibold text-slate-900 dark:text-white" data-counter="1">0</div>
                         <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">Client-ready guidance</div>
                     </div>
-                    <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
+                    <div class="rounded-3xl bg-white p-6 text-center shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm text-slate-500 dark:text-slate-300">Support</div>
                         <div class="mt-2 text-3xl font-semibold text-slate-900 dark:text-white" data-counter="24">0</div>
                         <div class="mt-2 text-sm text-slate-600 dark:text-slate-200">Community + mentor help</div>
