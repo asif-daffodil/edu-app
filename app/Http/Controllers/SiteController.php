@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FrontendPage;
 use App\Models\FrontendSection;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 use Modules\Course\Models\Course;
@@ -167,8 +168,26 @@ class SiteController extends Controller
     /**
      * Show a public mentor profile page.
      */
-    public function mentorShow(Mentor $mentor): View
+    public function mentorShow(string $mentor): View|RedirectResponse
     {
+        if (ctype_digit($mentor)) {
+            $legacyMentor = Mentor::query()->findOrFail((int) $mentor);
+
+            if (is_string($legacyMentor->slug) && $legacyMentor->slug !== '') {
+                return redirect()->route('mentors.show', ['mentor' => $legacyMentor->slug], 301);
+            }
+
+            $mentor = (string) $legacyMentor->id;
+        }
+
+        $mentorQuery = Mentor::query()->where('slug', $mentor);
+
+        if (ctype_digit($mentor)) {
+            $mentorQuery->orWhereKey((int) $mentor);
+        }
+
+        $mentor = $mentorQuery->firstOrFail();
+
         abort_unless($mentor->is_active, 404);
 
         $mentor->loadMissing(

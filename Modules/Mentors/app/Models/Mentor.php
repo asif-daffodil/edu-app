@@ -12,6 +12,7 @@ class Mentor extends Model
 
     protected $fillable = [
         'user_id',
+        'slug',
         'name',
         'topic',
         'bio',
@@ -25,5 +26,12 @@ class Mentor extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getPublicRouteKeyAttribute(): string
+    {
+        $slug = trim((string) ($this->slug ?? ''));
+
+        return $slug !== '' ? $slug : (string) $this->getKey();
     }
 }

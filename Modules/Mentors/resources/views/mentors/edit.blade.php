@@ -33,6 +33,17 @@
                 </div>
 
                 <div>
+                    <label class="block text-sm font-medium text-slate-700">Profile URL</label>
+                    <input type="text" name="slug" value="{{ old('slug', $mentor->slug) }}" class="mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="e.g., khayrul-bashar" autocomplete="off" spellcheck="false" />
+                    <p class="mt-1 text-xs text-slate-500">
+                        Public URL: {{ url('/mentors/' . ($mentor->slug ?: 'mentor-slug')) }}
+                    </p>
+                    @error('slug')
+                        <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
                     <label class="block text-sm font-medium text-slate-700">Topic</label>
                     <input type="text" name="topic" value="{{ old('topic', $mentor->topic) }}" class="mt-1 w-full rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="e.g., Web Development" />
                     @error('topic')

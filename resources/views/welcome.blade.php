@@ -498,7 +498,7 @@
                                             <div class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ $mentor->topic ?? 'Mentor' }} • Weekly support</div>
 
 										<a
-											href="{{ route('mentors.show', $mentor) }}"
+                                            href="{{ route('mentors.show', $mentor->public_route_key) }}"
 										class="mx-auto mt-4 inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-slate-900/10 transition hover:bg-slate-800 dark:bg-white/10 dark:ring-white/10 dark:hover:bg-white/15"
 										>
 											See details

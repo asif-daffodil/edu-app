@@ -10,6 +10,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Modules\Mentors\Models\Mentor;
 use Yajra\DataTables\Facades\DataTables;
@@ -165,6 +166,13 @@ class MentorController extends Controller implements HasMiddleware
             [
                 'email' => 'required|email|max:255|unique:users,email',
                 'name' => 'required|string|max:255',
+                'slug' => [
+                    'nullable',
+                    'string',
+                    'max:120',
+                    'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                    Rule::unique('mentors', 'slug'),
+                ],
                 'topic' => 'nullable|string|max:255',
                 'bio' => 'nullable|string|max:2000',
                 'is_active' => 'sometimes|boolean',
@@ -172,6 +180,9 @@ class MentorController extends Controller implements HasMiddleware
         );
 
         $validated['is_active'] = (bool) ($request->boolean('is_active'));
+        $validated['slug'] = $this->generateUniqueSlug(
+            $validated['slug'] ?? $validated['name'] ?? '',
+        );
 
         DB::transaction(
             function () use ($validated) {
@@ -189,6 +200,7 @@ class MentorController extends Controller implements HasMiddleware
                 Mentor::query()->create(
                     [
                         'user_id' => $user->id,
+                        'slug' => $validated['slug'],
                         'name' => $validated['name'],
                         'topic' => $validated['topic'] ?? null,
                         'bio' => $validated['bio'] ?? null,
@@ -243,6 +255,13 @@ class MentorController extends Controller implements HasMiddleware
                     Rule::unique('users', 'email')->ignore($mentor->user_id),
                 ],
                 'name' => 'required|string|max:255',
+                'slug' => [
+                    'nullable',
+                    'string',
+                    'max:120',
+                    'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                    Rule::unique('mentors', 'slug')->ignore($mentor->id),
+                ],
                 'topic' => 'nullable|string|max:255',
                 'bio' => 'nullable|string|max:2000',
                 'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -252,6 +271,10 @@ class MentorController extends Controller implements HasMiddleware
         );
 
         $validated['is_active'] = (bool) ($request->boolean('is_active'));
+        $validated['slug'] = $this->generateUniqueSlug(
+            $validated['slug'] ?? $validated['name'] ?? '',
+            $mentor->id,
+        );
 
         DB::transaction(
             function () use ($mentor, $validated, $request) {
@@ -294,6 +317,7 @@ class MentorController extends Controller implements HasMiddleware
 
                 $mentor->update(
                     [
+                        'slug' => $validated['slug'],
                         'name' => $validated['name'],
                         'topic' => $validated['topic'] ?? null,
                         'bio' => $validated['bio'] ?? null,
@@ -318,6 +342,30 @@ class MentorController extends Controller implements HasMiddleware
         if (is_string($path) && $path !== '') {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    protected function generateUniqueSlug(string $value, ?int $ignoreMentorId = null): string
+    {
+        $baseSlug = Str::slug($value);
+
+        if ($baseSlug === '') {
+            $baseSlug = 'mentor';
+        }
+
+        $slug = $baseSlug;
+        $suffix = 2;
+
+        while (
+            Mentor::query()
+                ->when($ignoreMentorId, fn ($query) => $query->whereKeyNot($ignoreMentorId))
+                ->where('slug', $slug)
+                ->exists()
+        ) {
+            $slug = $baseSlug.'-'.$suffix;
+            $suffix++;
+        }
+
+        return $slug;
     }
 
     /**
