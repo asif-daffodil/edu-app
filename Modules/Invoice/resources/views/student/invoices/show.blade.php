@@ -8,7 +8,7 @@
 
             <div class="flex flex-wrap gap-2 print:hidden">
                 <a href="{{ url('/dashboard/student/invoices') }}" class="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</a>
-                <a href="{{ url('/dashboard/student/invoices/'.$order->getRouteKey().'/download') }}" class="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Download</a>
+                <a href="{{ url('/dashboard/student/invoices/'.$order->getRouteKey().'/download') }}" class="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Download PDF</a>
                 <button type="button" onclick="window.print()" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700">Print</button>
             </div>
         </div>

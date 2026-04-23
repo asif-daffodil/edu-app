@@ -26,21 +26,23 @@ class BatchPolicy
 
     public function view(User $user, Batch $batch): bool
     {
-        if (! $user->can('readBatch')) {
-            return false;
-        }
-
         // Batch managers (admin) can view any batch.
         if ($user->can('addBatch') || $user->can('editBatch') || $user->can('deleteBatch')) {
             return true;
         }
 
         // Mentors/students can only view batches they belong to.
-        return $batch->mentors()->where('users.id', $user->id)->exists()
+        $belongsToBatch = $batch->mentors()->where('users.id', $user->id)->exists()
             || $batch->students()
-                ->wherePivot('status', 'approved')
+                ->wherePivotIn('status', ['pending', 'approved'])
                 ->where('users.id', $user->id)
                 ->exists();
+
+        if ($belongsToBatch) {
+            return true;
+        }
+
+        return $user->can('readBatch');
     }
 
     public function create(User $user): bool

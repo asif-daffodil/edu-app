@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Course\Models\CourseOrder;
+use Modules\Invoice\Support\InvoicePdf;
 
 /**
  * Student invoices controller.
@@ -86,7 +87,7 @@ class MyInvoicesController extends Controller
     }
 
     /**
-     * Download an invoice as an HTML file.
+     * Download an invoice as a PDF file.
      *
      * @param CourseOrder $order Order to download.
      *
@@ -107,17 +108,6 @@ class MyInvoicesController extends Controller
             ]
         );
 
-        $fileName = 'invoice-'.$order->id.'.html';
-
-        return response()
-            ->view(
-                'invoice::student.invoices.download',
-                [
-                    'order' => $order,
-                    'user' => $user,
-                ]
-            )
-            ->header('Content-Type', 'text/html; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        return InvoicePdf::download($order, $user);
     }
 }

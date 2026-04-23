@@ -69,3 +69,32 @@ it('prevents a student from viewing another student invoice', function () {
         ->get('/dashboard/student/invoices/'.$order->getRouteKey().'/download')
         ->assertForbidden();
 });
+
+it('downloads a student invoice as pdf', function () {
+    $studentRole = Role::findOrCreate('student');
+
+    $student = User::factory()->create();
+    $student->assignRole($studentRole);
+
+    $creator = User::factory()->create();
+
+    $course = Course::query()->create([
+        'title' => 'PDF Course',
+        'description' => 'Test description',
+        'status' => 'active',
+        'created_by' => $creator->id,
+    ]);
+
+    $order = CourseOrder::query()->create([
+        'user_id' => $student->id,
+        'course_id' => $course->id,
+        'amount' => 199,
+        'currency' => 'BDT',
+        'status' => 'paid',
+    ]);
+
+    $this->actingAs($student)
+        ->get('/dashboard/student/invoices/'.$order->getRouteKey().'/download')
+        ->assertOk()
+        ->assertHeader('content-type', 'application/pdf');
+});

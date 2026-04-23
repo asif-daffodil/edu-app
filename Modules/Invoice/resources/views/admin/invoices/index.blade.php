@@ -22,12 +22,6 @@
 
     <div class="py-8">
         <div class="mx-auto max-w-7xl">
-            @if (session('success'))
-                <div class="mb-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 ring-1 ring-inset ring-emerald-200">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             <div class="mb-4 flex flex-wrap items-center gap-2">
                 @php
                     $filters = [
@@ -70,7 +64,7 @@
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Status</th>
                                 <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">Total</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Date</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">Update</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 bg-white"></tbody>
@@ -119,8 +113,8 @@
                         },
                         { data: 'date', name: 'date', orderable: false, searchable: false },
                         {
-                            data: 'update',
-                            name: 'update',
+                            data: 'actions',
+                            name: 'actions',
                             orderable: false,
                             searchable: false,
                             className: 'text-right'

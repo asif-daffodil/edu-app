@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Course\Models\CourseOrder;
+use Modules\Invoice\Support\InvoicePdf;
 use Yajra\DataTables\Facades\DataTables;
 
 /**
@@ -112,8 +113,8 @@ class AdminInvoicesController extends Controller
                     ->format('d M Y, h:i A')
             )
             ->addColumn(
-                'update',
-                fn (CourseOrder $order) => $this->_renderUpdateAction($order)
+                'actions',
+                fn (CourseOrder $order) => $this->_renderActions($order)
             )
             ->filterColumn(
                 'student',
@@ -156,7 +157,7 @@ class AdminInvoicesController extends Controller
                     $query->where('id', 'like', "%{$keyword}%");
                 }
             )
-            ->rawColumns(['student', 'status', 'update'])
+                ->rawColumns(['student', 'status', 'actions'])
             ->toJson();
     }
 
@@ -216,13 +217,13 @@ class AdminInvoicesController extends Controller
     }
 
     /**
-     * Render update status action HTML.
+     * Render invoice actions HTML.
      *
      * @param CourseOrder $order Order row.
      *
      * @return string
      */
-    private function _renderUpdateAction(CourseOrder $order): string
+    private function _renderActions(CourseOrder $order): string
     {
         $isCompleted = $order->status === 'paid';
         $next = $isCompleted ? 'pending' : 'completed';
@@ -232,17 +233,36 @@ class AdminInvoicesController extends Controller
             : 'bg-emerald-600 hover:bg-emerald-500';
 
         $action = route('dashboard.admin.invoices.update', $order);
+        $download = route('dashboard.admin.invoices.download', $order);
         $token = csrf_token();
 
-        return '<form method="POST" action="' . e($action) . '">'
+        return '<div class="flex items-center justify-end gap-2">'
+            . '<a href="' . e($download) . '" class="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Download PDF</a>'
+            . '<form method="POST" action="' . e($action) . '">'
             . '<input type="hidden" name="_token" value="' . e($token) . '">'
             . '<input type="hidden" name="_method" value="PATCH">'
             . '<input type="hidden" name="status" value="' . e($next) . '">'
-            . '<button type="submit" class="rounded-md ' . e($btn) . ' '
-            . 'px-3 py-2 text-xs font-semibold text-white">'
+            . '<button type="submit" class="rounded-md ' . e($btn) . ' px-3 py-2 text-xs font-semibold text-white">'
             . e($label)
             . '</button>'
-            . '</form>';
+            . '</form>'
+            . '</div>';
+    }
+
+    public function download(CourseOrder $order)
+    {
+        $order->loadMissing(
+            [
+                'course',
+                'batch',
+                'user:id,name,email',
+            ]
+        );
+
+        $user = $order->user;
+        abort_unless($user !== null, 404);
+
+        return InvoicePdf::download($order, $user);
     }
 
     /**

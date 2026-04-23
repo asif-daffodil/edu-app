@@ -73,7 +73,7 @@
                             <td class="px-4 py-3 text-right">
                                 <div class="flex justify-end gap-2">
                                     <a href="{{ url('/dashboard/student/invoices/'.$order->getRouteKey()) }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">View</a>
-                                    <a href="{{ url('/dashboard/student/invoices/'.$order->getRouteKey().'/download') }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Download</a>
+                                    <a href="{{ url('/dashboard/student/invoices/'.$order->getRouteKey().'/download') }}" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Download PDF</a>
                                 </div>
                             </td>
                         </tr>

@@ -44,6 +44,11 @@ it('allows admin to view all invoices and mark one as completed', function () {
         ->assertJsonFragment(['invoice' => '#INV-'.$order->id]);
 
     $this->actingAs($admin)
+        ->get('/dashboard/admin/invoices/'.$order->getRouteKey().'/download')
+        ->assertOk()
+        ->assertHeader('content-type', 'application/pdf');
+
+    $this->actingAs($admin)
         ->patch('/dashboard/admin/invoices/'.$order->getRouteKey(), ['status' => 'completed'])
         ->assertRedirect();
 

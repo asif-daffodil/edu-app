@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Modules\Course\Models\CourseOrder;
+use Modules\Invoice\Support\InvoicePdf;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -266,14 +267,14 @@ class UserController extends Controller implements HasMiddleware
         );
     }
 
-     /**
-      * Download a student's invoice as HTML (admin view under Users section).
-      *
-      * @param User        $user  Student user.
-      * @param CourseOrder $order Invoice/order.
-      *
-      * @return \Symfony\Component\HttpFoundation\Response
-      */
+         /**
+            * Download a student's invoice as PDF (admin view under Users section).
+            *
+            * @param User        $user  Student user.
+            * @param CourseOrder $order Invoice/order.
+            *
+            * @return \Symfony\Component\HttpFoundation\Response
+            */
     public function invoiceDownload(User $user, CourseOrder $order)
     {
         $user->loadMissing(['roles:id,name']);
@@ -290,18 +291,7 @@ class UserController extends Controller implements HasMiddleware
             ]
         );
 
-        $fileName = 'invoice-'.$order->id.'.html';
-
-        return response()
-            ->view(
-                'invoice::student.invoices.download',
-                [
-                    'order' => $order,
-                    'user' => $user,
-                ]
-            )
-            ->header('Content-Type', 'text/html; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        return InvoicePdf::download($order, $user);
     }
 
     /**

@@ -15,7 +15,7 @@ class MyStudentBatchesController extends Controller
         abort_unless($user, 403);
 
         $batches = $user->studentBatches()
-            ->wherePivot('status', 'approved')
+            ->wherePivotIn('status', ['pending', 'approved'])
             ->with(['course:id,title'])
             ->withCount(['classSchedules', 'mentors'])
             ->orderByDesc('batches.id')
@@ -30,7 +30,7 @@ class MyStudentBatchesController extends Controller
         abort_unless($user, 403);
 
         $isEnrolled = $user->studentBatches()
-            ->wherePivot('status', 'approved')
+            ->wherePivotIn('status', ['pending', 'approved'])
             ->whereKey($batch->id)
             ->exists();
         abort_unless($isEnrolled, 403);

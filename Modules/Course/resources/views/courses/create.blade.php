@@ -12,13 +12,19 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700">Title</label>
-                <input name="title" value="{{ old('title') }}" class="mt-1 w-full rounded-lg border-slate-300" required />
+                <input id="course-title" name="title" value="{{ old('title') }}" class="mt-1 w-full rounded-lg border-slate-300" required />
                 @error('title') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-slate-700">Slug</label>
+                <input id="course-slug" name="slug" value="{{ old('slug') }}" class="mt-1 w-full rounded-lg border-slate-300" required />
+                @error('slug') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-slate-700">Description</label>
-                <textarea name="description" rows="5" class="wysiwyg mt-1 w-full rounded-lg border-slate-300" required>{{ old('description') }}</textarea>
+                <textarea name="description" rows="5" maxlength="1000" class="wysiwyg mt-1 w-full rounded-lg border-slate-300" required>{{ old('description') }}</textarea>
                 @error('description') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
@@ -57,5 +63,66 @@
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create</button>
             </div>
         </form>
+
+        <script>
+            (function () {
+                var titleInput = document.getElementById('course-title');
+                var slugInput = document.getElementById('course-slug');
+
+                if (!titleInput || !slugInput || slugInput.dataset.slugSyncReady === 'true') {
+                    return;
+                }
+
+                slugInput.dataset.slugSyncReady = 'true';
+
+                function slugify(value) {
+                    var normalizedValue = String(value || '')
+                        .toLowerCase()
+                        .replace(/&/g, ' and ');
+
+                    if (typeof normalizedValue.normalize === 'function') {
+                        normalizedValue = normalizedValue.normalize('NFKD');
+                    }
+
+                    return normalizedValue
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                        .replace(/-{2,}/g, '-')
+                        .slice(0, 255);
+                }
+
+                function syncSlug() {
+                    if (slugInput.dataset.manual === 'true') {
+                        return;
+                    }
+
+                    slugInput.value = slugify(titleInput.value);
+                }
+
+                var initialGeneratedSlug = slugify(titleInput.value);
+                slugInput.dataset.manual = slugInput.value !== '' && slugInput.value !== initialGeneratedSlug ? 'true' : 'false';
+
+                titleInput.addEventListener('input', syncSlug);
+                titleInput.addEventListener('change', syncSlug);
+                titleInput.addEventListener('keyup', syncSlug);
+
+                slugInput.addEventListener('input', function () {
+                    var generatedSlug = slugify(titleInput.value);
+
+                    if (slugInput.value === '') {
+                        slugInput.dataset.manual = 'false';
+                        syncSlug();
+                        return;
+                    }
+
+                    slugInput.dataset.manual = slugInput.value !== generatedSlug ? 'true' : 'false';
+                });
+
+                if (slugInput.value === '') {
+                    syncSlug();
+                }
+            })();
+        </script>
     </div>
 </x-app-layout>

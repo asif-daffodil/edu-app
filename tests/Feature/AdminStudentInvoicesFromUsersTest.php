@@ -46,7 +46,7 @@ it('allows an admin to view a student invoices list under users section', functi
     $this->actingAs($admin)
         ->get('/users/'.$student->getRouteKey().'/invoices/'.$order->getRouteKey().'/download')
         ->assertOk()
-        ->assertHeader('content-type', 'text/html; charset=UTF-8');
+        ->assertHeader('content-type', 'application/pdf');
 });
 
 it('returns 404 when admin tries to access an invoice that does not belong to the student', function () {

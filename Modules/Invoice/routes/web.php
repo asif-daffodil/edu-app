@@ -21,13 +21,17 @@ $studentInvoiceRoutes = static function () use (
 };
 
 $adminInvoicesIndexAction = [AdminInvoicesController::class, 'index'];
+$adminInvoicesDownloadAction = [AdminInvoicesController::class, 'download'];
 $adminInvoicesUpdateStatusAction = [AdminInvoicesController::class, 'updateStatus'];
 
 $adminInvoiceRoutes = static function () use (
     $adminInvoicesIndexAction,
+    $adminInvoicesDownloadAction,
     $adminInvoicesUpdateStatusAction
 ): void {
     Route::get('invoices', $adminInvoicesIndexAction)->name('invoices.index');
+    Route::get('invoices/{order}/download', $adminInvoicesDownloadAction)
+        ->name('invoices.download');
     Route::patch('invoices/{order}', $adminInvoicesUpdateStatusAction)
         ->name('invoices.update');
 };

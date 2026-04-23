@@ -20,10 +20,6 @@
         </div>
     </x-slot>
 
-    @if (session('success'))
-        <div class="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-800 ring-1 ring-emerald-100">{{ session('success') }}</div>
-    @endif
-
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <div class="flex items-center gap-3">
@@ -57,7 +53,7 @@
 
             <div class="mt-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Description</div>
-                <div class="mt-2 text-sm text-slate-700 whitespace-pre-line">{{ $course->description }}</div>
+                <div class="prose prose-slate mt-2 max-w-none text-sm">{!! $course->description !!}</div>
             </div>
         </div>
 

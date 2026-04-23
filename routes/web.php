@@ -4,6 +4,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\WysiwygUploadController;
 use Illuminate\Support\Facades\Route;
+use Modules\Course\Models\Course;
 
 Route::get(
     '/language/{lang}',
@@ -28,24 +29,40 @@ Route::middleware('frontend.locale')->group(
             ->defaults('slug', 'courses')
             ->name('courses');
 
+        Route::get('/courses/{courseId}', function (int $courseId) {
+            $course = Course::query()->findOrFail($courseId);
+
+            return redirect()->route('courses.show', $course, 301);
+        })
+            ->whereNumber('courseId')
+            ->name('courses.show.legacy');
+
         Route::get('/courses/{course}', [SiteController::class, 'course'])
-            ->whereNumber('course')
             ->name('courses.show');
 
         Route::middleware('auth')->group(
             function () {
                 Route::get(
+                    '/courses/{courseId}/checkout',
+                    function (int $courseId) {
+                        $course = Course::query()->findOrFail($courseId);
+
+                        return redirect()->route('checkout.show', $course, 301);
+                    }
+                )
+                    ->whereNumber('courseId')
+                    ->name('checkout.show.legacy');
+
+                Route::get(
                     '/courses/{course}/checkout',
                     [CheckoutController::class, 'show']
                 )
-                    ->whereNumber('course')
                     ->name('checkout.show');
 
                 Route::post(
                     '/courses/{course}/checkout',
                     [CheckoutController::class, 'store']
                 )
-                    ->whereNumber('course')
                     ->name('checkout.store');
 
                 Route::get(

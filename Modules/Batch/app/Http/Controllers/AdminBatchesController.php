@@ -132,7 +132,9 @@ class AdminBatchesController extends Controller implements HasMiddleware
             'course_id' => ['required', 'integer', 'exists:courses,id'],
         ]);
 
-        return redirect()->route('dashboard.batches.create.course', (int) $validated['course_id']);
+        $course = Course::query()->findOrFail((int) $validated['course_id']);
+
+        return redirect()->route('dashboard.batches.create.course', $course);
     }
 }
 
