@@ -59,7 +59,11 @@
             <table class="brand-row">
                 <tr>
                     <td class="brand-left">
-                        <div class="brand-name">iTechBD</div>
+                        @if (!empty($logoDataUri))
+                            <img src="{{ $logoDataUri }}" alt="{{ config('app.name') }}" style="max-height: 48px; max-width: 220px; object-fit: contain;">
+                        @else
+                            <div class="brand-name">{{ config('app.name', 'iTechBD') }}</div>
+                        @endif
                         <div class="brand-sub">System-generated course invoice</div>
                     </td>
                     <td class="brand-right">

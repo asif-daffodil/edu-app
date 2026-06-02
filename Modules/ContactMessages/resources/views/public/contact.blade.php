@@ -69,7 +69,8 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('contact.store') }}" class="mt-6 space-y-5">
+                    <form method="POST" action="{{ route('contact.store') }}" class="mt-6 space-y-5"
+                          data-recaptcha-action="contact">
                         @csrf
 
                         <div class="grid gap-5 sm:grid-cols-2">
@@ -105,6 +106,19 @@
                             <textarea id="contact_message" name="message" rows="6" class="contact-form-field mt-2 w-full rounded-2xl border-slate-300 bg-white/90 text-slate-900 placeholder:text-slate-400 shadow-sm focus:border-sky-500 focus:ring-sky-500 dark:border-white/10 dark:bg-slate-800/90 dark:text-white dark:placeholder:text-slate-400" required>{{ old('message') }}</textarea>
                             @error('message') <p class="mt-2 text-sm text-rose-600 dark:text-rose-300">{{ $message }}</p> @enderror
                         </div>
+
+                        @if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+                            <div>
+                                @if (config('recaptcha.version') === 'v3')
+                                    <input type="hidden" name="g-recaptcha-response" value="" />
+                                @else
+                                    <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}"></div>
+                                @endif
+                                @error('g-recaptcha-response')
+                                    <p class="mt-2 text-sm text-rose-600 dark:text-rose-300">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        @endif
 
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <p class="text-sm text-slate-500 dark:text-slate-400">By submitting this form, you allow us to contact you regarding your enquiry.</p>
@@ -169,6 +183,20 @@
 @endsection
 
 @push('scripts')
+@if (config('recaptcha.enabled') && config('recaptcha.site_key'))
+    @if (config('recaptcha.version') === 'v3')
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}" async defer></script>
+        <script>
+            window.__recaptcha = {
+                enabled: true,
+                version: 'v3',
+                siteKey: @json(config('recaptcha.site_key')),
+            };
+        </script>
+    @else
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
+@endif
 <script>
     (function () {
         var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));

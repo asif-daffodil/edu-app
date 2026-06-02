@@ -26,10 +26,10 @@ class AdminBatchesController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $allowedStatuses = ['upcoming', 'running', 'completed'];
-        $activeStatus = (string) request()->query('status', 'upcoming');
+        $allowedStatuses = ['all', 'upcoming', 'running', 'completed'];
+        $activeStatus = (string) request()->query('status', 'all');
         if (! in_array($activeStatus, $allowedStatuses, true)) {
-            $activeStatus = 'upcoming';
+            $activeStatus = 'all';
         }
 
         if ($activeStatus === 'upcoming') {
@@ -56,7 +56,7 @@ class AdminBatchesController extends Controller implements HasMiddleware
                     'created_at',
                 ])
                 ->withCount(['mentors', 'students', 'classSchedules'])
-                ->where('status', $activeStatus)
+                ->when($activeStatus !== 'all', fn ($q) => $q->where('status', $activeStatus))
                 ->latest();
 
             return DataTables::eloquent($query)

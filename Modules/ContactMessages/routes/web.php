@@ -19,6 +19,9 @@ Route::middleware(['auth', 'verified', 'role:admin', 'backend.locale'])
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])
             ->name('contact-messages.index');
 
+        Route::delete('/contact-messages/bulk-destroy', [ContactMessageController::class, 'destroyBulk'])
+            ->name('contact-messages.destroyBulk');
+
         Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])
             ->name('contact-messages.show');
 

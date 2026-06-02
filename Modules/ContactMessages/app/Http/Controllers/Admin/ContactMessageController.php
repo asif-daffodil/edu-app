@@ -5,6 +5,7 @@ namespace Modules\ContactMessages\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\ContactMessages\Models\ContactMessage;
 use Yajra\DataTables\Facades\DataTables;
@@ -109,5 +110,19 @@ class ContactMessageController extends Controller
         return redirect()
             ->route('dashboard.contact-messages.index')
             ->with('success', 'Contact message deleted successfully.');
+    }
+
+    public function destroyBulk(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids'   => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:contact_messages,id'],
+        ]);
+
+        $count = ContactMessage::whereIn('id', $validated['ids'])->delete();
+
+        return redirect()
+            ->route('dashboard.contact-messages.index')
+            ->with('success', $count . ' contact message' . ($count !== 1 ? 's' : '') . ' deleted successfully.');
     }
 }

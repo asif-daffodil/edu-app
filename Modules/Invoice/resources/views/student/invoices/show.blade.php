@@ -30,7 +30,14 @@
         <div class="rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
             <div class="border-b border-slate-200 p-6">
                 <div class="mb-6 flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                    <img src="{{ asset('brand/itechbd-logo.svg') }}" alt="iTechBD logo" class="h-12 w-auto">
+                    @php
+                        $siteLogo = \App\Models\FrontendSetting::where('key', 'site_logo_path')->value('value_en');
+                    @endphp
+                    @if ($siteLogo)
+                        <img src="{{ asset('storage/' . $siteLogo) }}" alt="{{ config('app.name') }}" class="h-12 w-auto max-w-[200px] object-contain">
+                    @else
+                        <img src="{{ asset('brand/itechbd-logo.svg') }}" alt="iTechBD logo" class="h-12 w-auto">
+                    @endif
                     <div class="text-right text-xs text-slate-500">System Generated Invoice</div>
                 </div>
 

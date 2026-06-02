@@ -17,8 +17,9 @@
 
     @php
         /** @var string $activeStatus */
-        $activeStatus = $activeStatus ?? (string) request()->query('status', 'upcoming');
+        $activeStatus = $activeStatus ?? (string) request()->query('status', 'all');
         $tabs = [
+            'all' => 'All',
             'upcoming' => 'Upcoming',
             'running' => 'Running',
             'completed' => 'Completed',
