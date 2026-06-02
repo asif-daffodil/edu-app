@@ -40,6 +40,11 @@ document.addEventListener('submit', async (event) => {
     const action = form.dataset.recaptchaAction;
     if (!action) return;
 
+    // Auth modal forms are handled via AJAX by auth-modals.js which already
+    // calls ensureV3Token() internally. Skip them here to prevent a duplicate
+    // native form.submit() firing alongside the AJAX submission.
+    if (form.dataset.authForm) return;
+
     if (!isV3Enabled()) return;
 
     // Prevent infinite loops when we re-submit after token insertion.

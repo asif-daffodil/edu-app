@@ -17,7 +17,7 @@ class ProfileDetailsRequest extends FormRequest
             'father_mobile' => ['nullable', 'string', 'max:25'],
             'mother_name' => ['nullable', 'string', 'max:255'],
             'mother_mobile' => ['nullable', 'string', 'max:25'],
-            'bio' => ['nullable', 'string', 'max:2000'],
+            'bio' => ['nullable', 'string', 'max:10000'],
         ];
     }
 

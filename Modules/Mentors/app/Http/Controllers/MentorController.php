@@ -174,7 +174,16 @@ class MentorController extends Controller implements HasMiddleware
                     Rule::unique('mentors', 'slug'),
                 ],
                 'topic' => 'nullable|string|max:255',
-                'bio' => 'nullable|string|max:2000',
+                'bio' => [
+                    'nullable',
+                    'string',
+                    function (string $attribute, mixed $value, \Closure $fail): void {
+                        $wordCount = count(preg_split('/\s+/u', trim(strip_tags((string) $value)), -1, PREG_SPLIT_NO_EMPTY));
+                        if ($wordCount > 10000) {
+                            $fail('The bio field must not exceed 10,000 words.');
+                        }
+                    },
+                ],
                 'is_active' => 'sometimes|boolean',
             ]
         );
@@ -263,7 +272,16 @@ class MentorController extends Controller implements HasMiddleware
                     Rule::unique('mentors', 'slug')->ignore($mentor->id),
                 ],
                 'topic' => 'nullable|string|max:255',
-                'bio' => 'nullable|string|max:2000',
+                'bio' => [
+                    'nullable',
+                    'string',
+                    function (string $attribute, mixed $value, \Closure $fail): void {
+                        $wordCount = count(preg_split('/\s+/u', trim(strip_tags((string) $value)), -1, PREG_SPLIT_NO_EMPTY));
+                        if ($wordCount > 10000) {
+                            $fail('The bio field must not exceed 10,000 words.');
+                        }
+                    },
+                ],
                 'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
                 'remove_profile_image' => 'nullable|boolean',
                 'is_active' => 'sometimes|boolean',

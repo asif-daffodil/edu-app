@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -79,7 +80,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse|JsonResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+        } catch (ValidationException $e) {
+            // For AJAX (modal) requests, detect the "email not verified" case and
+            // return a structured response so the modal can show the resend panel.
+            if ($request->expectsJson()) {
+                $emailErrors = $e->errors()['email'] ?? [];
+                if (in_array(trans('frontend.email_not_verified'), (array) $emailErrors, true)) {
+                    return response()->json([
+                        'message'               => $e->getMessage(),
+                        'errors'                => $e->errors(),
+                        'verification_required' => true,
+                        'email'                 => (string) $request->input('email', ''),
+                    ], 422);
+                }
+            }
+            throw $e;
+        }
 
         $request->session()->regenerate();
 

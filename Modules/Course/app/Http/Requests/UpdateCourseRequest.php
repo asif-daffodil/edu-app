@@ -34,7 +34,9 @@ class UpdateCourseRequest extends FormRequest
                         return;
                     }
 
-                    if (mb_strlen($value) <= 1000) {
+                    $wordCount = count(preg_split('/\s+/u', trim(strip_tags($value)), -1, PREG_SPLIT_NO_EMPTY));
+
+                    if ($wordCount <= 10000) {
                         return;
                     }
 
@@ -43,7 +45,7 @@ class UpdateCourseRequest extends FormRequest
                         return;
                     }
 
-                    $fail('The description field must not be greater than 1000 characters.');
+                    $fail('The description field must not exceed 10,000 words.');
                 },
             ],
             'old_price' => ['required', 'numeric', 'min:0'],

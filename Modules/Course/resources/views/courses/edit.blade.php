@@ -26,7 +26,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700">Description</label>
-                <textarea name="description" rows="5" maxlength="1000" class="wysiwyg mt-1 w-full rounded-lg border-slate-300" required>{{ old('description', $course->description) }}</textarea>
+                <textarea name="description" rows="5" class="wysiwyg mt-1 w-full rounded-lg border-slate-300" required>{{ old('description', $course->description) }}</textarea>
                 @error('description') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 

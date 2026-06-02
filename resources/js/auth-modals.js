@@ -77,6 +77,36 @@ function showVerificationPanel(modalRoot, email, message) {
     if (msgEl && message) msgEl.textContent = message;
 }
 
+function showLoginVerificationPanel(modalRoot, email, message) {
+    const formPanel = modalRoot.querySelector('[data-auth-panel="login-form"]');
+    const verifyPanel = modalRoot.querySelector('[data-auth-panel="login-verify"]');
+    if (!formPanel || !verifyPanel) {
+        setAlert(modalRoot, message || 'Please verify your email. Check your inbox for the verification link.', 'success');
+        return;
+    }
+
+    formPanel.classList.add('hidden');
+    verifyPanel.classList.remove('hidden');
+
+    const emailEl = verifyPanel.querySelector('[data-verify-email]');
+    if (emailEl) emailEl.textContent = email || '';
+
+    const input = verifyPanel.querySelector('input[name="email"]');
+    if (input) input.value = email || '';
+
+    const changeEmailLink = verifyPanel.querySelector('[data-verify-change-email-link]');
+    if (changeEmailLink) {
+        const basePath = '/email/verify';
+        changeEmailLink.setAttribute(
+            'href',
+            email ? `${basePath}?email=${encodeURIComponent(email)}` : basePath,
+        );
+    }
+
+    const msgEl = verifyPanel.querySelector('[data-verify-message]');
+    if (msgEl && message) msgEl.textContent = message;
+}
+
 function showErrors(root, errors) {
     if (!errors) return;
 
@@ -188,10 +218,19 @@ async function submitAuthForm(form) {
         const data = err?.response?.data;
 
         if (status === 422) {
+            // Unverified email on login — switch to verification panel.
+            if (form.dataset.authForm === 'login' && data?.verification_required) {
+                showLoginVerificationPanel(modalRoot, data?.email, data?.message);
+                return;
+            }
+
             showErrors(modalRoot, data?.errors);
             setAlert(modalRoot, data?.message || 'Please fix the errors and try again.', 'error');
 
-            if (data?.errors?.['g-recaptcha-response'] && window.grecaptcha?.reset) {
+            // Always reset the reCAPTCHA v2 widget after any validation error so
+            // the user can solve it again. The previous token is spent/expired once
+            // the first request was made, regardless of which field caused the error.
+            if (window.__recaptcha?.version !== 'v3' && window.grecaptcha?.reset) {
                 try {
                     window.grecaptcha.reset();
                 } catch (e) {
@@ -247,6 +286,22 @@ document.addEventListener('click', (event) => {
 
         // Close all and open target to avoid stacked modals
         Object.keys(MODAL_NAMES).forEach((k) => closeModal(k));
+
+        // If the switcher carries a reset flag, restore the form panel of the
+        // target modal (e.g. "Back to login" from the login-verify panel).
+        if (switcher.dataset.authSwitchReset) {
+            const targetModalName = MODAL_NAMES[switcher.dataset.authSwitchReset] || switcher.dataset.authSwitchReset;
+            const targetModalEl = document.querySelector(`[data-auth-modal="${switcher.dataset.authSwitchReset}"]`);
+            if (targetModalEl) {
+                const formPanel = targetModalEl.querySelector('[data-auth-panel="login-form"]');
+                const verifyPanel = targetModalEl.querySelector('[data-auth-panel="login-verify"]');
+                if (formPanel) formPanel.classList.remove('hidden');
+                if (verifyPanel) verifyPanel.classList.add('hidden');
+                clearAlert(targetModalEl);
+                clearErrors(targetModalEl);
+            }
+        }
+
         openModal(target);
 
         if (window.__authRedirectTo) {

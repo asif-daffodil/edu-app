@@ -23,7 +23,16 @@ class StoreCourseRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('courses', 'slug')],
-            'description' => ['required', 'string', 'max:1000'],
+            'description' => [
+                'required',
+                'string',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $wordCount = count(preg_split('/\s+/u', trim(strip_tags((string) $value)), -1, PREG_SPLIT_NO_EMPTY));
+                    if ($wordCount > 10000) {
+                        $fail('The description field must not exceed 10,000 words.');
+                    }
+                },
+            ],
             'old_price' => ['required', 'numeric', 'min:0'],
             'discount_price' => ['nullable', 'numeric', 'min:0', 'lte:old_price'],
             'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
