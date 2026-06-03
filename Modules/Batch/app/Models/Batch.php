@@ -51,7 +51,7 @@ class Batch extends Model
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'batch_students', 'batch_id', 'student_id')
-            ->withPivot(['status', 'approved_at', 'approved_by'])
+            ->withPivot(['status', 'batch_type', 'approved_at', 'approved_by'])
             ->withTimestamps();
     }
 

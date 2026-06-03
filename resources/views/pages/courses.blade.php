@@ -42,24 +42,53 @@
                             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ $course->title }}</h3>
 
                             @php
-                                $oldPrice = $course->old_price;
-                                $discountPrice = $course->discount_price;
+                                $hasOnOff = !is_null($course->online_old_price) || !is_null($course->online_discount_price)
+                                    || !is_null($course->offline_old_price) || !is_null($course->offline_discount_price);
+                                $onlineDisplay = $course->online_discount_price ?? $course->online_old_price;
+                                $onlineOld = !is_null($course->online_discount_price) ? $course->online_old_price : null;
+                                $offlineDisplay = $course->offline_discount_price ?? $course->offline_old_price;
+                                $offlineOld = !is_null($course->offline_discount_price) ? $course->offline_old_price : null;
+                                $generalOld = $course->old_price;
+                                $generalDiscount = $course->discount_price;
                             @endphp
 
                             <div class="mt-2">
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/60">{{ __('frontend.course_fee') }}</div>
-                                <div class="mt-1 flex items-baseline gap-2">
-                                    @if(!is_null($oldPrice) && !is_null($discountPrice) && (float) $discountPrice < (float) $oldPrice)
-                                        <span class="text-sm font-semibold text-slate-500 line-through dark:text-white/60">{{ number_format((float) $oldPrice, 2) }}</span>
-                                        <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $discountPrice, 2) }}</span>
-                                    @elseif(!is_null($discountPrice))
-                                        <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $discountPrice, 2) }}</span>
-                                    @elseif(!is_null($oldPrice))
-                                        <span class="text-base font-semibold text-slate-900 dark:text-white">{{ number_format((float) $oldPrice, 2) }}</span>
-                                    @else
-                                        <span class="text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.contact_for_fee') }}</span>
-                                    @endif
-                                </div>
+                                @if($hasOnOff)
+                                    <div class="flex flex-col gap-1">
+                                        @if(!is_null($onlineDisplay))
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-xs font-semibold text-sky-600 dark:text-sky-400">Online</span>
+                                                @if(!is_null($onlineOld))
+                                                    <span class="text-xs text-slate-400 line-through">{{ number_format((float) $onlineOld, 2) }}</span>
+                                                @endif
+                                                <span class="text-sm font-bold text-sky-700 dark:text-sky-300">৳ {{ number_format((float) $onlineDisplay, 2) }}</span>
+                                            </div>
+                                        @endif
+                                        @if(!is_null($offlineDisplay))
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-xs font-semibold text-amber-600 dark:text-amber-400">Offline</span>
+                                                @if(!is_null($offlineOld))
+                                                    <span class="text-xs text-slate-400 line-through">{{ number_format((float) $offlineOld, 2) }}</span>
+                                                @endif
+                                                <span class="text-sm font-bold text-amber-700 dark:text-amber-300">৳ {{ number_format((float) $offlineDisplay, 2) }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @else
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/60">{{ __('frontend.course_fee') }}</div>
+                                    <div class="mt-1 flex items-baseline gap-2">
+                                        @if(!is_null($generalOld) && !is_null($generalDiscount) && (float) $generalDiscount < (float) $generalOld)
+                                            <span class="text-sm font-semibold text-slate-500 line-through dark:text-white/60">{{ number_format((float) $generalOld, 2) }}</span>
+                                            <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $generalDiscount, 2) }}</span>
+                                        @elseif(!is_null($generalDiscount))
+                                            <span class="text-base font-semibold text-emerald-700 dark:text-emerald-200">{{ number_format((float) $generalDiscount, 2) }}</span>
+                                        @elseif(!is_null($generalOld))
+                                            <span class="text-base font-semibold text-slate-900 dark:text-white">{{ number_format((float) $generalOld, 2) }}</span>
+                                        @else
+                                            <span class="text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.contact_for_fee') }}</span>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
 
                             <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ $excerpt }}</p>

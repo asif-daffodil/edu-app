@@ -73,6 +73,11 @@ return [
     'secure_checkout_item_1' => 'Login required for purchase',
     'secure_checkout_item_2' => 'Order history stays in your account',
     'secure_checkout_item_3' => 'Support via phone/email',
+    'select_batch_type' => 'Select class type',
+    'online' => 'Online',
+    'offline' => 'Offline (In-person)',
+    'online_class_desc' => 'Attend live classes from anywhere',
+    'offline_class_desc' => 'Attend classes at our training center',
 
     'order_confirmed' => 'Order confirmed',
     'thanks_for_order' => 'Thanks! Your order is created.',

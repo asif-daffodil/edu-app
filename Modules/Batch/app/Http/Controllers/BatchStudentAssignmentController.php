@@ -104,10 +104,12 @@ class BatchStudentAssignmentController extends Controller implements HasMiddlewa
         $validated = $request->validate(
             [
                 'student_id' => ['required', 'integer', 'exists:users,id'],
+                'batch_type' => ['nullable', 'in:online,offline'],
             ]
         );
 
         $studentId = (int) $validated['student_id'];
+        $batchType = $validated['batch_type'] ?? null;
         $student = User::query()->findOrFail($studentId);
         abort_unless($student->hasRole('student'), 422);
 
@@ -130,6 +132,7 @@ class BatchStudentAssignmentController extends Controller implements HasMiddlewa
             ->update(
                 [
                     'status' => 'approved',
+                    'batch_type' => $batchType,
                     'approved_at' => now(),
                     'approved_by' => $adminId,
                     'updated_at' => now(),
@@ -142,6 +145,7 @@ class BatchStudentAssignmentController extends Controller implements HasMiddlewa
                     'batch_id' => $batch->id,
                     'student_id' => $student->id,
                     'status' => 'approved',
+                    'batch_type' => $batchType,
                     'approved_at' => now(),
                     'approved_by' => $adminId,
                     'created_at' => now(),
@@ -153,6 +157,33 @@ class BatchStudentAssignmentController extends Controller implements HasMiddlewa
         return redirect()
             ->route('dashboard.batches.students.edit', $batch)
             ->with('success', 'Student added successfully.');
+    }
+
+    /**
+     * Update the batch type for an admitted student.
+     *
+     * @param Request $request The incoming request.
+     * @param Batch   $batch   The batch model.
+     * @param User    $student The student user.
+     *
+     * @return RedirectResponse
+     */
+    public function updateBatchType(Request $request, Batch $batch, User $student): RedirectResponse
+    {
+        abort_unless(Gate::allows('assignStudents', $batch), 403);
+
+        $validated = $request->validate([
+            'batch_type' => ['nullable', 'in:online,offline'],
+        ]);
+
+        DB::table('batch_students')
+            ->where('batch_id', $batch->id)
+            ->where('student_id', $student->id)
+            ->update(['batch_type' => $validated['batch_type'] ?? null, 'updated_at' => now()]);
+
+        return redirect()
+            ->route('dashboard.batches.students.edit', $batch)
+            ->with('success', 'Student type updated.');
     }
 
     /**

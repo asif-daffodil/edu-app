@@ -36,13 +36,40 @@ class CourseController extends Controller implements HasMiddleware
 
         if (request()->ajax() && request()->has('draw')) {
             $query = Course::query()
-                ->select(['id', 'title', 'description', 'old_price', 'discount_price', 'status', 'created_at'])
+                ->select([
+                    'id', 'title', 'description',
+                    'old_price', 'discount_price',
+                    'online_old_price', 'online_discount_price',
+                    'offline_old_price', 'offline_discount_price',
+                    'status', 'created_at',
+                ])
                 ->withCount('batches')
                 ->latest();
 
             return DataTables::eloquent($query)
                 ->addIndexColumn()
                 ->addColumn('fee', function (Course $course) {
+                    $hasOnlineOffline = !is_null($course->online_old_price)
+                        || !is_null($course->online_discount_price)
+                        || !is_null($course->offline_old_price)
+                        || !is_null($course->offline_discount_price);
+
+                    if ($hasOnlineOffline) {
+                        $onlinePrice  = $course->online_discount_price ?? $course->online_old_price;
+                        $offlinePrice = $course->offline_discount_price ?? $course->offline_old_price;
+
+                        $parts = [];
+                        if (!is_null($onlinePrice)) {
+                            $parts[] = '<span class="text-sky-700">Online: ' . e(number_format((float) $onlinePrice, 2)) . '</span>';
+                        }
+                        if (!is_null($offlinePrice)) {
+                            $parts[] = '<span class="text-amber-700">Offline: ' . e(number_format((float) $offlinePrice, 2)) . '</span>';
+                        }
+                        if (count($parts)) {
+                            return '<div class="text-sm space-x-2">' . implode('<span class="text-slate-300"> • </span>', $parts) . '</div>';
+                        }
+                    }
+
                     $oldPrice = $course->old_price;
                     $discountPrice = $course->discount_price;
 
@@ -151,6 +178,10 @@ class CourseController extends Controller implements HasMiddleware
             'description' => $validated['description'],
             'old_price' => $validated['old_price'] ?? null,
             'discount_price' => $validated['discount_price'] ?? null,
+            'online_old_price' => $validated['online_old_price'] ?? null,
+            'online_discount_price' => $validated['online_discount_price'] ?? null,
+            'offline_old_price' => $validated['offline_old_price'] ?? null,
+            'offline_discount_price' => $validated['offline_discount_price'] ?? null,
             'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
             'created_by' => (int) Auth::id(),
@@ -208,6 +239,10 @@ class CourseController extends Controller implements HasMiddleware
             'description' => $validated['description'],
             'old_price' => $validated['old_price'] ?? null,
             'discount_price' => $validated['discount_price'] ?? null,
+            'online_old_price' => $validated['online_old_price'] ?? null,
+            'online_discount_price' => $validated['online_discount_price'] ?? null,
+            'offline_old_price' => $validated['offline_old_price'] ?? null,
+            'offline_discount_price' => $validated['offline_discount_price'] ?? null,
             'thumbnail' => $thumbnailPath,
             'status' => $validated['status'],
         ]);

@@ -83,9 +83,14 @@
                                                         <div class="text-sm text-slate-500 truncate">{{ $student->email }}</div>
                                                     </div>
 
-                                                    <form method="POST" action="{{ route('dashboard.batches.students.add', $batch) }}">
+                                                    <form method="POST" action="{{ route('dashboard.batches.students.add', $batch) }}" class="flex items-center gap-2">
                                                         @csrf
                                                         <input type="hidden" name="student_id" value="{{ $student->id }}" />
+                                                        <select name="batch_type" class="rounded-lg border-slate-300 text-xs py-1.5 px-2">
+                                                            <option value="">— Type —</option>
+                                                            <option value="online">Online</option>
+                                                            <option value="offline">Offline</option>
+                                                        </select>
                                                         <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-500">Add</button>
                                                     </form>
                                                 </div>
@@ -133,6 +138,17 @@
                             <div class="font-semibold text-slate-900 truncate">{{ $student->name }}</div>
                             <div class="mt-1 text-sm text-slate-600 truncate">{{ $student->email }}</div>
 
+                            @php($pendingBatchType = optional($student->pivot)->batch_type)
+                            @if($pendingBatchType)
+                                <div class="mt-2">
+                                    @if($pendingBatchType === 'online')
+                                        <span class="inline-flex items-center rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-100">Online</span>
+                                    @else
+                                        <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-amber-100">Offline</span>
+                                    @endif
+                                </div>
+                            @endif
+
                             <div class="mt-4 flex items-center gap-2">
                                 <form method="POST" action="{{ route('dashboard.batches.students.approve', [$batch, $student]) }}">
                                     @csrf
@@ -175,6 +191,19 @@
                                     @if(optional($student->pivot)->approved_at)
                                         <div class="mt-2 text-xs text-slate-500">Approved: {{ optional($student->pivot->approved_at)->format('d M, Y') }}</div>
                                     @endif
+                                    @php($approvedBatchType = optional($student->pivot)->batch_type)
+                                    <div class="mt-2">
+                                        <form method="POST" action="{{ route('dashboard.batches.students.updateBatchType', [$batch, $student]) }}" class="flex items-center gap-1.5">
+                                            @csrf
+                                            @method('PATCH')
+                                            <select name="batch_type" class="rounded-lg border-slate-300 text-xs py-1 px-2 {{ $approvedBatchType === 'online' ? 'bg-sky-50 text-sky-700' : ($approvedBatchType === 'offline' ? 'bg-amber-50 text-amber-700' : 'bg-slate-50 text-slate-500') }}">
+                                                <option value="" @selected(!$approvedBatchType)>— Not set —</option>
+                                                <option value="online" @selected($approvedBatchType === 'online')>Online</option>
+                                                <option value="offline" @selected($approvedBatchType === 'offline')>Offline</option>
+                                            </select>
+                                            <button type="submit" class="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-200">Set</button>
+                                        </form>
+                                    </div>
                                 </div>
 
                                 <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 ring-1 ring-emerald-100">Admitted</span>

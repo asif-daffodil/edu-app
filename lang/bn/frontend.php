@@ -73,6 +73,11 @@ return [
     'secure_checkout_item_1' => 'কিনতে লগইন লাগবে',
     'secure_checkout_item_2' => 'অর্ডার হিস্ট্রি আপনার অ্যাকাউন্টে থাকবে',
     'secure_checkout_item_3' => 'ফোন/ইমেইলে সাপোর্ট',
+    'select_batch_type' => 'ক্লাসের ধরন নির্বাচন করুন',
+    'online' => 'অনলাইন',
+    'offline' => 'অফলাইন (সরাসরি)',
+    'online_class_desc' => 'যেকোনো জায়গা থেকে লাইভ ক্লাসে যোগ দিন',
+    'offline_class_desc' => 'আমাদের ট্রেনিং সেন্টারে সরাসরি ক্লাস করুন',
 
     'order_confirmed' => 'অর্ডার কনফার্মড',
     'thanks_for_order' => 'ধন্যবাদ! আপনার অর্ডার তৈরি হয়েছে।',

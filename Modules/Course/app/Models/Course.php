@@ -26,6 +26,10 @@ class Course extends Model
         'description',
         'old_price',
         'discount_price',
+        'online_old_price',
+        'online_discount_price',
+        'offline_old_price',
+        'offline_discount_price',
         'thumbnail',
         'status',
         'created_by',
@@ -34,6 +38,10 @@ class Course extends Model
     protected $casts = [
         'old_price' => 'decimal:2',
         'discount_price' => 'decimal:2',
+        'online_old_price' => 'decimal:2',
+        'online_discount_price' => 'decimal:2',
+        'offline_old_price' => 'decimal:2',
+        'offline_discount_price' => 'decimal:2',
     ];
 
     protected static function booted(): void

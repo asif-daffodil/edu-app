@@ -30,17 +30,35 @@
                 @error('description') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
             </div>
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">Old price</label>
-                    <input type="number" name="old_price" value="{{ old('old_price', $course->old_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
-                    @error('old_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+            <div class="rounded-lg border border-sky-200 bg-sky-50 p-4 space-y-3">
+                <div class="text-sm font-semibold text-sky-800">Online Pricing</div>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Online old price</label>
+                        <input type="number" name="online_old_price" value="{{ old('online_old_price', $course->online_old_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                        @error('online_old_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Online discount price</label>
+                        <input type="number" name="online_discount_price" value="{{ old('online_discount_price', $course->online_discount_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                        @error('online_discount_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                    </div>
                 </div>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">Discount price</label>
-                    <input type="number" name="discount_price" value="{{ old('discount_price', $course->discount_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
-                    @error('discount_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+            <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 space-y-3">
+                <div class="text-sm font-semibold text-amber-800">Offline Pricing</div>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Offline old price</label>
+                        <input type="number" name="offline_old_price" value="{{ old('offline_old_price', $course->offline_old_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                        @error('offline_old_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Offline discount price</label>
+                        <input type="number" name="offline_discount_price" value="{{ old('offline_discount_price', $course->offline_discount_price) }}" min="0" step="0.01" class="mt-1 w-full rounded-lg border-slate-300" />
+                        @error('offline_discount_price') <p class="mt-1 text-sm text-rose-600">{{ $message }}</p> @enderror
+                    </div>
                 </div>
             </div>
 

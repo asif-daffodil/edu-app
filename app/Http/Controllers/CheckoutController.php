@@ -31,6 +31,7 @@ class CheckoutController extends Controller
             },
         ]);
 
+        $hasOnlineOfflinePricing = $this->hasOnlineOfflinePricing($course);
         $amount = $this->courseAmount($course);
 
         $joinedBatchIds = [];
@@ -44,7 +45,7 @@ class CheckoutController extends Controller
                 ->all();
         }
 
-        return view('pages.checkout', compact('course', 'amount', 'joinedBatchIds'));
+        return view('pages.checkout', compact('course', 'amount', 'joinedBatchIds', 'hasOnlineOfflinePricing'));
     }
 
     /**
@@ -57,11 +58,17 @@ class CheckoutController extends Controller
         $userId = (int) Auth::id();
         abort_unless($userId > 0, 403);
 
-        $amount = $this->courseAmount($course);
+        $hasOnlineOfflinePricing = $this->hasOnlineOfflinePricing($course);
 
         $validated = $request->validate([
             'batch_id' => ['nullable', 'integer'],
+            'batch_type' => $hasOnlineOfflinePricing
+                ? ['required', 'in:online,offline']
+                : ['nullable', 'in:online,offline'],
         ]);
+
+        $batchType = $validated['batch_type'] ?? null;
+        $amount = $this->courseAmount($course, $batchType);
 
         $batchId = (int) ($validated['batch_id'] ?? 0);
 
@@ -114,11 +121,13 @@ class CheckoutController extends Controller
 
         if ($existing) {
             if ($selectedBatch && (int) $existing->batch_id !== (int) $selectedBatch->id) {
-                $existing->update(['batch_id' => $selectedBatch->id]);
+                $existing->update(['batch_id' => $selectedBatch->id, 'batch_type' => $batchType]);
+            } elseif ($batchType !== null && $existing->batch_type !== $batchType) {
+                $existing->update(['batch_type' => $batchType]);
             }
 
             if ($selectedBatch) {
-                $this->ensurePendingEnrollment($selectedBatch->id, $userId);
+                $this->ensurePendingEnrollment($selectedBatch->id, $userId, $batchType);
             }
 
             return redirect()->route('checkout.success', $existing);
@@ -128,13 +137,14 @@ class CheckoutController extends Controller
             'user_id' => $userId,
             'course_id' => $course->id,
             'batch_id' => $selectedBatch?->id,
+            'batch_type' => $batchType,
             'amount' => $amount,
             'currency' => 'BDT',
             'status' => 'pending',
         ]);
 
         if ($selectedBatch) {
-            $this->ensurePendingEnrollment($selectedBatch->id, $userId);
+            $this->ensurePendingEnrollment($selectedBatch->id, $userId, $batchType);
         }
 
         return redirect()->route('checkout.success', $order);
@@ -154,8 +164,21 @@ class CheckoutController extends Controller
         return view('pages.checkout-success', compact('order'));
     }
 
-    private function courseAmount(Course $course): float
+    private function courseAmount(Course $course, ?string $batchType = null): float
     {
+        if ($batchType === 'online') {
+            $discount = $course->online_discount_price;
+            if (!is_null($discount)) return (float) $discount;
+            $old = $course->online_old_price;
+            if (!is_null($old)) return (float) $old;
+        } elseif ($batchType === 'offline') {
+            $discount = $course->offline_discount_price;
+            if (!is_null($discount)) return (float) $discount;
+            $old = $course->offline_old_price;
+            if (!is_null($old)) return (float) $old;
+        }
+
+        // Fallback to general pricing
         $discount = $course->discount_price;
         if (!is_null($discount)) {
             return (float) $discount;
@@ -169,7 +192,15 @@ class CheckoutController extends Controller
         return 0.0;
     }
 
-    private function ensurePendingEnrollment(int $batchId, int $studentId): void
+    private function hasOnlineOfflinePricing(Course $course): bool
+    {
+        return !is_null($course->online_old_price)
+            || !is_null($course->online_discount_price)
+            || !is_null($course->offline_old_price)
+            || !is_null($course->offline_discount_price);
+    }
+
+    private function ensurePendingEnrollment(int $batchId, int $studentId, ?string $batchType = null): void
     {
         $existing = DB::table('batch_students')
             ->where('batch_id', $batchId)
@@ -177,6 +208,12 @@ class CheckoutController extends Controller
             ->first();
 
         if ($existing) {
+            if ($batchType !== null && ($existing->batch_type ?? null) !== $batchType) {
+                DB::table('batch_students')
+                    ->where('batch_id', $batchId)
+                    ->where('student_id', $studentId)
+                    ->update(['batch_type' => $batchType, 'updated_at' => now()]);
+            }
             return;
         }
 
@@ -184,6 +221,7 @@ class CheckoutController extends Controller
             'batch_id' => $batchId,
             'student_id' => $studentId,
             'status' => 'pending',
+            'batch_type' => $batchType,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -33,8 +33,12 @@ class StoreCourseRequest extends FormRequest
                     }
                 },
             ],
-            'old_price' => ['required', 'numeric', 'min:0'],
+            'old_price' => ['nullable', 'numeric', 'min:0'],
             'discount_price' => ['nullable', 'numeric', 'min:0', 'lte:old_price'],
+            'online_old_price' => ['nullable', 'numeric', 'min:0'],
+            'online_discount_price' => ['nullable', 'numeric', 'min:0', 'lte:online_old_price'],
+            'offline_old_price' => ['nullable', 'numeric', 'min:0'],
+            'offline_discount_price' => ['nullable', 'numeric', 'min:0', 'lte:offline_old_price'],
             'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status' => ['required', 'in:active,inactive'],
         ];

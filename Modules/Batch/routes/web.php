@@ -77,6 +77,12 @@ $adminAssignmentRoutes = static function (): void {
         )
             ->whereNumber('student')
             ->name('students.reject');
+        Route::patch(
+            'students/{student}/batch-type',
+            [BatchStudentAssignmentController::class, 'updateBatchType']
+        )
+            ->whereNumber('student')
+            ->name('students.updateBatchType');
     };
 
     Route::prefix('batches/{batch}')->name('batches.')->group($scopedRoutes);

@@ -13,6 +13,7 @@ class CourseOrder extends Model
         'user_id',
         'course_id',
         'batch_id',
+        'batch_type',
         'amount',
         'currency',
         'status',

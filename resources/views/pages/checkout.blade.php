@@ -13,25 +13,111 @@
                     <h1 class="text-3xl font-semibold text-slate-900 dark:text-white sm:text-4xl">{{ __('frontend.checkout') }}</h1>
                     <p class="mt-3 text-slate-600 dark:text-slate-200">{{ __('frontend.checkout_subtitle') }}</p>
 
-                    <div class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none sm:p-8">
+                    @php
+                        $hasOnlineOfflinePricing = !is_null($course->online_old_price)
+                            || !is_null($course->online_discount_price)
+                            || !is_null($course->offline_old_price)
+                            || !is_null($course->offline_discount_price);
+
+                        $onlineAmount = (float) ($course->online_discount_price ?? $course->online_old_price ?? $amount);
+                        $offlineAmount = (float) ($course->offline_discount_price ?? $course->offline_old_price ?? $amount);
+
+                        $onlineOldAmount = !is_null($course->online_discount_price) ? (float) $course->online_old_price : null;
+                        $offlineOldAmount = !is_null($course->offline_discount_price) ? (float) $course->offline_old_price : null;
+                    @endphp
+
+                    <div class="mt-8 rounded-3xl bg-white p-6 ring-1 ring-slate-200/70 shadow-sm shadow-slate-200/60 dark:bg-white/5 dark:ring-white/10 dark:shadow-none sm:p-8"
+                         @if($hasOnlineOfflinePricing)
+                         x-data="{
+                             batchType: '{{ old('batch_type', 'online') }}',
+                             onlineAmount: {{ $onlineAmount }},
+                             offlineAmount: {{ $offlineAmount }},
+                             onlineOldAmount: {{ is_null($onlineOldAmount) ? 'null' : $onlineOldAmount }},
+                             offlineOldAmount: {{ is_null($offlineOldAmount) ? 'null' : $offlineOldAmount }},
+                             get displayAmount() {
+                                 return this.batchType === 'offline' ? this.offlineAmount : this.onlineAmount;
+                             },
+                             get displayOldAmount() {
+                                 return this.batchType === 'offline' ? this.offlineOldAmount : this.onlineOldAmount;
+                             },
+                             formatNum(n) {
+                                 if (n === null || n === undefined) return null;
+                                 return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                             }
+                         }"
+                         @endif>
                         <div class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-200">{{ __('frontend.selected_course') }}</div>
                         <div class="mt-2 text-xl font-semibold text-slate-900 dark:text-white">{{ $course->title }}</div>
 
-                        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/70">{{ __('frontend.course_fee') }}</div>
-                                <div class="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">{{ number_format((float) $amount, 2) }}</div>
+                        @if($hasOnlineOfflinePricing)
+                            <div class="mt-6">
+                                <div class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">{{ __('frontend.select_batch_type') }}</div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="relative flex cursor-pointer flex-col gap-1 rounded-2xl border-2 p-4 transition"
+                                           :class="{
+                                               'border-sky-500 bg-sky-50 dark:bg-sky-900/30': batchType === 'online',
+                                               'border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/5': batchType !== 'online'
+                                           }">
+                                        <input type="radio" name="batch_type" value="online" x-model="batchType" class="sr-only" />
+                                        <div class="font-semibold text-slate-900 dark:text-white">{{ __('frontend.online') }}</div>
+                                        <div class="text-sm text-slate-600 dark:text-slate-300">{{ __('frontend.online_class_desc') }}</div>
+                                        <div class="mt-2">
+                                            <template x-if="onlineOldAmount !== null">
+                                                <span class="text-xs text-slate-400 line-through" x-text="formatNum(onlineOldAmount)"></span>
+                                            </template>
+                                            <span class="text-lg font-bold text-sky-700 dark:text-sky-400" x-text="'৳ ' + formatNum(onlineAmount)"></span>
+                                        </div>
+                                    </label>
+
+                                    <label class="relative flex cursor-pointer flex-col gap-1 rounded-2xl border-2 p-4 transition"
+                                           :class="{
+                                               'border-amber-500 bg-amber-50 dark:bg-amber-900/30': batchType === 'offline',
+                                               'border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/5': batchType !== 'offline'
+                                           }">
+                                        <input type="radio" name="batch_type" value="offline" x-model="batchType" class="sr-only" />
+                                        <div class="font-semibold text-slate-900 dark:text-white">{{ __('frontend.offline') }}</div>
+                                        <div class="text-sm text-slate-600 dark:text-slate-300">{{ __('frontend.offline_class_desc') }}</div>
+                                        <div class="mt-2">
+                                            <template x-if="offlineOldAmount !== null">
+                                                <span class="text-xs text-slate-400 line-through" x-text="formatNum(offlineOldAmount)"></span>
+                                            </template>
+                                            <span class="text-lg font-bold text-amber-700 dark:text-amber-400" x-text="'৳ ' + formatNum(offlineAmount)"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                                @error('batch_type')
+                                    <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
-                            <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/70">{{ __('frontend.checkout_status') }}</div>
-                                <div class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{{ __('frontend.checkout_pending') }}</div>
-                                <div class="mt-1 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.checkout_pending_help') }}</div>
+                            <div class="mt-6">
+                                <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/70">{{ __('frontend.checkout_status') }}</div>
+                                    <div class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{{ __('frontend.checkout_pending') }}</div>
+                                    <div class="mt-1 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.checkout_pending_help') }}</div>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/70">{{ __('frontend.course_fee') }}</div>
+                                    <div class="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">{{ number_format((float) $amount, 2) }}</div>
+                                </div>
+
+                                <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200/70 dark:bg-white/5 dark:ring-white/10">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-white/70">{{ __('frontend.checkout_status') }}</div>
+                                    <div class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{{ __('frontend.checkout_pending') }}</div>
+                                    <div class="mt-1 text-sm text-slate-600 dark:text-slate-200">{{ __('frontend.checkout_pending_help') }}</div>
+                                </div>
+                            </div>
+                        @endif
 
                         <form method="POST" action="{{ route('checkout.store', $course) }}" class="mt-8 space-y-4">
                             @csrf
+
+                            @if($hasOnlineOfflinePricing)
+                                <input type="hidden" name="batch_type" :value="batchType">
+                            @endif
 
                             @if($course->relationLoaded('batches') && $course->batches->count())
                                 <div>
