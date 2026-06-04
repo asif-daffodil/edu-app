@@ -16,7 +16,11 @@
             </button>
         </div>
 
-        <div data-auth-alert class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90"></div>
+        <div data-auth-alert class="{{ session('status') ? 'block' : 'hidden' }} mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/90">
+            @if (session('status'))
+                {{ session('status') }}
+            @endif
+        </div>
 
         <div data-auth-panel="login-form">
         <form method="POST" action="{{ route('login', absolute: false) }}" class="mt-5" data-auth-form="login" data-recaptcha-action="login">

@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
             return true;
         }
 
-        return Str::startsWith($path, ['/login', '/register', '/forgot-password', '/email/verify']);
+        return Str::startsWith($path, ['/login', '/register', '/forgot-password', '/reset-password', '/email/verify']);
     }
 
     /**
@@ -55,7 +55,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $isUnsafePrevious = $previousPath === ''
-            || Str::startsWith($previousPath, ['/login', '/register', '/forgot-password', '/admin', '/dashboard'])
+            || Str::startsWith($previousPath, ['/login', '/register', '/forgot-password', '/reset-password', '/admin', '/dashboard'])
             || preg_match('#^/email/verify(?:/|$)#', $previousPath)
             || preg_match('#^/courses/\d+/checkout$#', $previousPath)
             || preg_match('#^/checkout/orders/\d+$#', $previousPath);

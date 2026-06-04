@@ -111,6 +111,10 @@ $adminBatchRoutes = static function () use ($adminAssignmentRoutes): void {
         ->whereNumber('batch')
         ->name('batches.update');
 
+    Route::delete('batches/{batch}', [AdminBatchDetailsController::class, 'destroy'])
+        ->whereNumber('batch')
+        ->name('batches.destroy');
+
     // Canonical per-course create/store under the Batches section
     Route::get('batches/create/{course}', [CourseBatchController::class, 'create'])
         ->name('batches.create.course');

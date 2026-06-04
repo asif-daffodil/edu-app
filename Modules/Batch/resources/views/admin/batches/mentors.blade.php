@@ -105,9 +105,7 @@
         </div>
     </x-slot>
 
-    @if (session('success'))
-        <div class="mb-4 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-800 ring-1 ring-emerald-100">{{ session('success') }}</div>
-    @endif
+    {{-- success flash is handled by the global layout to avoid duplicate messages --}}
 
     @if ($errors->any())
         <div class="mb-4 rounded-lg bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-100">

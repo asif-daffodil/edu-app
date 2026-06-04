@@ -88,9 +88,21 @@ class AdminBatchesController extends Controller implements HasMiddleware
                         $buttons .= '<a href="' . e($openUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Open</a>';
                     }
 
+                    $editUrl = route('dashboard.batches.edit', $batch);
+
+                    $buttons .= '<a href="' . e($editUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Edit</a>';
+
                     $buttons .= '<a href="' . e($scheduleUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Schedule</a>'
                         . '<a href="' . e($mentorsUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Mentors</a>'
-                        . '<a href="' . e($studentsUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Students</a>'
+                        . '<a href="' . e($studentsUrl) . '" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">Students</a>';
+
+                    $deleteUrl = route('dashboard.batches.destroy', $batch);
+
+                    $buttons .= '<form method="POST" action="' . e($deleteUrl) . '" onsubmit="return confirm(\'Are you sure you want to delete this batch?\');" class="inline-block ml-2">'
+                        . '<input type="hidden" name="_token" value="' . csrf_token() . '">'
+                        . '<input type="hidden" name="_method" value="DELETE">'
+                        . '<button type="submit" class="rounded-md border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50">Delete</button>'
+                        . '</form>'
                         . '</div>';
 
                     return $buttons;

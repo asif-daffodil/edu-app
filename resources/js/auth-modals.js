@@ -7,6 +7,7 @@ const MODAL_NAMES = {
     register: 'auth-register',
     forgot: 'auth-forgot',
     verifyStatus: 'auth-verify-status',
+    'reset-success': 'auth-reset-success',
 };
 
 function toModalName(keyOrName) {

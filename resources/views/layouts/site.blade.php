@@ -82,6 +82,12 @@
     @stack('head')
 
     <style>
+        @media (min-width: 768px) {
+            .force-dashboard-md { display: inline-flex !important; }
+        }
+    </style>
+
+    <style>
         :root {
             --bg1: 99 102 241;
             --bg2: 14 165 233;
@@ -177,7 +183,7 @@
     </div>
 
     <!-- Top bar / Nav -->
-    <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
+    <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
         <div class="border-b border-slate-200/70 bg-slate-50/70 dark:border-white/10 dark:bg-slate-950/40">
             <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-xs text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8 dark:text-slate-300">
                 <div class="inline-flex items-center gap-2">
@@ -302,6 +308,16 @@
             </nav>
 
             <div class="flex shrink-0 items-center gap-3">
+                <!-- Mobile menu toggle (JS-driven) -->
+                <button id="mobile-menu-toggle" type="button" class="inline-flex items-center justify-center rounded-xl p-2 text-slate-700 md:hidden ring-1 ring-slate-200/70 bg-white/0 hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10" aria-label="Toggle menu" aria-expanded="false">
+                    <svg id="mobile-open-icon" viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
+                        <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                    <svg id="mobile-close-icon" viewBox="0 0 24 24" fill="none" class="hidden h-5 w-5" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </button>
+
                 <button type="button"
                         data-theme-toggle
                         class="inline-flex items-center justify-center rounded-xl bg-slate-900/5 p-2 text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/15"
@@ -317,8 +333,8 @@
 
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/dashboard') }}"
-                           class="inline-flex items-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium text-slate-800 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">
+                                <a href="{{ url('/dashboard') }}"
+                                    class="hidden md:inline-flex force-dashboard-md items-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium text-slate-800 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">
                             {{ __('frontend.dashboard') }}
                         </a>
                     @else
@@ -343,6 +359,73 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile navigation panel (JS-driven) -->
+    <div id="mobile-nav-panel" class="hidden md:hidden">
+        <div class="border-b border-slate-200/70 !bg-slate-900/95 p-4 dark:!bg-slate-900/95 dark:border-white/10 text-slate-100">
+            <nav class="flex flex-col gap-3 text-base">
+                <a href="/" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.home') }}</a>
+                <a href="/about" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.about') }}</a>
+                <a href="/courses" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.courses') }}</a>
+                <a href="/mentors" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.mentors') }}</a>
+                <a href="/reviews" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.reviews') }}</a>
+                <a href="/news" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.news') }}</a>
+                <a href="/contact" class="block rounded-md px-3 py-2 !text-slate-100 hover:bg-slate-800">{{ __('frontend.contact') }}</a>
+            </nav>
+
+            <div class="mt-4 flex flex-col gap-3">
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center justify-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium !text-slate-100 ring-1 ring-slate-200/70 dark:!text-slate-100">{{ __('frontend.dashboard') }}</a>
+                    @else
+                        <a href="/login" data-auth-trigger="login" class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm !text-slate-700 dark:!text-slate-100 ring-1 ring-slate-200/70 dark:ring-white/10">{{ __('frontend.login') }}</a>
+
+                        @if (Route::has('register'))
+                            <a href="/register" data-auth-trigger="register" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold !text-white dark:!text-slate-950 dark:bg-white">{{ __('frontend.enroll_now') }}</a>
+                        @endif
+                    @endauth
+                @endif
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var toggle = document.getElementById('mobile-menu-toggle');
+                var panel = document.getElementById('mobile-nav-panel');
+                var openIcon = document.getElementById('mobile-open-icon');
+                var closeIcon = document.getElementById('mobile-close-icon');
+
+                function updateToggleVisibility() {
+                    if (!toggle) return;
+                    try {
+                        if (window.innerWidth >= 768) {
+                            toggle.classList.add('hidden');
+                        } else {
+                            toggle.classList.remove('hidden');
+                        }
+                    } catch (e) {
+                        // ignore
+                    }
+                }
+
+                if (toggle && panel) {
+                    toggle.addEventListener('click', function () {
+                        var isHidden = panel.classList.toggle('hidden');
+                        toggle.setAttribute('aria-expanded', String(!isHidden));
+                        if (openIcon && closeIcon) {
+                            openIcon.classList.toggle('hidden');
+                            closeIcon.classList.toggle('hidden');
+                        }
+                    });
+
+                    window.addEventListener('resize', updateToggleVisibility);
+                    updateToggleVisibility();
+                }
+            });
+        </script>
+    @endpush
 
     @yield('content')
 
@@ -544,6 +627,7 @@
         <x-auth.login-modal />
         <x-auth.register-modal />
         <x-auth.forgot-password-modal />
+        <x-auth.reset-success-modal />
         @if (session('status') === 'verified' || session('status') === 'already-verified')
             <x-auth.verification-status-modal />
         @endif

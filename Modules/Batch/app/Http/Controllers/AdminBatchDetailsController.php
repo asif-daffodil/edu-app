@@ -67,6 +67,17 @@ class AdminBatchDetailsController extends Controller implements HasMiddleware
             ->route('dashboard.batches.show', $batch)
             ->with('success', 'Batch updated successfully');
     }
+
+    public function destroy(Batch $batch)
+    {
+        abort_unless(Gate::allows('delete', $batch), 403);
+
+        $batch->delete();
+
+        return redirect()
+            ->route('dashboard.batches.index')
+            ->with('success', 'Batch deleted successfully');
+    }
 }
 
 // phpcs:enable
