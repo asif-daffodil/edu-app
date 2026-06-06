@@ -24,6 +24,11 @@
                 background: white !important;
             }
         }
+
+        /* Hide global site background/watermark when viewing invoice */
+        div[class*="fixed inset-0 -z-10"] {
+            display: none !important;
+        }
     </style>
 
     <div class="mx-auto max-w-3xl">

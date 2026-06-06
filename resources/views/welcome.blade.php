@@ -119,7 +119,7 @@
                     </h1>
 
                     <p class="reveal mt-5 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-200 sm:text-lg">
-                        {{ optional($heroParagraph)->content ?: __('frontend.hero_paragraph') }}
+                        {!! optional($heroParagraph)->content ?: __('frontend.hero_paragraph') !!}
                     </p>
 
                     <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -224,21 +224,21 @@
             <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
                 <div class="reveal">
                     <h2 class="text-2xl font-semibold text-slate-900 dark:text-white sm:text-3xl">{{ optional($cmsSectionsByKey->get('home_about_title'))->title ?: __('frontend.home_about_title') }}</h2>
-                    <p class="mt-2 max-w-3xl text-slate-600 dark:text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_subtitle'))->content ?: __('frontend.home_about_subtitle') }}</p>
+                    <p class="mt-2 max-w-3xl text-slate-600 dark:text-slate-200">{!! optional($cmsSectionsByKey->get('home_about_subtitle'))->content ?: __('frontend.home_about_subtitle') !!}</p>
                 </div>
 
                 <div class="reveal mt-10 grid gap-6 md:grid-cols-3">
                     <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ optional($cmsSectionsByKey->get('home_about_card_1'))->title ?: __('frontend.home_about_card_1_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_1'))->content ?: __('frontend.home_about_card_1_desc') }}</p>
+                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{!! optional($cmsSectionsByKey->get('home_about_card_1'))->content ?: __('frontend.home_about_card_1_desc') !!}</p>
                     </div>
                     <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ optional($cmsSectionsByKey->get('home_about_card_2'))->title ?: __('frontend.home_about_card_2_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_2'))->content ?: __('frontend.home_about_card_2_desc') }}</p>
+                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{!! optional($cmsSectionsByKey->get('home_about_card_2'))->content ?: __('frontend.home_about_card_2_desc') !!}</p>
                     </div>
                     <div class="rounded-3xl bg-white p-6 shadow-sm shadow-slate-200/60 ring-1 ring-slate-200/70 dark:bg-white/5 dark:shadow-none dark:ring-white/10">
                         <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ optional($cmsSectionsByKey->get('home_about_card_3'))->title ?: __('frontend.home_about_card_3_title') }}</div>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{{ optional($cmsSectionsByKey->get('home_about_card_3'))->content ?: __('frontend.home_about_card_3_desc') }}</p>
+                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-200">{!! optional($cmsSectionsByKey->get('home_about_card_3'))->content ?: __('frontend.home_about_card_3_desc') !!}</p>
                     </div>
                 </div>
             </div>

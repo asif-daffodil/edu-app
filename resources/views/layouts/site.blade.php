@@ -270,6 +270,30 @@
             </div>
         </div>
 
+        <div class="mx-auto flex md:hidden max-w-7xl items-center justify-start gap-3 px-4 py-2 sm:px-6 lg:px-8">
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="inline-flex items-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium text-slate-800 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">
+                        {{ __('frontend.dashboard') }}
+                    </a>
+                @else
+                    <a href="/login" data-auth-trigger="login" class="inline-flex rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
+                        {{ __('frontend.login') }}
+                    </a>
+
+                    @if (Route::has('register'))
+                        <a href="/register" data-auth-trigger="register" class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
+                            {{ __('frontend.enroll_now') }}
+                        </a>
+                    @else
+                        <a href="/contact" class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
+                            {{ __('frontend.contact') }}
+                        </a>
+                    @endif
+                @endauth
+            @endif
+        </div>
+
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
             <a href="/" class="group inline-flex shrink-0 items-center gap-3">
                 @php
@@ -331,31 +355,31 @@
                     </svg>
                 </button>
 
+                
                 @if (Route::has('login'))
-                    @auth
-                                <a href="{{ url('/dashboard') }}"
-                                    class="hidden md:inline-flex force-dashboard-md items-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium text-slate-800 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">
-                            {{ __('frontend.dashboard') }}
-                        </a>
-                    @else
-                                <a href="/login" data-auth-trigger="login"
-                                    class="inline-flex rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
-                            {{ __('frontend.login') }}
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a href="/register" data-auth-trigger="register"
-                               class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
-                                {{ __('frontend.enroll_now') }}
+                    <div class="hidden md:flex items-center gap-3">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="inline-flex force-dashboard-md items-center rounded-xl bg-slate-900/5 px-4 py-2 text-sm font-medium text-slate-800 ring-1 ring-slate-200/70 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15">
+                                {{ __('frontend.dashboard') }}
                             </a>
                         @else
-                            <a href="/contact"
-                               class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
-                                {{ __('frontend.contact') }}
+                            <a href="/login" data-auth-trigger="login" class="inline-flex rounded-xl px-4 py-2 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:bg-slate-100 dark:text-slate-200 dark:ring-white/10 dark:hover:bg-white/10">
+                                {{ __('frontend.login') }}
                             </a>
-                        @endif
-                    @endauth
+
+                            @if (Route::has('register'))
+                                <a href="/register" data-auth-trigger="register" class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
+                                    {{ __('frontend.enroll_now') }}
+                                </a>
+                            @else
+                                <a href="/contact" class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100">
+                                    {{ __('frontend.contact') }}
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
                 @endif
+
             </div>
         </div>
     </header>
